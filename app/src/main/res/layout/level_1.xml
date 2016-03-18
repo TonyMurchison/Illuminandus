@@ -686,6 +686,67 @@
         android:layout_marginLeft="5dp"
         android:visibility="gone"/>
 
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="225dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/finished_background"
+        android:id="@+id/finished_background"
+        android:visibility="gone"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textSize="25sp"
+        android:id="@+id/time_finished_screen"
+        android:layout_toRightOf="@id/middleSquare"
+        android:layout_above="@id/middleSquare"
+        android:layout_marginLeft="80dp"
+        android:layout_marginBottom="7.5dp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textSize="25sp"
+        android:id="@+id/partime_finished_screen"
+        android:layout_toRightOf="@id/middleSquare"
+        android:layout_above="@id/middleSquare"
+        android:layout_marginLeft="124dp"
+        android:layout_marginBottom="-25dp"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        android:src="@drawable/next_level_button"
+        android:id="@+id/next_level_button"
+        android:scaleType="fitXY"
+        android:layout_toLeftOf="@id/middleSquare"
+        android:layout_marginRight="-5dp"
+        android:layout_centerVertical="true"
+        android:onClick="nextLevelButtonClick"
+        android:clickable="false"
+        android:visibility="gone"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/home"
+        android:text="home"
+        android:layout_toRightOf="@id/middleSquare"
+        android:layout_below="@id/middleSquare"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:onClick="homeButtonClick"
+        android:clickable="false"
+        android:visibility="gone"
+        />
+
 
 
 

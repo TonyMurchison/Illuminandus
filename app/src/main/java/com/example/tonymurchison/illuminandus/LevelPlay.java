@@ -1,5 +1,7 @@
 package com.example.tonymurchison.illuminandus;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -69,6 +71,12 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     TextView pauseScreenTimeText;
     Button quitLevelButton;
     Button restartLevelButton;
+
+    TextView partimeFinishedScreen;
+    TextView timeFinishedScreen;
+    ImageView nextLevelButton;
+    ImageView finishedScreenBackground;
+    Button homeButton;
 
 
     @Override
@@ -172,10 +180,22 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         quitLevelButton = (Button) findViewById(R.id.quitLevelButton);
         restartLevelButton = (Button) findViewById(R.id.restartButton);
         pauseScreenTimeText = (TextView) findViewById(R.id.timePause);
+
+        partimeFinishedScreen = (TextView) findViewById(R.id.partime_finished_screen);
+        timeFinishedScreen = (TextView) findViewById(R.id.time_finished_screen);
+        nextLevelButton = (ImageView) findViewById(R.id.next_level_button);
+        finishedScreenBackground = (ImageView) findViewById(R.id.finished_background);
+        homeButton = (Button) findViewById(R.id.home);
     }
 
     public void restartButtonClick(View v){
         super.recreate();
+    }
+
+    public void quitLevelClick(View v){
+        Intent intent = new Intent(LevelPlay.this, LevelSelect.class);
+        intent.putExtra("levelNumber", levelNumber);
+        startActivity(intent);
     }
 
     public void playButtonClick(View v){
@@ -444,8 +464,56 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         if(powerUp.getType()==4 && powerUp.getHittable()){
             bluePowerUp(powerUp);
         }
+        if(amountPowerUpsTouched==powerUpCounter[levelNumber]) {
+            finishedLevel();
+        }
 
 
+    }
+
+    private void finishedLevel(){
+        finishedScreenBackground.setVisibility(View.VISIBLE);
+        nextLevelButton.setVisibility(View.VISIBLE);
+        nextLevelButton.setClickable(true);
+        partimeFinishedScreen.setVisibility(View.VISIBLE);
+        timeFinishedScreen.setVisibility(View.VISIBLE);
+        partimeFinishedScreen.setText("0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
+        homeButton.setVisibility(View.VISIBLE);
+        homeButton.setClickable(true);
+
+        /*
+        SharedPreferences dataSave = getSharedPreferences("highScores", 0);
+        int localHighScore = dataSave.getInt("HighScore_" + levelNumber, 0);  //gets highscore for level with name HighScore_[levelNumber]
+        if(time<localHighScore){
+
+        }
+        */
+
+        if (timeMinutes < 10) {
+            if (timeSeconds < 10) {
+                timeFinishedScreen.setText("0" + Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds));
+            } else {
+                timeFinishedScreen.setText("0" + Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds));
+            }
+        } else {
+            if (timeSeconds < 10) {
+                timeFinishedScreen.setText(Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds));
+            } else {
+                timeFinishedScreen.setText(Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds));
+            }
+        }
+    }
+
+    public void homeButtonClick(){
+        Intent intent = new Intent(LevelPlay.this, LevelSelect.class);
+        intent.putExtra("levelNumber", levelNumber);
+        startActivity(intent);
+    }
+
+    public void nextLevelButtonClick(){
+        Intent intent = new Intent(LevelPlay.this, LevelPlay.class);
+        intent.putExtra("levelNumber", levelNumber+1);
+        startActivity(intent);
     }
 
     public void pinkPowerUp(PowerUp powerUp){
