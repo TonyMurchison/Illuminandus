@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".LevelSelect"></activity>
+        <activity android:name=".LevelPlay"></activity>
     </application>
 
 </manifest>
