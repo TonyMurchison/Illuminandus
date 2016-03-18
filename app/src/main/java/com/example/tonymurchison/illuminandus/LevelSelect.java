@@ -55,12 +55,13 @@ public class LevelSelect extends AppCompatActivity {
         }
 
         Bundle extras = getIntent().getExtras();                //Receives levelNumber from played level, and returns view to corresponding four levels.
-        if (extras.getInt("levelNumber") != 0){
+        if(extras == null|| extras.getInt("levelNumber") == 0){
+
+        }
+        else{
             screenNumber = extras.getInt("levelNumber") / 4;
         }
-        else {
-            screenNumber = 0;       //Always starts with the first four levels, considering we'll make about six
-        }
+
 
         updateLevels(screenNumber);
         setUnlock();
