@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         startButton = (ImageView) findViewById(R.id.start_button);
-        fadeView = (ImageView) findViewById(R.id.fade_view);
 
     }
 
