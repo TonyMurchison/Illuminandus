@@ -1,6 +1,7 @@
 package com.example.tonymurchison.illuminandus;
 
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 
 /*
@@ -80,13 +81,18 @@ public class Wall extends AppCompatActivity {
         }
     }
 
-    public float getOpacity(){
+    public float getVisility(){
         return opacity;
     }
 
-    public void setOpacity(float i){
-        opacity=i;
-        wallImage.setAlpha(opacity);
+    public void setVisibility(float i){
+        opacity=1;
+        if(i==0){
+            wallImage.setVisibility(View.INVISIBLE  );
+        }
+        else {
+            wallImage.setVisibility(View.VISIBLE);
+        }
     }
 
     public int getWidth(){

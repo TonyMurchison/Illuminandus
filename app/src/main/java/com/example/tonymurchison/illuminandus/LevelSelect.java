@@ -160,6 +160,7 @@ public class LevelSelect extends AppCompatActivity {
         Intent intent = new Intent(LevelSelect.this, LevelPlay.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
+        finish();
     }
 
     private String secondsToMinutes(int numberOfSeconds){

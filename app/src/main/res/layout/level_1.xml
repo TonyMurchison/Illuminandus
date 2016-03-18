@@ -80,7 +80,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/leftBorderWall"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_marginRight="250dp"
@@ -92,7 +92,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/rightBorderWall"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toRightOf="@id/middleSquare"
         android:layout_marginLeft="250dp"
@@ -104,7 +104,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/bottomBorderWall"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/middleSquare"
@@ -116,7 +116,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/topBorderWall"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_centerHorizontal="true"
         android:layout_above="@id/middleSquare"
@@ -147,7 +147,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall4"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_below="@id/middleSquare"
@@ -162,7 +162,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall5"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_below="@id/middleSquare"
@@ -175,7 +175,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall6"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_below="@id/middleSquare"
@@ -189,7 +189,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall7"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_below="@id/middleSquare"
@@ -202,7 +202,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall8"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_below="@id/middleSquare"
@@ -215,7 +215,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall9"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_below="@id/middleSquare"
@@ -228,7 +228,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall10"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -241,7 +241,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall11"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -254,7 +254,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall12"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -267,7 +267,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall13"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -280,7 +280,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall14"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -293,7 +293,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall15"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -306,7 +306,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall16"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -319,7 +319,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall17"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -332,7 +332,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall18"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -345,7 +345,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall19"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -358,7 +358,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall20"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -371,7 +371,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall21"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -384,7 +384,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall22"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -397,7 +397,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall23"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -410,7 +410,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall24"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -423,7 +423,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall25"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -436,7 +436,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall26"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -449,7 +449,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall27"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -462,7 +462,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall28"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -475,7 +475,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall29"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -488,7 +488,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall30"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -501,7 +501,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall31"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -514,7 +514,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall32"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_vertical"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -527,7 +527,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall33"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -540,7 +540,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:id="@+id/wall34"
-        android:alpha="1"
+        
         android:src="@drawable/wall_image_horizontal"
         android:layout_toLeftOf="@id/middleSquare"
         android:layout_above="@id/middleSquare"
@@ -621,10 +621,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/level_select_background"
-        android:alpha="1"
+        
         android:id="@+id/menu_background"
         android:visibility="gone"/>
-    
+
     <ImageView
         android:layout_width="400dp"
         android:layout_height="225dp"

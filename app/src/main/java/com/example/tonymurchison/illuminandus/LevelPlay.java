@@ -3,12 +3,14 @@ package com.example.tonymurchison.illuminandus;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -47,6 +49,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     int time;
     int timeMinutes;
     int timeSeconds;
+    int speedAdjustment;
     TextView timeText;
     TextView powerUpsTouched;
     TextView parTimeText;
@@ -120,7 +123,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
 
         for (int i = 4; i < wallCounter[levelNumber]; i++) {
-            mazeWall[i].setOpacity(hide);
+            mazeWall[i].setVisibility(hide);
         }
 
 
@@ -186,6 +189,12 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         nextLevelButton = (ImageView) findViewById(R.id.next_level_button);
         finishedScreenBackground = (ImageView) findViewById(R.id.finished_background);
         homeButton = (Button) findViewById(R.id.home);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int screenWidth = size.x;
+        speedAdjustment=screenWidth/1920;
     }
 
     public void restartButtonClick(View v){
@@ -293,7 +302,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         float wy = (ball.getWidth() + wall.getWidth()) * (ball.getCenterY() - wall.getCenterY());
         float hx = (ball.getHeight() + wall.getHeight()) * (ball.getCenterX() - wall.getCenterX());
 
-        wall.setOpacity(show);
+        wall.setVisibility(show);
         wall.setTimeTouched((int) System.currentTimeMillis()-timeStart);
 
         if (wy > hx) {
@@ -515,18 +524,19 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         Intent intent = new Intent(LevelPlay.this, LevelSelect.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
+        finish();
     }
 
     public void nextLevelButtonClick(View v){
         Intent intent = new Intent(LevelPlay.this, LevelPlay.class);
         intent.putExtra("levelNumber", levelNumber+1);
-        finish();
         startActivity(intent);
+        finish();
     }
 
     public void pinkPowerUp(PowerUp powerUp){
         for(int i=0; i<wallCounter[levelNumber];i++){
-            mazeWall[i].setOpacity(show);
+            mazeWall[i].setVisibility(show);
             mazeWall[i].setTimeTouched((int)System.currentTimeMillis()-timeStart);
         }
         powerUp.setInvisible();
@@ -550,7 +560,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         for(int i=4;i<wallCounter[levelNumber];i++){
             double deltaDsquared = Math.pow(mazeWall[i].getCenterX() - powerUp.getCenterX(), 2) + Math.pow(mazeWall[i].getCenterY() - powerUp.getCenterY(), 2);
             if(deltaDsquared < Math.pow(pickup_range, 2)){
-                mazeWall[i].setOpacity(show);
+                mazeWall[i].setVisibility(show);
                 mazeWall[i].setTimeTouched((int) System.currentTimeMillis());
             }
         }
@@ -690,8 +700,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
 
         //adjusts and then saves the angle of phone in the x and y direction.
-        x = Math.round(event.values[1]) / 3 * invert * allowMovement;
-        y = Math.round(-event.values[2]) / 3 * invert * allowMovement;
+        x = Math.round(event.values[1]) / 3 * invert * allowMovement*speedAdjustment;
+        y = Math.round(-event.values[2]) / 3 * invert * allowMovement*speedAdjustment;
 
         //limits the speed
         if (x > 15) {
@@ -711,7 +721,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         time = (int) (System.currentTimeMillis() - timeStart-pausedTime);
         for (int i = 4; i < wallCounter[levelNumber]; i++) {
             if (time - mazeWall[i].getTimeTouched() > visibleThreshold) {
-                mazeWall[i].setOpacity(hide);
+                mazeWall[i].setVisibility(hide);
             }
         }
 

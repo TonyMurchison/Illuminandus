@@ -1,5 +1,6 @@
 package com.example.tonymurchison.illuminandus;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.Image;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         //TODO create animation
         Intent intent = new Intent(MainActivity.this,LevelSelect.class);
         startActivity(intent);
+        finish();
 
     }
 

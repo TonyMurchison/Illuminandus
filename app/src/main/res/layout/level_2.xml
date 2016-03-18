@@ -152,6 +152,8 @@
         android:layout_marginBottom="75dp"
         android:layout_marginRight="120dp"/>
 
+
+
     <ImageView
         android:layout_width="@dimen/wall_width"
         android:layout_height="80dp"
