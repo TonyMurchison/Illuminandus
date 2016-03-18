@@ -25,14 +25,7 @@
         android:src="@drawable/level_select_background"
         android:scaleType="fitXY"
         />
-    <ImageView
-        android:layout_width="530dp"
-        android:layout_height="260dp"
-        android:src="@drawable/wood_background"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:scaleType="centerCrop"
-        />
+
 
 
 <!-- Power ups -->
