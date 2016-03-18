@@ -71,7 +71,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     Button restartLevelButton;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
