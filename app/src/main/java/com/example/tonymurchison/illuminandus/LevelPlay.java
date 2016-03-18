@@ -517,9 +517,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         startActivity(intent);
     }
 
-    public void nextLevelButtonClick(){
+    public void nextLevelButtonClick(View v){
         Intent intent = new Intent(LevelPlay.this, LevelPlay.class);
         intent.putExtra("levelNumber", levelNumber+1);
+        finish();
         startActivity(intent);
     }
 
