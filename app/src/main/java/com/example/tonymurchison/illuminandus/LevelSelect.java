@@ -58,7 +58,7 @@ public class LevelSelect extends AppCompatActivity {
         }
 
     private void setUnlock(){       //checks whether next four are available
-        int time_total = 0;         //may be ever so slightly cocked up (using int for control, rather than float)
+        int time_total = 0;
         SharedPreferences dataSave = getSharedPreferences("highScores", 0);
 
         if(screenNumber == 0){
