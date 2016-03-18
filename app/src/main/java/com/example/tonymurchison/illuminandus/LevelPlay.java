@@ -449,6 +449,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "/" + Integer.toString(powerUpCounter[levelNumber]));
         }
 
+        if(amountPowerUpsTouched==powerUpCounter[levelNumber]) {
+            finishedLevel();
+        }
+
         if(powerUp.getType()==1 && powerUp.getHittable()){
             pinkPowerUp(powerUp);
         }
@@ -464,15 +468,18 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         if(powerUp.getType()==4 && powerUp.getHittable()){
             bluePowerUp(powerUp);
         }
-        if(amountPowerUpsTouched==powerUpCounter[levelNumber]) {
-            finishedLevel();
-        }
+
 
 
     }
 
     private void finishedLevel(){
+        int finishTime= time;
+        timeMinutes = (finishTime / (1000 * 60)) % 60;
+        timeSeconds = ((finishTime - (timeMinutes * 60 * 1000)) / 1000) % 60;
+
         finishedScreenBackground.setVisibility(View.VISIBLE);
+        pauseScreenBackground.setVisibility(View.VISIBLE);
         nextLevelButton.setVisibility(View.VISIBLE);
         nextLevelButton.setClickable(true);
         partimeFinishedScreen.setVisibility(View.VISIBLE);
@@ -504,7 +511,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
     }
 
-    public void homeButtonClick(){
+    public void homeButtonClick(View v){
         Intent intent = new Intent(LevelPlay.this, LevelSelect.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
