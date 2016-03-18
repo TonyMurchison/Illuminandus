@@ -72,7 +72,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
