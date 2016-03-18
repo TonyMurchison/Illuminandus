@@ -11,187 +11,236 @@
     android:background="@drawable/level_select_background">
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="70dp"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="45dp">
+        android:layout_alignParentLeft="true"
+        android:id="@+id/previous_button_layout">
 
-        <LinearLayout
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingRight="10dp">
-
-            <ImageView
-                android:layout_width="110dp"
-                android:layout_height="110dp"
-                android:id="@+id/first_level_select"
-                android:onClick="onLevelClick"
-
-                />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/first_level_time"
-                android:text=""
-                android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                />
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingRight="10dp"
-            android:layout_marginTop="90dp">
-
-            <ImageView
-                android:layout_width="110dp"
-                android:layout_height="110dp"
-                android:id="@+id/second_level_select"
-                android:onClick="onLevelClick"
-
-                />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:id="@+id/second_level_time"/>
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingRight="10dp"
-            android:layout_marginTop="20dp">
-
-        <ImageView
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:id="@+id/third_level_select"
-            android:onClick="onLevelClick"
-
-            />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:id="@+id/third_level_time"/>
-
-            </RelativeLayout>
-
-            </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginTop="70dp">
-
-        <ImageView
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:id="@+id/fourth_level_select"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:onClick="onLevelClick"
-            />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text=""
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:id="@+id/fourth_level_time"
-            />
-        </RelativeLayout>
-
-        </LinearLayout>
-
-        </LinearLayout>
+            android:src="@drawable/previous_button"
+            android:id="@+id/previous_button"
+            android:layout_centerVertical="true"
+            android:onClick="onPreviousButtonClick"/>
 
     </RelativeLayout>
 
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@drawable/next_button_locked"
+    <RelativeLayout
+        android:layout_width="70dp"
+        android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:id="@+id/next_button"
-        android:layout_centerVertical="true"
-        android:onClick="onNextButtonClick"/>
+        android:id="@+id/next_button_layout">
 
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@drawable/previous_button"
-        android:layout_alignParentLeft="true"
-        android:id="@+id/previous_button"
-        android:layout_centerVertical="true"
-        android:onClick="onPreviousButtonClick"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/next_button_locked"
+            android:id="@+id/next_button"
+            android:layout_centerVertical="true"
+            android:onClick="onNextButtonClick"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_toLeftOf="@+id/next_button_layout"
+        android:layout_toRightOf="@+id/previous_button_layout">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/previous_button_layout"
+            android:id="@+id/first_level_layout"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/first_allignment"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/first_level_select"
+                android:onClick="onLevelClick"
+                android:src="@drawable/locked_level_0"
+                android:layout_above="@+id/first_allignment"
+                android:layout_marginBottom="-40dp"
+                android:adjustViewBounds="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/first_level_select"
+                android:layout_marginTop="50dp"
+                android:textSize="30sp"
+                android:text=""
+                android:id="@+id/first_level_time"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/first_level_layout"
+            android:id="@+id/second_level_layout"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/second_allignment"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/second_level_select"
+                android:onClick="onLevelClick"
+                android:src="@drawable/locked_level_1"
+                android:layout_below="@+id/second_allignment"
+                android:layout_marginTop="-10dp"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@+id/second_level_select"
+                android:layout_marginBottom="20dp"
+                android:textSize="30sp"
+                android:text=""
+                android:id="@+id/second_level_time"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/second_level_layout"
+            android:layout_toLeftOf="@+id/fourth_level_layout"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/third_allignment"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/third_level_select"
+                android:onClick="onLevelClick"
+                android:src="@drawable/locked_level_2"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:layout_above="@+id/third_allignment"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/third_level_select"
+                android:textSize="30sp"
+                android:layout_marginTop="10dp"
+                android:text=""
+                android:id="@+id/third_level_time"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/next_button_layout"
+            android:id="@+id/fourth_level_layout"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fourth_allignment"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/fourth_level_select"
+                android:onClick="onLevelClick"
+                android:layout_below="@+id/fourth_allignment"
+                android:src="@drawable/locked_level_3"
+                android:layout_marginTop="-40dp"
+                android:adjustViewBounds="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@+id/fourth_level_select"
+                android:textSize="30sp"
+                android:layout_marginBottom="50dp"
+                android:text=""
+                android:id="@+id/fourth_level_time"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:layout_above="@+id/next_button"
-        android:text="0"
-        android:id="@+id/time_scored"
+        android:text="     /     "
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="30dp"
+        android:id="@+id/slash_timer"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:layout_below="@+id/next_button"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:textSize="30sp"
+        android:text=""
+        android:id="@+id/time_scored"
+        android:layout_toLeftOf="@+id/slash_timer"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:textSize="30sp"
+        android:layout_toRightOf="@+id/slash_timer"
         android:text="0"
         android:id="@+id/time_needed"
         />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:alpha="0.3"
         android:src="@drawable/level_select_background"/>
-
 
 </RelativeLayout>
