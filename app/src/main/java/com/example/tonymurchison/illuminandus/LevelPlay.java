@@ -76,9 +76,9 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         levelNumber = extras.getInt("levelNumber");
-        if(levelNumber==0) {
-            setContentView(R.layout.level_1);
-        }
+
+        int id = getResources().getIdentifier("level_" + (levelNumber + 1), "layout", getPackageName());
+        setContentView(id);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

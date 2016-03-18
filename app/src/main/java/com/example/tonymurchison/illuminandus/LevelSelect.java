@@ -108,9 +108,8 @@ public class LevelSelect extends AppCompatActivity {
             screenNumber++;
             updateLevels(screenNumber);
             setUnlock();
-            return;
         }
-        if(!unlockedstate) {
+        else {
             Toast toast = Toast.makeText(getApplicationContext(), "Levels not yet unlocked", Toast.LENGTH_SHORT);
             toast.show();
         }
