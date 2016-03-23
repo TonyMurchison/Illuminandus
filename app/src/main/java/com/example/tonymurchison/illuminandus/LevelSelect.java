@@ -20,6 +20,7 @@ public class LevelSelect extends AppCompatActivity {
     private ImageView[] level_array = new ImageView[4]; //Levels' corresponding ImageViews
     private TextView time_goal;
     private TextView time_scored;
+    private TextView slash_textview;
     private ImageView next_button;
     private ImageView previous_button;
     private int screenNumber;
@@ -49,6 +50,7 @@ public class LevelSelect extends AppCompatActivity {
         time_array[3] = (TextView) findViewById(R.id.fourth_level_time);
         time_goal = (TextView) findViewById(R.id.time_needed);
         time_scored = (TextView) findViewById(R.id.time_scored);
+        slash_textview = (TextView) findViewById(R.id.slash_timer);
 
         for(int i=0; i < 4; i++) {
             level_array[i].setTag(i);
