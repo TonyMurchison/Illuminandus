@@ -128,7 +128,7 @@
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:id="@+id/ball"
-        android:src="@drawable/ball_128"
+        android:src="@drawable/sof_pc_128"
         android:layout_below="@id/topBorderWall"
         android:layout_toRightOf="@id/leftBorderWall"
         android:layout_marginLeft="-230dp"

@@ -3,6 +3,7 @@ package com.example.tonymurchison.illuminandus;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 /*
     Class describes the wall
@@ -38,7 +39,9 @@ public class Wall extends AppCompatActivity {
 
     //constructor
     public Wall(ImageView wall){
+
         wallImage = wall;
+
     }
 
     //This method sets the coordinates for the four corners
@@ -143,19 +146,26 @@ public class Wall extends AppCompatActivity {
         return bottomRightY;
     }
 
-    public void setWidth(){
-        width=wallImage.getWidth();
+    public void setWidth(int widthInput) {
+        width = widthInput;
+        wallImage.requestLayout();
+        wallImage.getLayoutParams().width = width;
     }
 
-    public void setHeight(){
-        height=wallImage.getHeight();
+    public void setHeight(int heightInput){
+        height = heightInput;
+        wallImage.requestLayout();
+        wallImage.getLayoutParams().height = height;
     }
 
-    public void setCenter(){
-        int x[] = new int[2];
-        wallImage.getLocationOnScreen(x);
-        centerX=x[0]+(width/2);
-        centerY=x[1]+(height/2);
+    public void setCenter(int x, int y){
+        centerX=x+(width/2);
+        centerY=y+(height/2);
+        RelativeLayout.LayoutParams alp = getLayoutParams();
+        alp.leftMargin=centerX;
+        alp.topMargin=centerY;
+        setLayoutParams(alp);
+
     }
 
     public void setTimeTouched(int timeInput){
@@ -164,5 +174,13 @@ public class Wall extends AppCompatActivity {
 
     public int getTimeTouched(){
         return timeTouched;
+    }
+
+    public RelativeLayout.LayoutParams getLayoutParams(){
+        return (RelativeLayout.LayoutParams) wallImage.getLayoutParams();
+    }
+
+    public void setLayoutParams(RelativeLayout.LayoutParams alp){
+        wallImage.setLayoutParams(alp);
     }
 }

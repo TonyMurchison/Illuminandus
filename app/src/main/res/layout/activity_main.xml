@@ -10,6 +10,7 @@
     tools:context="com.example.tonymurchison.illuminandus.MainActivity"
     android:background="@drawable/titlescreen_background">
 
+
     <ImageView
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -18,6 +19,8 @@
         android:layout_centerVertical="true"
         android:src="@drawable/start_button"
         android:onClick="startButtonClick"/>
+
+
 
 
 </RelativeLayout>
