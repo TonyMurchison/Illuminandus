@@ -19,7 +19,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/previous_button"
+            android:src="@drawable/button_previous"
             android:id="@+id/previous_button"
             android:layout_centerVertical="true"
             android:onClick="onPreviousButtonClick"/>
@@ -35,7 +35,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/next_button_locked"
+            android:src="@drawable/button_next_locked"
             android:id="@+id/next_button"
             android:layout_centerVertical="true"
             android:onClick="onNextButtonClick"/>

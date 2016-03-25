@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/goal_slash"
+            android:textSize="40sp"
+            android:layout_alignParentTop="true"
+            android:text="0"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="   /   "
+            android:layout_centerHorizontal="true"
+            android:textSize="40sp"
+            android:layout_alignParentTop="true"
+            android:id="@+id/goal_slash"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/goal_slash"
+            android:textSize="40sp"
+            android:layout_alignParentTop="true"
+            android:text="4"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/time_slash"
+            android:textSize="30sp"
+            android:layout_alignParentBottom="true"
+            android:text="0:00"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="   /   "
+            android:layout_centerHorizontal="true"
+            android:textSize="30sp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/time_slash"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/time_slash"
+            android:textSize="30sp"
+            android:layout_alignParentBottom="true"
+            android:text="0:45"
+            android:layout_marginBottom="10dp"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:text="1"
+        android:textSize="120sp"
+        android:typeface="monospace"
+        android:layout_marginBottom="-15dp"/>
+
+</RelativeLayout>
