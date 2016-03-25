@@ -1,5 +1,6 @@
 package com.example.tonymurchison.illuminandus;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LevelPlay extends AppCompatActivity implements SensorEventListener {
     private SensorManager sManager;
@@ -49,7 +51,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     int time;
     int timeMinutes;
     int timeSeconds;
-    int speedAdjustment;
+    double speedAdjustment;
     TextView timeText;
     TextView powerUpsTouched;
     TextView parTimeText;
@@ -200,7 +202,15 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         display.getSize(size);
         screenWidth = size.x;
         speedAdjustment=screenWidth/1920;
-        block=screenWidth/90;
+        block=(int)Math.round(screenWidth/90d);
+
+        Context context = getApplicationContext();
+        CharSequence text = Integer.toString(block);
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+
         start();
     }
 
@@ -681,8 +691,9 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             powerUps[i].setCorners();
         }
 */
-    double offsetX=5.5;
-    double offsetY=3;
+    double offsetX=11.5;
+    double offsetY=4.7;
+
 
 
         for(int i=0;i<5;i++){
@@ -693,22 +704,23 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                     mazeWall[wallNumber] = new Wall(wallImage);
                     mazeWall[wallNumber].setWidth(6 * block);
                     mazeWall[wallNumber].setHeight(1 * block);
-                    mazeWall[wallNumber].setCenter((int)(j*5*block+(((4+offsetX)*block))), (i*5*block + block*(int)(6+offsetY)));
+                    mazeWall[wallNumber].setCenter((int) ((double)j * 5d * (double) block + (4d + offsetX) * (double) block), (int) ((double)i * 5d * (double)block + (double)block * (6d + offsetY)));
                     mazeWall[wallNumber].setCorners();
                     mazeWall[wallNumber].setVisibility(show);
                     wallNumber=wallNumber+1;
                 }
             }
         }
+
         for(int i=0;i<12;i++){
             for(int j=0;j<6;j++){
                 if(verticalWalls[i][j]==true){
                     int id = getResources().getIdentifier("vertical_wall_" + ((i*6)+(j+1)), "id", getPackageName());
                     ImageView wallImage = (ImageView) findViewById(id);
                     mazeWall[wallNumber] = new Wall(wallImage);
-                    mazeWall[wallNumber].setWidth(1*block);
-                    mazeWall[wallNumber].setHeight(5*block);
-                    mazeWall[wallNumber].setCenter((int)(i*5*block+block*(11.5+offsetX)), j*5*block+ (int) (block*(offsetY)));
+                    mazeWall[wallNumber].setWidth(1 * block);
+                    mazeWall[wallNumber].setHeight(5 * block);
+                    mazeWall[wallNumber].setCenter((int) ((double)i * 5d * (double)block +(double) block * (6.5d + offsetX)), (int) ((double)j * 5d * (double)block + ((double)block * (offsetY + 3d))));
                     mazeWall[wallNumber].setCorners();
                     mazeWall[wallNumber].setVisibility(show);
                     wallNumber=wallNumber+1;
@@ -717,11 +729,14 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             }
         }
 
+
+
+
         ImageView leftBorderWallImage = (ImageView) findViewById(R.id.leftBorderWall);
         mazeWall[wallNumber] = new Wall(leftBorderWallImage);
         mazeWall[wallNumber].setWidth(1 * block);
         mazeWall[wallNumber].setHeight(32 * block);
-        mazeWall[wallNumber].setCenter((int) ((5.5 + offsetX) * block), (int) ((-14.5 + offsetY) * block));
+        mazeWall[wallNumber].setCenter((int) ((offsetX + 0.5d) *(double) block), (int) ((offsetY + 15.5d) * (double)block));
         mazeWall[wallNumber].setCorners();
         wallNumber=wallNumber+1;
 
@@ -729,43 +744,44 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         mazeWall[wallNumber] = new Wall(rightBorderWallImage);
         mazeWall[wallNumber].setWidth(1 * block);
         mazeWall[wallNumber].setHeight(32 * block);
-        mazeWall[wallNumber].setCenter((int) ((72.5 + offsetX) * block), (int) ((-14.5 + offsetY) * block));
+        mazeWall[wallNumber].setCenter((int) ((67.5d + offsetX) * (double)block), (int) ((offsetY + 15.5d) * (double)block));
         mazeWall[wallNumber].setCorners();
         wallNumber=wallNumber+1;
 
         ImageView topBorderWallImage = (ImageView) findViewById(R.id.topBorderWall);
         mazeWall[wallNumber] = new Wall(topBorderWallImage);
-        mazeWall[wallNumber].setWidth(67 * block);
+        mazeWall[wallNumber].setWidth(68 * block);
         mazeWall[wallNumber].setHeight(1 * block);
-        mazeWall[wallNumber].setCenter((int) ((-26.5 + offsetX) * block), (int) ((1 + offsetY) * block));
+        mazeWall[wallNumber].setCenter((int) ((offsetX + 34d) * (double)block), (int) ((offsetY) * (double)block));
         mazeWall[wallNumber].setCorners();
         wallNumber=wallNumber+1;
 
         ImageView bottomBorderWallImage = (ImageView) findViewById(R.id.bottomBorderWall);
         mazeWall[wallNumber] = new Wall(bottomBorderWallImage);
-        mazeWall[wallNumber].setWidth(67 * block);
+        mazeWall[wallNumber].setWidth(68 * block);
         mazeWall[wallNumber].setHeight(1 * block);
-        mazeWall[wallNumber].setCenter((int) ((-26.5 + offsetX) * block), (int) ((32 + offsetY) * block));
+        mazeWall[wallNumber].setCenter((int) ((offsetX + 34d) * (double)block), (int) ((31d + offsetY) * (double)block));
         mazeWall[wallNumber].setCorners();
         wallNumber=wallNumber+1;
 
+
+
+
         ImageView border = (ImageView) findViewById(R.id.border);
-        border.getLayoutParams().height=(int)(39.20*block);
-        border.getLayoutParams().width=82*block;
+        border.getLayoutParams().height=(int)(39.20d * block);
+        border.getLayoutParams().width=(int)(82d * block);
         RelativeLayout.LayoutParams borderLayout = (RelativeLayout.LayoutParams)border.getLayoutParams();
-        borderLayout.topMargin=(int)(1.4*block);
+        borderLayout.topMargin=(int)(1.4d * block);
+        borderLayout.leftMargin=(int)(4.4d*(double)block);
         border.setLayoutParams(borderLayout);
 
-        playingBall.setWidth((int) (2 * block));
-        playingBall.setHeight((int) (2 * block));
-        playingBall.setCenter((int) ((0.25*block+offsetX) * block), (int)((offsetY+2.5)*block));
-        playingBall.setCorners();
 
-/*
-        playingBall.setWidth();
-        playingBall.setHeight();
-        playingBall.setCenter();
+        playingBall.setWidth((int) (2d * block));
+        playingBall.setHeight((int) (2d * block));
+        playingBall.setCenter((int) ((1d * block + offsetX) * block), (int) ((offsetY + 3.5d) * block));
         playingBall.setCorners();
+        /*
+
 
         powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched)+"/"+Integer.toString(powerUpCounter[levelNumber]));
         */
@@ -774,19 +790,15 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-/*
-        if (started == false) {
-            start();
-        }
-*/
+
         //if sensor is unreliable, return void
         if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
             return;
         }
 
         //adjusts and then saves the angle of phone in the x and y direction.
-        x = Math.round(event.values[1]) / 3 * invert * allowMovement*speedAdjustment;
-        y = Math.round(-event.values[2]) / 3 * invert * allowMovement*speedAdjustment;
+        x = Math.round((event.values[1]) / (int)(3f * invert * allowMovement*speedAdjustment));
+        y = Math.round((-event.values[2]) / (int)(3f * invert * allowMovement*speedAdjustment));
 
         //limits the speed
         if (x > 15) {
@@ -807,7 +819,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         time = (int) (System.currentTimeMillis() - timeStart-pausedTime);
         for (int i = 0; i < wallNumber-4; i++) {
             if (time - mazeWall[i].getTimeTouched() > visibleThreshold) {
-                mazeWall[i].setVisibility(hide);
+                //mazeWall[i].setVisibility(hide);
             }
         }
 

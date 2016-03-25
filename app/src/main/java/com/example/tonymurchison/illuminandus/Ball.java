@@ -124,11 +124,11 @@ public class Ball{
     }
 
     public void setCenter(int x, int y){
-        centerX=x+(width/2);
-        centerY=y+(height/2);
+        centerX=x;
+        centerY=y;
         RelativeLayout.LayoutParams alp = getLayoutParams();
-        alp.leftMargin=centerX;
-        alp.topMargin=centerY;
+        alp.leftMargin=centerX-width/2;
+        alp.topMargin=centerY-height/2;
         setLayoutParams(alp);
     }
 

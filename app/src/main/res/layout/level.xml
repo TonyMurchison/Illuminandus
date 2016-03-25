@@ -8,18 +8,11 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".LevelPlay"
-    >
+    android:background="@drawable/titlescreen_background">
 
 
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/levelplay_level_frame"
-        android:id="@+id/border"
-        android:layout_centerHorizontal="true"
-        />
+
 
 
     <ImageView
@@ -1158,13 +1151,13 @@
         android:id="@+id/ball"
         android:src="@drawable/sof_pc_128"/>
 
-
-
-
-
-
-
-
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/levelplay_level_frame"
+        android:id="@+id/border"
+        />
 
 
 
