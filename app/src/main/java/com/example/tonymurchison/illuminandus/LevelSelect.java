@@ -88,8 +88,14 @@ public class LevelSelect extends AppCompatActivity {
                 localHighScore = 10;
             }
             if(localHighScore == 0){
+
+                /*
+
+
+                FIX THIS!!!
                 next_button.setImageResource(R.drawable.next_button_locked);
                 unlockedstate = false;
+                */
                 return;
             }
             time_total = time_total + localHighScore;
@@ -101,13 +107,29 @@ public class LevelSelect extends AppCompatActivity {
             time_scored.setText("");
         }
         if(time_total < setGoalTime(screenNumber)){
+
+            /*
+
+            FIX THIS!!!!
+
+
             next_button.setImageResource(R.drawable.next_button);
             unlockedstate = true;
+            */
             return;
         }
         else{
+
+            /*
+
+
+
+
+            FIX THIS!!!!
+
             next_button.setImageResource(R.drawable.next_button_locked);
             unlockedstate = false;
+            */
             return;
         }
     }

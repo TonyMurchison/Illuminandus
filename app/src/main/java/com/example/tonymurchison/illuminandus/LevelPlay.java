@@ -38,7 +38,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
     //power up storage info
     PowerUp powerUps[];
-    int powerUpCounter[]=new int[8];
 
     //wall storage info
     Wall mazeWall[] = new Wall[137];
@@ -83,6 +82,15 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     ImageView finishedScreenBackground;
     Button homeButton;
 
+    int powerUpsPlacement[][]={
+            {1,1,1,1,1,1,1,1,1,1,1,1,1},
+            {1,1,1,1,1,1,1,1,1,1,1,1,1},
+            {1,1,1,1,1,1,1,1,1,1,1,1,1},
+            {1,1,1,1,1,1,1,1,1,1,1,1,1},
+            {1,1,1,1,1,1,1,1,1,1,1,1,1},
+            {1,1,1,1,1,1,1,1,1,1,1,1,1},
+    };
+
     boolean horizontalWalls[][] = {{false,true,false,false,false,false,true,true,true,true,true,false,false},
         {true,false,true,true,false,true,true,false,false,false,true,true,false},
         {false,true,false,true,true,false,true,false,false,false,true,false,true},
@@ -94,8 +102,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         {true,false,false,true,true,true},
         {false,true,true,false,true,false},
         {true,true,false,false,false,true},
-        {false,false,false,true,true,false},
-        {false,false,true,false,false,false},
+        {false,false,false,true, true, false},
+            {false,false,true,false,false,false},
         {false,true,true,false,true,false},
         {false,true,true,true,false,true},
         {false,false,true,true,true,false},
@@ -129,10 +137,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        timeText = (TextView) findViewById(R.id.timeText);
-        parTimeText = (TextView) findViewById(R.id.ParText);
-        powerUpsTouched = (TextView) findViewById(R.id.powerUpCounter);
-        levelText = (TextView) findViewById(R.id.LevelText);
 
         /*
         powerUpCounter=getResources().getIntArray(R.array.powerUpCount);
@@ -472,12 +476,12 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     public void hitPowerUp(PowerUp powerUp){
         if(powerUp.getHittable()) {
             amountPowerUpsTouched = amountPowerUpsTouched + 1;
-            powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "/" + Integer.toString(powerUpCounter[levelNumber]));
+            //powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "/" + Integer.toString(powerUpCounter[levelNumber]));
         }
 
-        if(amountPowerUpsTouched==powerUpCounter[levelNumber]) {
-            finishedLevel();
-        }
+        //if(amountPowerUpsTouched==powerUpCounter[levelNumber]) {
+          //  finishedLevel();
+        //}
 
         if(powerUp.getType()==1 && powerUp.getHittable()){
             pinkPowerUp(powerUp);
@@ -726,6 +730,14 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                     wallNumber=wallNumber+1;
                 }
 
+            }
+        }
+
+        for(int i=0;i<13;i++){
+            for(int j=0;j<6;j++){
+                if(powerUpsPlacement[i][j]==1){
+                    ImageView imagePowerUp = (ImageView) findViewById(R.drawable.)
+                }
             }
         }
 
