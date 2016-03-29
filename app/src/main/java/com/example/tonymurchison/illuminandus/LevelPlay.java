@@ -91,6 +91,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             {1,1,1,1,1,1,1,1,1,1,1,1,1},
     };
 
+    int powerUpCounter=0;
+
     boolean horizontalWalls[][] = {{false,true,false,false,false,false,true,true,true,true,true,false,false},
         {true,false,true,true,false,true,true,false,false,false,true,true,false},
         {false,true,false,true,true,false,true,false,false,false,true,false,true},
@@ -736,8 +738,13 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         for(int i=0;i<13;i++){
             for(int j=0;j<6;j++){
                 if(powerUpsPlacement[i][j]==1){
-                    ImageView imagePowerUp = (ImageView) findViewById(R.drawable.)
-                }
+                    ImageView imagePowerUp = new ImageView(this);
+                    imagePowerUp.setImageResource(R.drawable.pickup_blue_v2);
+                    powerUps[powerUpCounter] = new PowerUp(powerUpsPlacement[i][j], imagePowerUp);
+                    powerUps[powerUpCounter].setWidth((int) (2d * block));
+                    powerUps[powerUpCounter].setHeight((int) (2d * block));
+                    powerUps[powerUpCounter].setCenter((int) ((double)j * 5d * (double) block + (4d + offsetX) * (double) block), (int) ((double)i * 5d * (double)block + (double)block * (6d + offsetY)));
+                    powerUps[powerUpCounter].setCorners();
             }
         }
 

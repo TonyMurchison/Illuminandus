@@ -3,6 +3,7 @@ package com.example.tonymurchison.illuminandus;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 /*
     Class describes power ups
@@ -114,19 +115,25 @@ public class PowerUp extends AppCompatActivity {
         return bottomRightY;
     }
 
-    public void setWidth(){
-        width=powerUpImage.getWidth();
+    public void setWidth(int widthInput){
+        width=widthInput;
+        powerUpImage.requestLayout();
+        powerUpImage.getLayoutParams().width = width;
     }
 
-    public void setHeight(){
-        height=powerUpImage.getHeight();
+    public void setHeight(int heightInput){
+        height=heightInput;
+        powerUpImage.requestLayout();
+        powerUpImage.getLayoutParams().height = height;
     }
 
-    public void setCenter(){
-        int x[] = new int[2];
-        powerUpImage.getLocationOnScreen(x);
-        centerX=x[0]+(width/2);
-        centerY=x[1]+(height/2);
+    public void setCenter(int x, int y){
+        centerX=x;
+        centerY=y;
+        RelativeLayout.LayoutParams alp = getLayoutParams();
+        alp.leftMargin=centerX-width/2;
+        alp.topMargin=centerY-height/2;
+        setLayoutParams(alp);
     }
 
     public int getType(){
@@ -143,6 +150,14 @@ public class PowerUp extends AppCompatActivity {
 
     public boolean getHittable(){
         return hittable;
+    }
+
+    public RelativeLayout.LayoutParams getLayoutParams(){
+        return (RelativeLayout.LayoutParams) powerUpImage.getLayoutParams();
+    }
+
+    public void setLayoutParams(RelativeLayout.LayoutParams alp){
+        powerUpImage.setLayoutParams(alp);
     }
 
 
