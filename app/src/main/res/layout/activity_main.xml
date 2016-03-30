@@ -20,7 +20,4 @@
         android:src="@drawable/button_start_screen"
         android:onClick="startButtonClick"/>
 
-
-
-
 </RelativeLayout>
