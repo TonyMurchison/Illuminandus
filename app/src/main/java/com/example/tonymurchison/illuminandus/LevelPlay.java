@@ -972,10 +972,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
             pauseScreenTimeText.setWidth(35 * block);
             pauseScreenTimeText.setHeight(30 * block);
-            pauseScreenTimeText.setTextSize(3 * block);
+            pauseScreenTimeText.setTextSize((int)(1.25d * block));
             RelativeLayout.LayoutParams paramsPauseTimeText = (RelativeLayout.LayoutParams)pauseScreenTimeText.getLayoutParams();
-            paramsPauseTimeText.leftMargin=60*block;
-            paramsPauseTimeText.topMargin=37*block;
+            paramsPauseTimeText.leftMargin=45*block;
+            paramsPauseTimeText.topMargin=20*block;
             pauseScreenTimeText.setLayoutParams(paramsPauseTimeText);
 
     }
