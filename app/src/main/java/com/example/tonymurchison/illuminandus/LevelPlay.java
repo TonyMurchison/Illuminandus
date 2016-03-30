@@ -1,9 +1,6 @@
 package com.example.tonymurchison.illuminandus;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
 import android.graphics.Point;
@@ -11,10 +8,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,13 +18,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.DataInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class LevelPlay extends AppCompatActivity implements SensorEventListener {
@@ -46,7 +36,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     boolean allowedMovement[] = {true, true, true, true};
 
     //power up storage info
-    PowerUp powerUps[] = new PowerUp[80];
+    PowerUp powerUps[] = new PowerUp[15];
 
     //wall storage info
     Wall mazeWall[] = new Wall[137];
@@ -130,7 +120,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         timeText = (TextView) findViewById(R.id.timeText);
         powerUpsTouched = (TextView) findViewById(R.id.powerUpsTouched);
 
-
+        int parTimeArray [] = getResources().getIntArray(R.array.parTime);
+        parTime = parTimeArray[levelNumber];
         parTimeMinutes=(parTime/(1000*60))%60;
         parTimeSeconds=((parTime-(parTimeMinutes*60*1000))/1000)%60;
         parTimeText.setText("  /  0"+Integer.toString(parTimeMinutes)+":"+Integer.toString(parTimeSeconds));
@@ -263,7 +254,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         time = (int) (System.currentTimeMillis() - timeStart - pausedTime);
         for (int i = 0; i < wallNumber - 4; i++) {
             if (time - mazeWall[i].getTimeTouched() > visibleThreshold) {
-                mazeWall[i].setVisibility(hide);
+                //mazeWall[i].setVisibility(hide);
             }
         }
 
@@ -787,7 +778,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                     mazeWall[wallNumber].setHeight(1 * block);
                     mazeWall[wallNumber].setCenter((int) ((double) j * 5d * (double) block + (4d + offsetX) * (double) block), (int) ((double) i * 5d * (double) block + (double) block * (6d + offsetY)));
                     mazeWall[wallNumber].setCorners();
-                    mazeWall[wallNumber].setVisibility(hide);
+                    mazeWall[wallNumber].setVisibility(show);
                     wallNumber = wallNumber + 1;
                 }
             }
@@ -803,7 +794,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                     mazeWall[wallNumber].setHeight(5 * block);
                     mazeWall[wallNumber].setCenter((int) ((double) i * 5d * (double) block + (double) block * (6.5d + offsetX)), (int) ((double) j * 5d * (double) block + ((double) block * (offsetY + 3d))));
                     mazeWall[wallNumber].setCorners();
-                    mazeWall[wallNumber].setVisibility(hide);
+                    mazeWall[wallNumber].setVisibility(show);
                     wallNumber = wallNumber + 1;
                 }
 
