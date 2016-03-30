@@ -63,9 +63,9 @@ public class PowerUp extends AppCompatActivity {
     }
 
     //make the power up go invisible
-    public void setInvisible(){
-        powerUpImage.setVisibility(View.GONE);
-    }
+    public void setInvisible(){powerUpImage.setVisibility(View.GONE);}
+
+    public void setVisible(){powerUpImage.setVisibility(View.VISIBLE);}
 
     public int getWidth(){
         return width;

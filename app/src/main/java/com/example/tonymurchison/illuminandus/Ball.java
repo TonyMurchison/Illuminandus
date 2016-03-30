@@ -1,5 +1,6 @@
 package com.example.tonymurchison.illuminandus;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -29,7 +30,7 @@ public class Ball{
     //information off the ball
     private int width;
     private int height;
-    public ImageView ballImage;
+    private ImageView ballImage;
 
     //constructor
     public Ball(ImageView ball){
@@ -109,6 +110,15 @@ public class Ball{
 
     public void setCenterY(int y){
         centerY=y;
+    }
+
+    public void setVisibility(float x){
+        if(x==1){
+            ballImage.setVisibility(View.VISIBLE);
+        }
+        if(x==0){
+            ballImage.setVisibility(View.GONE);
+        }
     }
 
     public void setWidth(int widthInput){

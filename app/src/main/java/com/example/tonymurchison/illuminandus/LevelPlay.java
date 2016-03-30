@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.AssetManager;
 import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -13,6 +14,7 @@ import android.hardware.SensorManager;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +24,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class LevelPlay extends AppCompatActivity implements SensorEventListener {
     private SensorManager sManager;
@@ -33,7 +42,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     boolean started = false;        //stores if the walls,ball and power ups have been set up already
 
     //ball storage info
-    ImageView ballImage;
     Ball playingBall;
     boolean allowedMovement[] = {true, true, true, true};
 
@@ -61,7 +69,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     int invert=1;
     int pickup_range=500;
     int amountPowerUpsTouched=0;
-    int parTime[]= new int[8];
     int parTimeMinutes;
     int parTimeSeconds;
     int pausedTime=0;
@@ -74,8 +81,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     ImageView pauseScreenBackground2;
     ImageView playButton;
     TextView pauseScreenTimeText;
-    Button quitLevelButton;
-    Button restartLevelButton;
+    ImageView quitLevelButton;
+    ImageView restartLevelButton;
 
     TextView partimeFinishedScreen;
     TextView timeFinishedScreen;
@@ -83,38 +90,16 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     ImageView finishedScreenBackground;
     Button homeButton;
 
-    int powerUpsPlacement[][]={
-            {1,1,1,1,1,1,1,1,1,1,1,1,1},
-            {2,2,2,2,2,2,2,2,2,2,2,2,2},
-            {3,3,3,3,3,3,3,3,3,3,3,3,3},
-            {4,4,4,4,4,4,4,4,4,4,4,4,4},
-            {5,5,5,5,5,5,5,5,5,5,5,5,5},
-            {6,6,6,6,6,6,6,6,6,6,6,6,6},
-    };
-
+    int powerUpsPlacement[][]= new int[6][13];
     int powerUpCounter=0;
 
-    boolean horizontalWalls[][] = {{false,true,false,false,false,false,true,true,true,true,true,false,false},
-        {true,false,true,true,false,true,true,false,false,false,true,true,false},
-        {false,true,false,true,true,false,true,false,false,false,true,false,true},
-        {true,false,false,false,true,true,false,true,true,false,false,true,false},
-        {false,true,false,false,false,false,false,true,false,true,true,false,false}};
+    boolean horizontalWalls[][] = new boolean[5][13];
 
-    boolean verticalWalls[][] = {{false,false,false,false,true,false},
-        {false,true,true,true,false,false},
-        {true,false,false,true,true,true},
-        {false,true,true,false,true,false},
-        {true,true,false,false,false,true},
-        {false,false,false,true, true, false},
-        {false,false,true,false,false,false},
-        {false,true,true,false,true,false},
-        {false,true,true,true,false,true},
-        {false,false,true,true,true,false},
-        {false,false,false,false,false,false},
-        {false,true,false,false,true,false},
-    };
+    boolean verticalWalls[][] = new boolean[12][6];
 
+    int ballPosition=0;
 
+    int parTime=50000;
 
     int wallNumber=0;
     int screenWidth;
@@ -127,10 +112,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         Bundle extras = getIntent().getExtras();
         levelNumber = extras.getInt("levelNumber");
 
-        /*
-        int id = getResources().getIdentifier("level_" + (levelNumber + 1), "layout", getPackageName());
-        setContentView(id);
-        */
         setContentView(R.layout.level);
         //hide top bar
         getSupportActionBar().hide();
@@ -141,29 +122,37 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
-        //ball initializing
-        ballImage = (ImageView) findViewById(R.id.ball);
+        ImageView ballImage = (ImageView)findViewById(R.id.ball);
         playingBall = new Ball(ballImage);
 
+        parTimeText = (TextView) findViewById(R.id.parTimeText);
+        levelText = (TextView) findViewById(R.id.levelText);
+        timeText = (TextView) findViewById(R.id.timeText);
+        powerUpsTouched = (TextView) findViewById(R.id.powerUpsTouched);
 
-/*
-        parTime=getResources().getIntArray(R.array.parTime);
 
-        parTimeMinutes=(parTime[levelNumber]/(1000*60))%60;
-        parTimeSeconds=((parTime[levelNumber]-(parTimeMinutes*60*1000))/1000)%60;
-        parTimeText.setText("Par time: "+Integer.toString(parTimeMinutes)+":"+Integer.toString(parTimeSeconds));
+        parTimeMinutes=(parTime/(1000*60))%60;
+        parTimeSeconds=((parTime-(parTimeMinutes*60*1000))/1000)%60;
+        parTimeText.setText("  /  0"+Integer.toString(parTimeMinutes)+":"+Integer.toString(parTimeSeconds));
 
-        levelText.setText("Level "+Integer.toString(levelNumber+1));
+        levelText.setText(Integer.toString(levelNumber+1));
 
         timeStart=(int)System.currentTimeMillis();
 
         pauseScreenBackground = (ImageView) findViewById(R.id.menu_background);
         pauseScreenBackground2 = (ImageView) findViewById(R.id.menu_background_2);
         playButton = (ImageView) findViewById(R.id.playButton);
-        quitLevelButton = (Button) findViewById(R.id.quitLevelButton);
-        restartLevelButton = (Button) findViewById(R.id.restartButton);
+        quitLevelButton = (ImageView) findViewById(R.id.quitLevelButton);
+        restartLevelButton = (ImageView) findViewById(R.id.restartButton);
         pauseScreenTimeText = (TextView) findViewById(R.id.timePause);
 
+
+        readFile();
+
+
+
+
+/*
         partimeFinishedScreen = (TextView) findViewById(R.id.partime_finished_screen);
         timeFinishedScreen = (TextView) findViewById(R.id.time_finished_screen);
         nextLevelButton = (ImageView) findViewById(R.id.next_level_button);
@@ -180,6 +169,69 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         start();
     }
 
+
+    void readFile(){
+        AssetManager assetManager = getResources().getAssets();
+        InputStream inputStream = null;
+
+        try {
+            inputStream = assetManager.open("levelsFile.txt");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Scanner scanner = new Scanner(inputStream);
+        boolean reading = true;
+        String level = "Level "+Integer.toString(levelNumber+1);
+        while(reading==true){
+            if(level.equals(scanner.nextLine())){
+                for(int i=0;i<6;i++){
+                    String line = scanner.nextLine();
+                    for(int j=0;j<13;j++){
+                        powerUpsPlacement[i][j]=Character.getNumericValue(line.charAt(j));
+                    }
+                }
+
+                scanner.nextLine();
+
+                for(int i=0;i<5;i++){
+                    String line = scanner.nextLine();
+                    for(int j=0;j<13;j++){
+                        if(Character.getNumericValue(line.charAt(j))==1){
+                            horizontalWalls[i][j]=true;
+                        }
+                        else{
+                            horizontalWalls[i][j]=false;
+                        }
+                    }
+                }
+
+                scanner.nextLine();
+
+                for(int i=0;i<12;i++){
+                    String line = scanner.nextLine();
+                    for(int j=0;j<6;j++){
+                        if(Character.getNumericValue(line.charAt(j))==1){
+                            verticalWalls[i][j]=true;
+                        }
+                        else{
+                            verticalWalls[i][j]=false;
+                        }
+                    }
+                }
+
+                scanner.nextLine();
+
+                String line = scanner.nextLine();
+                ballPosition=Integer.parseInt(line);
+                reading=false;
+
+            }
+        }
+
+
+    }
 
     @Override
     public void onSensorChanged (SensorEvent event){
@@ -211,13 +263,13 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         time = (int) (System.currentTimeMillis() - timeStart - pausedTime);
         for (int i = 0; i < wallNumber - 4; i++) {
             if (time - mazeWall[i].getTimeTouched() > visibleThreshold) {
-                //mazeWall[i].setVisibility(hide);
+                mazeWall[i].setVisibility(hide);
             }
         }
 
         timeMinutes = (time / (1000 * 60)) % 60;
         timeSeconds = ((time - (timeMinutes * 60 * 1000)) / 1000) % 60;
-/*
+
         if (timeMinutes < 10) {
             if (timeSeconds < 10) {
                 timeText.setText("0" + Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds));
@@ -232,10 +284,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             }
         }
 
-        if (time > (parTime[levelNumber] + 1000)) {
+        if (time > (parTime + 1000)) {
             timeText.setTextColor(getResources().getColor(R.color.red));
         }
-*/
+
         move(x, y);
 
     }
@@ -264,6 +316,12 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         
         allowMovement =1;
         pausedTime=pausedTime+((int)System.currentTimeMillis()-timeAtPause);
+
+        for(int i=0;i<powerUpCounter;i++){
+            if(powerUps[i].getHittable()==true) {
+                powerUps[i].setVisible();
+            }
+        }
     }
 
 
@@ -312,6 +370,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     public void pauseScreen(){
         timeAtPause=(int) System.currentTimeMillis();
         allowMovement =0;
+
+        for (int i=0;i<powerUpCounter;i++){
+            powerUps[i].setInvisible();
+        }
 
         pauseScreenBackground.setVisibility(View.VISIBLE);
         pauseScreenBackground2.setVisibility(View.VISIBLE);
@@ -499,12 +561,12 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     public void hitPowerUp(PowerUp powerUp){
         if(powerUp.getHittable()) {
             amountPowerUpsTouched = amountPowerUpsTouched + 1;
-            //powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "/" + Integer.toString(powerUpCounter[levelNumber]));
+            powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "  /  " + Integer.toString(powerUpCounter));
         }
 
-        //if(amountPowerUpsTouched==powerUpCounter[levelNumber]) {
-          //  finishedLevel();
-        //}
+        if(amountPowerUpsTouched==powerUpCounter) {
+          finishedLevel();
+        }
 
         if(powerUp.getType()==1 && powerUp.getHittable()){
             pinkPowerUp(powerUp);
@@ -652,10 +714,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             for (int i = 0; i < wallNumber; i++) {
                 intersectWall(playingBall, mazeWall[i]);
             }
-/*
-            for(int i=0; i< powerUpCounter[levelNumber]; i++){
+
+            for(int i=0; i< powerUpCounter; i++){
                 intersectPowerUp(playingBall, powerUps[i]);
-            }*/
+            }
 
             if (stepsTakenX < maxMovementX) {
                 stepsTakenX = stepsTakenX + 1;
@@ -725,7 +787,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                     mazeWall[wallNumber].setHeight(1 * block);
                     mazeWall[wallNumber].setCenter((int) ((double) j * 5d * (double) block + (4d + offsetX) * (double) block), (int) ((double) i * 5d * (double) block + (double) block * (6d + offsetY)));
                     mazeWall[wallNumber].setCorners();
-                    mazeWall[wallNumber].setVisibility(show);
+                    mazeWall[wallNumber].setVisibility(hide);
                     wallNumber = wallNumber + 1;
                 }
             }
@@ -741,7 +803,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                     mazeWall[wallNumber].setHeight(5 * block);
                     mazeWall[wallNumber].setCenter((int) ((double) i * 5d * (double) block + (double) block * (6.5d + offsetX)), (int) ((double) j * 5d * (double) block + ((double) block * (offsetY + 3d))));
                     mazeWall[wallNumber].setCorners();
-                    mazeWall[wallNumber].setVisibility(show);
+                    mazeWall[wallNumber].setVisibility(hide);
                     wallNumber = wallNumber + 1;
                 }
 
@@ -754,12 +816,24 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
                     ImageView imagePowerUp = new ImageView(LevelPlay.this);
 
-                    if(powerUpsPlacement[i][j]==1){imagePowerUp.setImageResource(R.drawable.pickup_blue_v2);}
-                    if(powerUpsPlacement[i][j]==2){imagePowerUp.setImageResource(R.drawable.pickup_red_v2);}
-                    if(powerUpsPlacement[i][j]==3){imagePowerUp.setImageResource(R.drawable.pickup_pink_v2);}
-                    if(powerUpsPlacement[i][j]==4){imagePowerUp.setImageResource(R.drawable.pickup_green_v2);}
-                    if(powerUpsPlacement[i][j]==5){imagePowerUp.setImageResource(R.drawable.pickup_yellow_v2);}
-                    if(powerUpsPlacement[i][j]==6){imagePowerUp.setImageResource(R.drawable.sof_multi_pickup);}
+                    if (powerUpsPlacement[i][j] == 1) {
+                        imagePowerUp.setImageResource(R.drawable.pickup_blue_v2);
+                    }
+                    if (powerUpsPlacement[i][j] == 2) {
+                        imagePowerUp.setImageResource(R.drawable.pickup_red_v2);
+                    }
+                    if (powerUpsPlacement[i][j] == 3) {
+                        imagePowerUp.setImageResource(R.drawable.pickup_pink_v2);
+                    }
+                    if (powerUpsPlacement[i][j] == 4) {
+                        imagePowerUp.setImageResource(R.drawable.pickup_green_v2);
+                    }
+                    if (powerUpsPlacement[i][j] == 5) {
+                        imagePowerUp.setImageResource(R.drawable.pickup_yellow_v2);
+                    }
+                    if (powerUpsPlacement[i][j] == 6) {
+                        imagePowerUp.setImageResource(R.drawable.pickup_multi_v2);
+                    }
 
 
                     RelativeLayout rl = (RelativeLayout) findViewById(R.id.relativeLayout);
@@ -773,10 +847,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                     powerUps[powerUpCounter].setHeight((int) (2d * block));
                     powerUps[powerUpCounter].setCenter((int) ((double) j * 5d * (double) block + (4d + offsetX) * (double) block), (int) ((double) i * 5d * (double) block + (double) block * (3.5d + offsetY)));
                     powerUps[powerUpCounter].setCorners();
-                    powerUpCounter=powerUpCounter+1;
+                    powerUpCounter = powerUpCounter + 1;
                 }
             }
-
+        }
 
             ImageView leftBorderWallImage = (ImageView) findViewById(R.id.leftBorderWall);
             mazeWall[wallNumber] = new Wall(leftBorderWallImage);
@@ -822,19 +896,87 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
             playingBall.setWidth((int) (2d * block));
             playingBall.setHeight((int) (2d * block));
-            playingBall.setCenter((int) ((1d * block + offsetX) * block), (int) ((offsetY + 3.5d) * block));
+            playingBall.setCenter((int) ((4d + offsetX) * block), (int) ((offsetY + 3.5d) * block));
             playingBall.setCorners();
-        /*
+
+            timeText.setWidth(30 * block);
+            timeText.setHeight(10 * block);
+            timeText.setTextSize(block);
+            RelativeLayout.LayoutParams paramsTimeText = (RelativeLayout.LayoutParams)timeText.getLayoutParams();
+            paramsTimeText.leftMargin=15*block;
+            paramsTimeText.topMargin=46*block;
+            timeText.setLayoutParams(paramsTimeText);
+
+            parTimeText.setWidth(30 * block);
+            parTimeText.setHeight(10 * block);
+            parTimeText.setTextSize(block);
+            RelativeLayout.LayoutParams paramsParTimeText = (RelativeLayout.LayoutParams) parTimeText.getLayoutParams();
+            paramsParTimeText.leftMargin=45*block;
+            paramsParTimeText.topMargin=46*block;
+            parTimeText.setLayoutParams(paramsParTimeText);
+
+            levelText.setWidth(35 * block);
+            levelText.setHeight(30 * block);
+            levelText.setTextSize(3 * block);
+            RelativeLayout.LayoutParams paramsLevelText = (RelativeLayout.LayoutParams)levelText.getLayoutParams();
+            paramsLevelText.leftMargin=60*block;
+            paramsLevelText.topMargin=37*block;
+            levelText.setLayoutParams(paramsLevelText);
 
 
-        powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched)+"/"+Integer.toString(powerUpCounter[levelNumber]));
-        */
-            started = true;
-        }
+            powerUpsTouched.setWidth(35 * block);
+            powerUpsTouched.setHeight(30 * block);
+            powerUpsTouched.setTextSize((int) (1.5d * block));
+            RelativeLayout.LayoutParams paramsPowerUpsTouched = (RelativeLayout.LayoutParams)powerUpsTouched.getLayoutParams();
+            paramsPowerUpsTouched.leftMargin = (int) (37d * block);
+            paramsPowerUpsTouched.topMargin = 40 * block;
+            powerUpsTouched.setLayoutParams(paramsPowerUpsTouched);
+
+            powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "    /    " + Integer.toString(powerUpCounter));
 
 
+            pauseScreenBackground2.requestLayout();
+            pauseScreenBackground2.getLayoutParams().width = 4*(16*block);
+            pauseScreenBackground2.getLayoutParams().height = 4*(9*block);
+            RelativeLayout.LayoutParams paramsBackground2 = (RelativeLayout.LayoutParams)pauseScreenBackground2.getLayoutParams();
+            paramsBackground2.leftMargin=(int)((5d+7d)*block);
+            paramsBackground2.topMargin=(int)((5d+3d)*block);
+            pauseScreenBackground2.setLayoutParams(paramsBackground2);
 
 
+            playButton.requestLayout();
+            playButton.getLayoutParams().width = (int)(3.1d*(9*block));
+            playButton.getLayoutParams().height = (int)(3.1d*(9*block));
+            RelativeLayout.LayoutParams paramsPlayButton = (RelativeLayout.LayoutParams)playButton.getLayoutParams();
+            paramsPlayButton.leftMargin=(int)((8.35d+7d)*block);
+            paramsPlayButton.topMargin=(int)((8.65d+3d)*block);
+            playButton.setLayoutParams(paramsPlayButton);
+
+
+            quitLevelButton.requestLayout();
+            quitLevelButton.getLayoutParams().width = (int)(5*4.65d*block);
+            quitLevelButton.getLayoutParams().height = 5*block;
+            RelativeLayout.LayoutParams paramsQuitLevel = (RelativeLayout.LayoutParams) quitLevelButton.getLayoutParams();
+            paramsQuitLevel.leftMargin=(int)(48d*block);
+            paramsQuitLevel.topMargin=28*block;
+            quitLevelButton.setLayoutParams(paramsQuitLevel);
+
+
+            restartLevelButton.requestLayout();
+            restartLevelButton.getLayoutParams().width = (int)(5*4.65d*block);
+            restartLevelButton.getLayoutParams().height = 5*block;
+            RelativeLayout.LayoutParams paramsRestartLevel = (RelativeLayout.LayoutParams)restartLevelButton.getLayoutParams();
+            paramsRestartLevel.leftMargin=(int)(42d*block);
+            paramsRestartLevel.topMargin=35*block;
+            restartLevelButton.setLayoutParams(paramsRestartLevel);
+
+            pauseScreenTimeText.setWidth(35 * block);
+            pauseScreenTimeText.setHeight(30 * block);
+            pauseScreenTimeText.setTextSize(3 * block);
+            RelativeLayout.LayoutParams paramsPauseTimeText = (RelativeLayout.LayoutParams)pauseScreenTimeText.getLayoutParams();
+            paramsPauseTimeText.leftMargin=60*block;
+            paramsPauseTimeText.topMargin=37*block;
+            pauseScreenTimeText.setLayoutParams(paramsPauseTimeText);
 
     }
 }

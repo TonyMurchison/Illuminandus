@@ -1150,7 +1150,7 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:id="@+id/ball"
-        android:src="@drawable/sof_pc_128"/>
+        android:src="@drawable/player_character_v2"/>
 
     <ImageView
         android:layout_width="50dp"
@@ -1159,6 +1159,81 @@
         android:src="@drawable/levelplay_level_frame"
         android:id="@+id/border"
         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/parTimeText"
+        android:gravity="left"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/levelText"
+        android:gravity="right"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timeText"
+        android:gravity="right"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/powerUpsTouched"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/menu_background"
+        android:src="@drawable/titlescreen_background"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/menu_background_2"
+        android:src="@drawable/background_paused"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/playButton"
+        android:src="@drawable/playbutton"
+        android:visibility="gone"
+        android:onClick="playButtonClick"
+        android:clickable="false"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/quitLevelButton"
+        android:src="@drawable/button_level_select"
+        android:onClick="quitLevelClick"
+        android:clickable="false"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/restartButton"
+        android:src="@drawable/button_level_redo"
+        android:onClick="restartButtonClick"
+        android:clickable="false"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timePause"
+        android:visibility="gone"
+        />
+
+
+
+
 
 
 
