@@ -1183,6 +1183,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/powerUpsTouched"/>
 
+
+
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -1196,6 +1199,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/menu_background_2"
         android:src="@drawable/background_paused"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/finishedScreenBackground"
+        android:src="@drawable/background_completed"
         android:visibility="gone"/>
 
     <ImageView
@@ -1234,6 +1244,17 @@
 
 
 
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nextLevelButton"
+        android:src="@drawable/button_level_next"
+        android:visibility="gone"
+        android:onClick="nextLevelButtonClick"
+        android:clickable="false"
+        />
 
 
 

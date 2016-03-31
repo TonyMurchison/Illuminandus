@@ -29,7 +29,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     int x = 0;          //stores the angle of the phone around the x-axis
     int y = 0;          //stores the angle of the phone around the y-axis
 
-    boolean started = false;        //stores if the walls,ball and power ups have been set up already
+
 
     //ball storage info
     Ball playingBall;
@@ -140,7 +140,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
         readFile();
 
-
+        finishedScreenBackground = (ImageView) findViewById(R.id.finishedScreenBackground);
+        nextLevelButton = (ImageView) findViewById(R.id.nextLevelButton);
 
 
 /*
@@ -233,8 +234,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
 
         //adjusts and then saves the angle of phone in the x and y direction.
-        x = Math.round((event.values[1]) / (int) (3f * invert * allowMovement * speedAdjustment));
-        y = Math.round((-event.values[2]) / (int) (3f * invert * allowMovement * speedAdjustment));
+        x = Math.round((event.values[1]) / (int) (3f * invert * speedAdjustment)*allowMovement);
+        y = Math.round((-event.values[2]) / (int) (3f * invert * speedAdjustment)*allowMovement);
 
         //limits the speed
         if (x > 15) {
@@ -371,12 +372,12 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         playButton.setVisibility(View.VISIBLE);
         quitLevelButton.setVisibility(View.VISIBLE);
         restartLevelButton.setVisibility(View.VISIBLE);
-        pauseScreenTimeText.setVisibility(View.VISIBLE);
 
         playButton.setClickable(true);
         quitLevelButton.setClickable(true);
         restartLevelButton.setClickable(true);
 
+        pauseScreenTimeText.setVisibility(View.VISIBLE);
         if (timeMinutes < 10) {
             if (timeSeconds < 10) {
                 pauseScreenTimeText.setText("0" + Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds) + "/0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
@@ -560,23 +561,28 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
 
         if(powerUp.getType()==1 && powerUp.getHittable()){
-            pinkPowerUp(powerUp);
+            yellowPowerUp(powerUp);
         }
 
         if(powerUp.getType()==2 && powerUp.getHittable()){
-            greenPowerUp(powerUp);
+            pinkPowerUp(powerUp);
         }
 
         if (powerUp.getType()==3 && powerUp.getHittable()){
-            redPowerUp(powerUp);
+            greenPowerUp(powerUp);
         }
 
         if(powerUp.getType()==4 && powerUp.getHittable()){
+            redPowerUp(powerUp);
+        }
+
+        if(powerUp.getType()==5 && powerUp.getHittable()){
             bluePowerUp(powerUp);
         }
 
-
-
+        if(powerUp.getType()==6 && powerUp.getHittable()){
+            multiPowerUp(powerUp);
+        }
     }
 
     private void finishedLevel(){
@@ -588,11 +594,36 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         pauseScreenBackground.setVisibility(View.VISIBLE);
         nextLevelButton.setVisibility(View.VISIBLE);
         nextLevelButton.setClickable(true);
-        partimeFinishedScreen.setVisibility(View.VISIBLE);
-        timeFinishedScreen.setVisibility(View.VISIBLE);
-        partimeFinishedScreen.setText("0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
-        homeButton.setVisibility(View.VISIBLE);
-        homeButton.setClickable(true);
+
+
+        pauseScreenTimeText.setVisibility(View.VISIBLE);
+        if (timeMinutes < 10) {
+            if (timeSeconds < 10) {
+                pauseScreenTimeText.setText("0" + Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds) + "/0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
+            } else {
+                pauseScreenTimeText.setText("0" + Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds) + "/0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
+            }
+        } else {
+            if (timeSeconds < 10) {
+                pauseScreenTimeText.setText(Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds)+"/0"+Integer.toString(parTimeMinutes)+":"+Integer.toString(parTimeSeconds));
+            } else {
+                pauseScreenTimeText.setText(Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds) + "/0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
+            }
+        }
+
+
+
+
+        for (int i=0;i<powerUpCounter;i++){
+            powerUps[i].setInvisible();
+        }
+
+
+        quitLevelButton.setVisibility(View.VISIBLE);
+        restartLevelButton.setVisibility(View.VISIBLE);
+
+        quitLevelButton.setClickable(true);
+        restartLevelButton.setClickable(true);
 
         /*
         SharedPreferences dataSave = getSharedPreferences("highScores", 0);
@@ -602,19 +633,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
         */
 
-        if (timeMinutes < 10) {
-            if (timeSeconds < 10) {
-                timeFinishedScreen.setText("0" + Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds));
-            } else {
-                timeFinishedScreen.setText("0" + Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds));
-            }
-        } else {
-            if (timeSeconds < 10) {
-                timeFinishedScreen.setText(Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds));
-            } else {
-                timeFinishedScreen.setText(Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds));
-            }
-        }
     }
 
     public void homeButtonClick(View v){
@@ -631,28 +649,42 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         finish();
     }
 
-    public void pinkPowerUp(PowerUp powerUp){
-        for(int i=0; i<wallNumber;i++){
-            mazeWall[i].setVisibility(show);
-            mazeWall[i].setTimeTouched((int)System.currentTimeMillis()-timeStart);
+    //hides whole map
+    public void yellowPowerUp(PowerUp powerUp){
+        for(int i=0; i<wallNumber-4;i++){
+            mazeWall[i].setVisibility(hide);
         }
         powerUp.setInvisible();
         powerUp.setHittable(false);
     }
 
+    //shows whole map
+    public void pinkPowerUp(PowerUp powerUp){
+        for(int i=0; i<wallNumber;i++){
+            mazeWall[i].setVisibility(show);
+            mazeWall[i].setTimeTouched((int) System.currentTimeMillis() - timeStart);
+        }
+        powerUp.setInvisible();
+        powerUp.setHittable(false);
+    }
+
+    //pause time
     public void greenPowerUp(PowerUp powerUp){
+
+
 
         powerUp.setInvisible();
         powerUp.setHittable(false);
-
     }
 
+    //inverts controls
     public void redPowerUp(PowerUp powerUp){
         invert = -1;
         powerUp.setInvisible();
         powerUp.setHittable(false);
     }
 
+    //shows certain walls
     public void bluePowerUp(PowerUp powerUp){
         for(int i=0;i<wallNumber;i++){
             double deltaDsquared = Math.pow(mazeWall[i].getCenterX() - powerUp.getCenterX(), 2) + Math.pow(mazeWall[i].getCenterY() - powerUp.getCenterY(), 2);
@@ -661,7 +693,12 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                 mazeWall[i].setTimeTouched((int) System.currentTimeMillis());
             }
         }
+        powerUp.setInvisible();
+        powerUp.setHittable(false);
+    }
 
+    //choses a random effect
+    public void multiPowerUp(PowerUp powerUp){
 
         powerUp.setInvisible();
         powerUp.setHittable(false);
@@ -968,6 +1005,22 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             paramsPauseTimeText.leftMargin=45*block;
             paramsPauseTimeText.topMargin=20*block;
             pauseScreenTimeText.setLayoutParams(paramsPauseTimeText);
+
+            nextLevelButton.requestLayout();
+            nextLevelButton.getLayoutParams().width = (int)(3.1d*(9*block));
+            nextLevelButton.getLayoutParams().height = (int)(3.1d*(9*block));
+            RelativeLayout.LayoutParams paramsNextLevelButton = (RelativeLayout.LayoutParams)nextLevelButton.getLayoutParams();
+            paramsNextLevelButton.leftMargin=(int)((8.35d+7d)*block);
+            paramsNextLevelButton.topMargin=(int)((8.65d+3d)*block);
+            nextLevelButton.setLayoutParams(paramsNextLevelButton);
+
+            finishedScreenBackground.requestLayout();
+            finishedScreenBackground.getLayoutParams().width = 4*(16*block);
+            finishedScreenBackground.getLayoutParams().height = 4*(9*block);
+            RelativeLayout.LayoutParams paramsFinished = (RelativeLayout.LayoutParams)finishedScreenBackground.getLayoutParams();
+            paramsFinished.leftMargin=(int)((5d+7d)*block);
+            paramsFinished.topMargin=(int)((5d+3d)*block);
+            finishedScreenBackground.setLayoutParams(paramsFinished);
 
     }
 }
