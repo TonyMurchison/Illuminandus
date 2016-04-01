@@ -643,8 +643,11 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             restartLevelButton.setClickable(true);
 
             //Right here
+
             HighScoreEditor highScoreEditor = new HighScoreEditor();
-            highScoreEditor.saveInt(this, "HighScore_" +levelNumber, finishTime);
+            if(finishTime < highScoreEditor.getValue(this, "HighScore_" + levelNumber)) {
+                highScoreEditor.saveInt(this, "HighScore_" + levelNumber, finishTime);
+            }
         }
     }
 
