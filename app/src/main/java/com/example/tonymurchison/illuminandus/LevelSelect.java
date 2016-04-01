@@ -113,49 +113,6 @@ public class LevelSelect extends AppCompatActivity {
         else{
             time_scored.setText("");
         }
-
-
-        /*
-        for(int i = 4 * screenNumber; i < (4*screenNumber+4); i++){
-            int localHighScore = highScoreEditor.getValue(this, "HighScore_" + i);
-            if(debug_timer){
-                localHighScore = 10;
-            }
-            if(localHighScore == 0){
-                int totalTime =
-                for(int j = 0; j < 4; j++){
-                    if(highScoreEditor.getValue(this, "HighScore_" + (4 * screenNumber + j)) == 0){
-                        time_array[j].setText("");
-                    }
-                    else{
-                        time_array[j].setText(secondsToMinutes(highScoreEditor.getValue(this, "HighScore_" + (4 * screenNumber + j))));
-                    }
-                }
-                next_button.setImageResource(R.drawable.button_next_locked);
-                unlockedstate = false;
-                return;
-            }
-            else {
-                time_array[i % 4].setText(secondsToMinutes(localHighScore));
-                time_total = time_total + localHighScore;
-            }
-        }
-        if(time_total > 0) {
-            time_scored.setText(secondsToMinutes(time_total));
-        }
-        else {
-            time_scored.setText("");
-        }
-        if(time_total < setGoalTime(screenNumber)){
-            next_button.setImageResource(R.drawable.button_next);
-            unlockedstate = true;
-            return;
-        }
-        else{
-            next_button.setImageResource(R.drawable.button_next_locked);
-            unlockedstate = false;
-            return;
-        }*/
     }
 
     public void onNextButtonClick(View view){
