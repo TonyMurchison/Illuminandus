@@ -32,4 +32,17 @@ public class UnlockEditor{
         }
         else return false;
     }
+
+    public int requestTotalTime(Context c, int screenNumber){
+        this.c = c;
+        HighScoreEditor highScoreEditor = new HighScoreEditor();
+        int total_time = 0;
+
+        for(int i = 4 * screenNumber; i < (screenNumber * 4 + 4); i++) {
+            int local_value = highScoreEditor.getValue(this.c, "HighScore_" + i);
+            total_time = total_time + local_value;
+        }
+
+        return total_time;
+    }
 }
