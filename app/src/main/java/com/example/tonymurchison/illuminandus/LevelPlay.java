@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -652,10 +653,17 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     }
 
     public void nextLevelButtonClick(View v){
-        Intent intent = new Intent(LevelPlay.this, LevelPlay.class);
-        intent.putExtra("levelNumber", levelNumber+1);
-        startActivity(intent);
-        finish();
+        UnlockEditor unlockCheck = new UnlockEditor();
+        if(unlockCheck.requestUnlock(this, (levelNumber / 4)) || levelNumber % 4 != 3) {
+            Intent intent = new Intent(LevelPlay.this, LevelPlay.class);
+            intent.putExtra("levelNumber", levelNumber + 1);
+            startActivity(intent);
+            finish();
+        }
+        else{
+            Toast toast = Toast.makeText(this, "Next level not yet unlocked", Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
     //hides whole map
