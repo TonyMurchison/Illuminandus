@@ -18,6 +18,8 @@ public class LevelSelect extends AppCompatActivity {
 
     private TextView[] time_array = new TextView[4];    //Levels' corresponding time TextViews
     private ImageView[] level_array = new ImageView[4]; //Levels' corresponding ImageViews
+    private ImageView loadingBackground;
+    private ImageView loadingBar;
     private TextView time_goal;
     private TextView time_scored;
     private TextView slash_textview;
@@ -51,9 +53,12 @@ public class LevelSelect extends AppCompatActivity {
         time_goal = (TextView) findViewById(R.id.time_needed);
         time_scored = (TextView) findViewById(R.id.time_scored);
         slash_textview = (TextView) findViewById(R.id.slash_timer);
+        loadingBackground = (ImageView) findViewById(R.id.loadingBackground);
+        loadingBar = (ImageView) findViewById(R.id.loadingBar);
 
         for(int i=0; i < 4; i++) {
             level_array[i].setTag(i);
+            level_array[i].setClickable(true);
         }
 
         Bundle extras = getIntent().getExtras();                //Receives levelNumber from played level, and returns view to corresponding four levels.
@@ -179,6 +184,13 @@ public class LevelSelect extends AppCompatActivity {
     }
 
     public void onLevelClick(View v){
+        for(int i=0;i<4;i++){
+            level_array[i].setClickable(false);
+        }
+
+        loadingBar.setVisibility(View.VISIBLE);
+        loadingBackground.setVisibility(View.VISIBLE);
+
         int viewNumber = (Integer) v.getTag();
         int levelNumber = viewNumber + screenNumber * 4;
         Intent intent = new Intent(LevelSelect.this, LevelPlay.class);

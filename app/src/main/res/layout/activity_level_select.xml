@@ -238,6 +238,24 @@
         android:id="@+id/time_needed"
         />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/titlescreen_background"
+        android:id="@+id/loadingBackground"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/loadingbar"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/loadingBar"
+        android:visibility="gone"
+        />
+
 
 
 </RelativeLayout>

@@ -96,6 +96,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     int wallNumber=0;
     int screenWidth;
     int block;
+    boolean touchAllowed = false;
 
 
     @Override
@@ -321,7 +322,9 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        pauseScreen();
+        if(touchAllowed==true) {
+            pauseScreen();
+        }
         return super.onTouchEvent(event);
     }
 
@@ -378,6 +381,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         playButton.setClickable(true);
         quitLevelButton.setClickable(true);
         restartLevelButton.setClickable(true);
+
+        if(time>parTime){
+            pauseScreenTimeText.setTextColor(getResources().getColor(R.color.red));
+        }
 
         pauseScreenTimeText.setVisibility(View.VISIBLE);
         if (timeMinutes < 10) {
@@ -600,6 +607,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
 
             pauseScreenTimeText.setVisibility(View.VISIBLE);
+
+            if(finishTime>parTime){
+                pauseScreenTimeText.setTextColor(getResources().getColor(R.color.red));
+            }
 
             if (timeMinutes < 10) {
                 if (timeSeconds < 10) {
@@ -1024,6 +1035,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             paramsFinished.leftMargin=(int)((5d+7d)*block);
             paramsFinished.topMargin=(int)((5d+3d)*block);
             finishedScreenBackground.setLayoutParams(paramsFinished);
+
+        touchAllowed=true;
 
     }
 }
