@@ -603,7 +603,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
     private void finishedLevel(){
         HighScoreEditor highScoreEditor = new HighScoreEditor();
-        if(time < highScoreEditor.getValue(this, "HighScore_" + levelNumber)) {
+        int previous_score = highScoreEditor.getValue(this, "HighScore_" + levelNumber);
+        if(time < previous_score || previous_score == 0) {
             highScoreEditor.saveInt(this, "HighScore_" + levelNumber, time);
         }
 
