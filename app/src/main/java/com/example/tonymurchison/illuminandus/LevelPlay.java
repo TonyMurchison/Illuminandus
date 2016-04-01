@@ -150,7 +150,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         restartLevelButton = (ImageView) findViewById(R.id.restartButton);
         pauseScreenTimeText = (TextView) findViewById(R.id.timePause);
 
-
         readFile();
 
         finishedScreenBackground = (ImageView) findViewById(R.id.finishedScreenBackground);
