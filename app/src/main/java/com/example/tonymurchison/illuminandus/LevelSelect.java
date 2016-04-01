@@ -164,10 +164,13 @@ public class LevelSelect extends AppCompatActivity {
     }
 
     private int setGoalTime(int screenNumber) {      //sets goaltime for any screenNumber, then returns said time in milliseconds
-        int id = getApplicationContext().getResources().getIdentifier("time_goal_" + screenNumber, "string", getPackageName());
-        int timingNumber = Integer.parseInt(getResources().getString(id));
-        time_goal.setText(secondsToMinutes(timingNumber));
-        return timingNumber;
+        int tempArray[] = getResources().getIntArray(R.array.parTime);
+        int totalGoalTime = 0;
+        for(int i = screenNumber * 4; i < screenNumber * 4 + 4; i++){
+            totalGoalTime = totalGoalTime + tempArray[i];
+        }
+        time_goal.setText(secondsToMinutes(totalGoalTime));
+        return totalGoalTime;
     }
 
     public void onLevelClick(View v){
