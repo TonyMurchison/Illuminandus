@@ -22,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.leakcanary.LeakCanary;
 
 import java.io.File;
 import java.io.IOException;
@@ -112,6 +111,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Bundle extras = getIntent().getExtras();
         levelNumber = extras.getInt("levelNumber");
 
@@ -163,6 +163,9 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         screenWidth = size.x;
         speedAdjustment=screenWidth/1920;
         block=(int)Math.round(screenWidth/90d);
+
+        loadingBackground = (ImageView) findViewById(R.id.loadingBackground);
+        loadingBar = (ImageView) findViewById(R.id.loadingBar);
 
         start();
     }
@@ -261,7 +264,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         time = (int) (System.currentTimeMillis() - timeStart - pausedTime);
         for (int i = 0; i < wallNumber - 4; i++) {
             if (time - mazeWall[i].getTimeTouched() > visibleThreshold) {
-                //mazeWall[i].setVisibility(hide);
+                mazeWall[i].setVisibility(hide);
             }
         }
 
@@ -298,6 +301,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         Intent intent = new Intent(LevelPlay.this, LevelSelect.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
+        System.gc();
+        finish();
     }
 
     public void playButtonClick(View v){
@@ -413,7 +418,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         float hx = (ball.getHeight() + wall.getHeight()) * (ball.getCenterX() - wall.getCenterX());
 
         wall.setVisibility(show);
-        wall.setTimeTouched((int) System.currentTimeMillis()-timeStart);
+        wall.setTimeTouched((int) System.currentTimeMillis()-timeStart-pausedTime);
 
         if (wy > hx) {
             if (wy > -hx) {//top
@@ -658,6 +663,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             loadingBackground.setVisibility(View.VISIBLE);
             loadingBar.setVisibility(View.VISIBLE);
             startActivity(intent);
+            System.gc();
             finish();
         }
         else{
@@ -679,7 +685,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     public void pinkPowerUp(PowerUp powerUp){
         for(int i=0; i<wallNumber;i++){
             mazeWall[i].setVisibility(show);
-            mazeWall[i].setTimeTouched((int) System.currentTimeMillis() - timeStart);
+            mazeWall[i].setTimeTouched((int) System.currentTimeMillis() - timeStart-pausedTime);
         }
         powerUp.setInvisible();
         powerUp.setHittable(false);
@@ -707,7 +713,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             double deltaDsquared = Math.pow(mazeWall[i].getCenterX() - powerUp.getCenterX(), 2) + Math.pow(mazeWall[i].getCenterY() - powerUp.getCenterY(), 2);
             if(deltaDsquared < Math.pow(pickup_range, 2)){
                 mazeWall[i].setVisibility(show);
-                mazeWall[i].setTimeTouched((int) System.currentTimeMillis());
+                mazeWall[i].setTimeTouched((int) System.currentTimeMillis()-timeStart-pausedTime);
             }
         }
         powerUp.setInvisible();
