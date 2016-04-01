@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
+
+import java.io.File;
 
 public class LevelSelect extends AppCompatActivity {
 
@@ -94,13 +97,9 @@ public class LevelSelect extends AppCompatActivity {
             }
             if(localHighScore == 0){
 
-                /*
-
-
-                FIX THIS!!!
-                next_button.setImageResource(R.drawable.next_button_locked);
+                next_button.setImageResource(R.drawable.button_next_locked);
                 unlockedstate = false;
-                */
+
                 return;
             }
             time_total = time_total + localHighScore;
@@ -113,28 +112,15 @@ public class LevelSelect extends AppCompatActivity {
         }
         if(time_total < setGoalTime(screenNumber)){
 
-            /*
-
-            FIX THIS!!!!
-
-
-            next_button.setImageResource(R.drawable.next_button);
+            next_button.setImageResource(R.drawable.button_next);
             unlockedstate = true;
-            */
+
             return;
         }
         else{
-
-            /*
-
-
-
-
-            FIX THIS!!!!
-
-            next_button.setImageResource(R.drawable.next_button_locked);
+            next_button.setImageResource(R.drawable.button_next_locked);
             unlockedstate = false;
-            */
+
             return;
         }
     }
@@ -218,4 +204,6 @@ public class LevelSelect extends AppCompatActivity {
         }
         return time_minutes + " : " + time_seconds;
     }
+
+
 }
