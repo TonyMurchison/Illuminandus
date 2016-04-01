@@ -1,6 +1,7 @@
 package com.example.tonymurchison.illuminandus;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
 import android.graphics.Point;
@@ -646,14 +647,15 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             quitLevelButton.setClickable(true);
             restartLevelButton.setClickable(true);
 
+            //Right here
+            SharedPreferences dataSave = getSharedPreferences("highScores", 0);
+            int localHighScore = dataSave.getInt("HighScore_" + levelNumber, 0);
+            if(finishTime < localHighScore){
+                SharedPreferences.Editor editor = dataSave.edit();
+                editor.putInt("HighScore_" + levelNumber, finishTime);
+                editor.commit();
+            }
         }
-    }
-
-    public void homeButtonClick(View v){
-        Intent intent = new Intent(LevelPlay.this, LevelSelect.class);
-        intent.putExtra("levelNumber", levelNumber);
-        startActivity(intent);
-        finish();
     }
 
     public void nextLevelButtonClick(View v){

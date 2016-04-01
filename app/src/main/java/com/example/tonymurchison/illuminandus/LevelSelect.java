@@ -93,16 +93,16 @@ public class LevelSelect extends AppCompatActivity {
                 localHighScore = 10;
             }
             if(localHighScore == 0){
-
-                /*
-
-
-                FIX THIS!!!
-                next_button.setImageResource(R.drawable.next_button_locked);
+                for(int j = 0; j < 4; j++){
+                    if(dataSave.getInt("HighScore_" + (4 * screenNumber + j), 0) == 0){
+                        time_array[j].setText("");
+                    }
+                }
+                next_button.setImageResource(R.drawable.button_next_locked);
                 unlockedstate = false;
-                */
                 return;
             }
+            time_array[i % 4].setText(secondsToMinutes(localHighScore));
             time_total = time_total + localHighScore;
         }
         if(time_total > 0) {
@@ -112,29 +112,13 @@ public class LevelSelect extends AppCompatActivity {
             time_scored.setText("");
         }
         if(time_total < setGoalTime(screenNumber)){
-
-            /*
-
-            FIX THIS!!!!
-
-
-            next_button.setImageResource(R.drawable.next_button);
+            next_button.setImageResource(R.drawable.button_next);
             unlockedstate = true;
-            */
             return;
         }
         else{
-
-            /*
-
-
-
-
-            FIX THIS!!!!
-
-            next_button.setImageResource(R.drawable.next_button_locked);
+            next_button.setImageResource(R.drawable.button_next_locked);
             unlockedstate = false;
-            */
             return;
         }
     }
@@ -163,14 +147,14 @@ public class LevelSelect extends AppCompatActivity {
     private void updateLevels(int screenNumber){
         SharedPreferences dataSave = getSharedPreferences("highScores", 0);
         for(int i = screenNumber * 4; i < screenNumber * 4 + 4; i++){ //Sets images to the correct source in a horrible way
-            if(dataSave.getInt("Highscore_" + i, 0) == 0) {
+            if(dataSave.getInt("HighScore_" + i, 0) == 0) {
                 int id = getResources().getIdentifier("locked_level_" + i, "drawable", getPackageName());
                 level_array[i -screenNumber * 4].setImageResource(id);
             }
             else{
                 int id = getResources().getIdentifier("unlocked_level_" + i, "drawable", getPackageName());
                 level_array[i -screenNumber * 4].setImageResource(id);
-                time_array[i -screenNumber * 4].setText(dataSave.getInt("Highscore_" + i, 0));
+                time_array[i -screenNumber * 4].setText(dataSave.getInt("HighScore_" + i, 0));
             }
         }
         setGoalTime(screenNumber);
