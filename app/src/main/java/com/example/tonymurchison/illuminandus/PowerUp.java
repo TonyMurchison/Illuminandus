@@ -159,6 +159,4 @@ public class PowerUp extends AppCompatActivity {
     public void setLayoutParams(RelativeLayout.LayoutParams alp){
         powerUpImage.setLayoutParams(alp);
     }
-
-
 }

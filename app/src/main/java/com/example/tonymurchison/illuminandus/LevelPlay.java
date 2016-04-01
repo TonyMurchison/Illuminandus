@@ -602,6 +602,11 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     }
 
     private void finishedLevel(){
+        HighScoreEditor highScoreEditor = new HighScoreEditor();
+        if(time < highScoreEditor.getValue(this, "HighScore_" + levelNumber)) {
+            highScoreEditor.saveInt(this, "HighScore_" + levelNumber, time);
+        }
+
         if(displayedFinishScreen==false) {
             int finishTime= time;
             timeMinutes = (finishTime / (1000 * 60)) % 60;
@@ -644,13 +649,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
             quitLevelButton.setClickable(true);
             restartLevelButton.setClickable(true);
-
-            //Right here
-
-            HighScoreEditor highScoreEditor = new HighScoreEditor();
-            if(finishTime < highScoreEditor.getValue(this, "HighScore_" + levelNumber)) {
-                highScoreEditor.saveInt(this, "HighScore_" + levelNumber, finishTime);
-            }
         }
     }
 
