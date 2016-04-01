@@ -25,7 +25,6 @@ public class LevelSelect extends AppCompatActivity {
     private ImageView loadingBar;
     private TextView time_goal;
     private TextView time_scored;
-    private TextView slash_textview;
     private ImageView next_button;
     private ImageView previous_button;
     private int screenNumber;
@@ -55,7 +54,6 @@ public class LevelSelect extends AppCompatActivity {
         time_array[3] = (TextView) findViewById(R.id.fourth_level_time);
         time_goal = (TextView) findViewById(R.id.time_needed);
         time_scored = (TextView) findViewById(R.id.time_scored);
-        slash_textview = (TextView) findViewById(R.id.slash_timer);
         loadingBackground = (ImageView) findViewById(R.id.loadingBackground);
         loadingBar = (ImageView) findViewById(R.id.loadingBar);
 
@@ -83,30 +81,64 @@ public class LevelSelect extends AppCompatActivity {
 
         if(screenNumber == 0){
             backUnlocked = false;
-            previous_button.setAlpha(0.5f);
+            previous_button.setVisibility(View.INVISIBLE);
         }
         else{
             backUnlocked = true;
-            previous_button.setAlpha(1f);
+            previous_button.setVisibility(View.VISIBLE);
+        }
+        unlockedstate = true;
+        next_button.setImageResource(R.drawable.button_next);
+
+        for(int i = 4 * screenNumber; i < (4 * screenNumber + 4); i++){
+            int localHighScore = highScoreEditor.getValue(this, "HighScore_" + i);
+            if(debug_timer) localHighScore = 1000;
+            if (localHighScore == 0){
+                setNextButtonLocked();
+                time_array[i % 4].setText("");
+            }
+            else{
+                time_array[i % 4].setText(secondsToMinutes(localHighScore));
+                time_total = time_total + localHighScore;
+            }
         }
 
+        if(time_total > setGoalTime(screenNumber)){
+            setNextButtonLocked();
+        }
+
+        if(time_total > 0){
+            time_scored.setText(secondsToMinutes(time_total));
+        }
+        else{
+            time_scored.setText("");
+        }
+
+
+        /*
         for(int i = 4 * screenNumber; i < (4*screenNumber+4); i++){
             int localHighScore = highScoreEditor.getValue(this, "HighScore_" + i);
             if(debug_timer){
                 localHighScore = 10;
             }
             if(localHighScore == 0){
+                int totalTime =
                 for(int j = 0; j < 4; j++){
                     if(highScoreEditor.getValue(this, "HighScore_" + (4 * screenNumber + j)) == 0){
                         time_array[j].setText("");
+                    }
+                    else{
+                        time_array[j].setText(secondsToMinutes(highScoreEditor.getValue(this, "HighScore_" + (4 * screenNumber + j))));
                     }
                 }
                 next_button.setImageResource(R.drawable.button_next_locked);
                 unlockedstate = false;
                 return;
             }
-            time_array[i % 4].setText(secondsToMinutes(localHighScore));
-            time_total = time_total + localHighScore;
+            else {
+                time_array[i % 4].setText(secondsToMinutes(localHighScore));
+                time_total = time_total + localHighScore;
+            }
         }
         if(time_total > 0) {
             time_scored.setText(secondsToMinutes(time_total));
@@ -123,7 +155,7 @@ public class LevelSelect extends AppCompatActivity {
             next_button.setImageResource(R.drawable.button_next_locked);
             unlockedstate = false;
             return;
-        }
+        }*/
     }
 
     public void onNextButtonClick(View view){
@@ -207,5 +239,10 @@ public class LevelSelect extends AppCompatActivity {
             time_seconds = "" + timeSeconds;
         }
         return time_minutes + " : " + time_seconds;
+    }
+
+    private void setNextButtonLocked(){
+        next_button.setImageResource(R.drawable.button_next_locked);
+        unlockedstate = false;
     }
 }
