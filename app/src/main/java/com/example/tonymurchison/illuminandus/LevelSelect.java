@@ -1,21 +1,14 @@
 package com.example.tonymurchison.illuminandus;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
-import java.io.File;
 
 public class LevelSelect extends AppCompatActivity {
 
@@ -70,7 +63,7 @@ public class LevelSelect extends AppCompatActivity {
             screenNumber = extras.getInt("levelNumber") / 4;
         }
 
-
+        screenNumber = getPreviousScreenNumber();
         updateLevels(screenNumber);
         setUnlock();
         }
@@ -201,5 +194,16 @@ public class LevelSelect extends AppCompatActivity {
     private void setNextButtonLocked(){
         next_button.setImageResource(R.drawable.button_next_locked);
         unlockedstate = false;
+    }
+
+    private int getPreviousScreenNumber(){
+        HighScoreEditor highScoreEditor = new HighScoreEditor();
+        int last_level = 0;
+        while(true){
+            if(highScoreEditor.getValue(this, "HighScore_" + last_level) == 0){
+                return (last_level / 4);
+            }
+            last_level++;
+        }
     }
 }
