@@ -68,7 +68,6 @@ public class LevelSelect extends AppCompatActivity {
         }
 
     private void setUnlock(){       //checks whether next four are available
-        int time_total = 0;
         HighScoreEditor highScoreEditor = new HighScoreEditor();
 
         if(screenNumber == 0){
@@ -86,21 +85,20 @@ public class LevelSelect extends AppCompatActivity {
             int localHighScore = highScoreEditor.getValue(this, "HighScore_" + i);
             if(debug_timer) localHighScore = 1000;
             if (localHighScore == 0){
-                setNextButtonLocked();
                 time_array[i % 4].setText("");
             }
             else{
                 time_array[i % 4].setText(secondsToMinutes(localHighScore));
-                time_total = time_total + localHighScore;
             }
         }
 
-        if(time_total > setGoalTime(screenNumber)){
+        UnlockEditor unlockEditor = new UnlockEditor();
+        if(unlockEditor.requestUnlock(this, screenNumber) == false){
             setNextButtonLocked();
         }
 
-        if(time_total > 0){
-            time_scored.setText(secondsToMinutes(time_total));
+        if(unlockEditor.requestTotalTime(this, screenNumber) > 0){
+            time_scored.setText(secondsToMinutes(unlockEditor.requestTotalTime(this, screenNumber)));
         }
         else{
             time_scored.setText("");
