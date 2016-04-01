@@ -22,6 +22,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +31,9 @@ import java.util.Scanner;
 
 public class LevelPlay extends AppCompatActivity implements SensorEventListener {
     boolean displayedFinishScreen= false;
+
+    private ImageView loadingBackground;
+    private ImageView loadingBar;
 
     private SensorManager sManager;
     private int a;      //stores x position for the layout of the ball
@@ -152,13 +157,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         nextLevelButton = (ImageView) findViewById(R.id.nextLevelButton);
 
 
-/*
-        partimeFinishedScreen = (TextView) findViewById(R.id.partime_finished_screen);
-        timeFinishedScreen = (TextView) findViewById(R.id.time_finished_screen);
-        nextLevelButton = (ImageView) findViewById(R.id.next_level_button);
-        finishedScreenBackground = (ImageView) findViewById(R.id.finished_background);
-        homeButton = (Button) findViewById(R.id.home);
-*/
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -657,6 +655,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         if(unlockCheck.requestUnlock(this, (levelNumber / 4)) || levelNumber % 4 != 3) {
             Intent intent = new Intent(LevelPlay.this, LevelPlay.class);
             intent.putExtra("levelNumber", levelNumber + 1);
+            loadingBackground.setVisibility(View.VISIBLE);
+            loadingBar.setVisibility(View.VISIBLE);
             startActivity(intent);
             finish();
         }
