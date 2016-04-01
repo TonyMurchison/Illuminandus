@@ -631,14 +631,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             }
             displayedFinishScreen=true;
 
-            /*
-        SharedPreferences dataSave = getSharedPreferences("highScores", 0);
-        int localHighScore = dataSave.getInt("HighScore_" + levelNumber, 0);  //gets highscore for level with name HighScore_[levelNumber]
-        if(time<localHighScore){
-
-        }
-        */
-
             for (int i=0;i<powerUpCounter;i++){
                 powerUps[i].setInvisible();
             }
@@ -651,13 +643,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             restartLevelButton.setClickable(true);
 
             //Right here
-            SharedPreferences dataSave = getSharedPreferences("highScores", 0);
-            int localHighScore = dataSave.getInt("HighScore_" + levelNumber, 0);
-            if(finishTime < localHighScore){
-                SharedPreferences.Editor editor = dataSave.edit();
-                editor.putInt("HighScore_" + levelNumber, finishTime);
-                editor.commit();
-            }
+            HighScoreEditor highScoreEditor = new HighScoreEditor();
+            highScoreEditor.saveInt(this, "HighScore_" +levelNumber, finishTime);
         }
     }
 

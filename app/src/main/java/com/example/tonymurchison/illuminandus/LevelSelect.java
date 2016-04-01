@@ -79,7 +79,7 @@ public class LevelSelect extends AppCompatActivity {
 
     private void setUnlock(){       //checks whether next four are available
         int time_total = 0;
-        SharedPreferences dataSave = getSharedPreferences("highScores", 0);
+        HighScoreEditor highScoreEditor = new HighScoreEditor();
 
         if(screenNumber == 0){
             backUnlocked = false;
@@ -91,13 +91,13 @@ public class LevelSelect extends AppCompatActivity {
         }
 
         for(int i = 4 * screenNumber; i < (4*screenNumber+4); i++){
-            int localHighScore = dataSave.getInt("HighScore_" + i, 0);  //gets highscore for level with name HighScore_[levelNumber]
+            int localHighScore = highScoreEditor.getValue(this, "HighScore_" + i);
             if(debug_timer){
                 localHighScore = 10;
             }
             if(localHighScore == 0){
                 for(int j = 0; j < 4; j++){
-                    if(dataSave.getInt("HighScore_" + (4 * screenNumber + j), 0) == 0){
+                    if(highScoreEditor.getValue(this, "HighScore_" + (4 * screenNumber + j)) == 0){
                         time_array[j].setText("");
                     }
                 }
@@ -148,16 +148,16 @@ public class LevelSelect extends AppCompatActivity {
     }
 
     private void updateLevels(int screenNumber){
-        SharedPreferences dataSave = getSharedPreferences("highScores", 0);
+        HighScoreEditor highScoreEditor = new HighScoreEditor();
         for(int i = screenNumber * 4; i < screenNumber * 4 + 4; i++){ //Sets images to the correct source in a horrible way
-            if(dataSave.getInt("HighScore_" + i, 0) == 0) {
+            if(highScoreEditor.getValue(this, "HighScore_" + i) == 0) {
                 int id = getResources().getIdentifier("locked_level_" + i, "drawable", getPackageName());
                 level_array[i -screenNumber * 4].setImageResource(id);
             }
             else{
                 int id = getResources().getIdentifier("unlocked_level_" + i, "drawable", getPackageName());
                 level_array[i -screenNumber * 4].setImageResource(id);
-                time_array[i -screenNumber * 4].setText(dataSave.getInt("HighScore_" + i, 0));
+                time_array[i -screenNumber * 4].setText(secondsToMinutes(highScoreEditor.getValue(this, "HighScore_" + i)));
             }
         }
         setGoalTime(screenNumber);
