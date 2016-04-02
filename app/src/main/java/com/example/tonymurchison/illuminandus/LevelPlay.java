@@ -1,7 +1,6 @@
 package com.example.tonymurchison.illuminandus;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
 import android.graphics.Point;
@@ -11,12 +10,10 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,120 +26,104 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 public class LevelPlay extends AppCompatActivity implements SensorEventListener {
-    boolean displayedFinishScreen= false;
-
+   //layout items
+    private TextView pauseScreenTimeText;
+    private TextView timeText;
+    private TextView powerUpsTouched;
+    private TextView parTimeText;
+    private TextView levelText;
     private ImageView loadingBackground;
     private ImageView loadingBar;
+    private ImageView pauseScreenBackground;
+    private ImageView pauseScreenBackground2;
+    private ImageView playButton;
+    private ImageView quitLevelButton;
+    private ImageView restartLevelButton;
+    private ImageView nextLevelButton;
+    private ImageView finishedScreenBackground;
 
+    //time items
+    private int timeStart;
+    private int time;
+    private int timeMinutes;
+    private int timeSeconds;
+    private int parTimeMinutes;
+    private int parTimeSeconds;
+    private int pausedTime=0;
+    private int timeAtPause=0;
+    private int parTime=50000;
+
+    //game items
+    private Ball playingBall;
+    //TODO fix ball position
+    private int ballPosition=0;
+
+    private PowerUp powerUps[] = new PowerUp[15];
+    private int powerUpsPlacement[][]= new int[6][13];
+    private int powerUpCounter=0;
+    private int amountPowerUpsTouched=0;
+
+    private Wall mazeWall[] = new Wall[137];
+    private boolean horizontalWalls[][] = new boolean[5][13];
+    private boolean verticalWalls[][] = new boolean[12][6];
+    private int wallNumber=0;
+
+    //remaining items
+    private boolean displayedFinishScreen= false;
     private SensorManager sManager;
     private int a;      //stores x position for the layout of the ball
     private int b;      //stores y position for the layout of the ball
-    int x = 0;          //stores the angle of the phone around the x-axis
-    int y = 0;          //stores the angle of the phone around the y-axis
-
-
-
-    //ball storage info
-    Ball playingBall;
-    boolean allowedMovement[] = {true, true, true, true};
-
-    //power up storage info
-    PowerUp powerUps[] = new PowerUp[15];
-
-    //wall storage info
-    Wall mazeWall[] = new Wall[137];
-
-    //opacity settings
-    float show = 1;
-    float hide = 0;
-
-    int timeStart;
-    int time;
-    int timeMinutes;
-    int timeSeconds;
-    double speedAdjustment;
-    TextView timeText;
-    TextView powerUpsTouched;
-    TextView parTimeText;
-    TextView levelText;
-
-    int visibleThreshold=10000;
-    int invert=1;
-    int pickup_range=500;
-    int amountPowerUpsTouched=0;
-    int parTimeMinutes;
-    int parTimeSeconds;
-    int pausedTime=0;
-    int timeAtPause=0;
-    int levelNumber=0;  //level 1 equals levelNumber 0 etc
-
-    int allowMovement =1;
-
-    ImageView pauseScreenBackground;
-    ImageView pauseScreenBackground2;
-    ImageView playButton;
-    TextView pauseScreenTimeText;
-    ImageView quitLevelButton;
-    ImageView restartLevelButton;
-
-    TextView partimeFinishedScreen;
-    TextView timeFinishedScreen;
-    ImageView nextLevelButton;
-    ImageView finishedScreenBackground;
-    Button homeButton;
-
-    int powerUpsPlacement[][]= new int[6][13];
-    int powerUpCounter=0;
-
-    boolean horizontalWalls[][] = new boolean[5][13];
-
-    boolean verticalWalls[][] = new boolean[12][6];
-
-    int ballPosition=0;
-
-    int parTime=50000;
-
-    int wallNumber=0;
-    int screenWidth;
-    int block;
-    boolean touchAllowed = false;
+    private int x = 0;          //stores the angle of the phone around the x-axis
+    private int y = 0;          //stores the angle of the phone around the y-axis
+    private boolean allowedMovement[] = {true, true, true, true};
+    private float show = 1;
+    private float hide = 0;
+    private double speedAdjustment;
+    private int visibleThreshold=10000;
+    private int invert=1;
+    private int pickup_range=500;
+    private int levelNumber=0;  //level 1 equals levelNumber 0 etc
+    private int allowMovement =1;
+    private int screenWidth;
+    private int block;
+    private boolean touchAllowed = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //setup level
         Bundle extras = getIntent().getExtras();
         levelNumber = extras.getInt("levelNumber");
-
         setContentView(R.layout.level);
-        //hide top bar
         getSupportActionBar().hide();
-
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-
+        //set ball
         ImageView ballImage = (ImageView)findViewById(R.id.ball);
         playingBall = new Ball(ballImage);
 
+        //set layout of the game screen
         parTimeText = (TextView) findViewById(R.id.parTimeText);
         levelText = (TextView) findViewById(R.id.levelText);
         timeText = (TextView) findViewById(R.id.timeText);
         powerUpsTouched = (TextView) findViewById(R.id.powerUpsTouched);
+        levelText.setText(Integer.toString(levelNumber+1));
+        loadingBackground = (ImageView) findViewById(R.id.loadingBackground);
+        loadingBar = (ImageView) findViewById(R.id.loadingBar);
 
+        //set times
         int parTimeArray [] = getResources().getIntArray(R.array.parTime);
         parTime = parTimeArray[levelNumber];
         parTimeMinutes=(parTime/(1000*60))%60;
         parTimeSeconds=((parTime-(parTimeMinutes*60*1000))/1000)%60;
         parTimeText.setText("  /  0"+Integer.toString(parTimeMinutes)+":"+Integer.toString(parTimeSeconds));
-
-        levelText.setText(Integer.toString(levelNumber+1));
-
         timeStart=(int)System.currentTimeMillis();
 
+        //set pauseScreen layout
         pauseScreenBackground = (ImageView) findViewById(R.id.menu_background);
         pauseScreenBackground2 = (ImageView) findViewById(R.id.menu_background_2);
         playButton = (ImageView) findViewById(R.id.playButton);
@@ -150,21 +131,22 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         restartLevelButton = (ImageView) findViewById(R.id.restartButton);
         pauseScreenTimeText = (TextView) findViewById(R.id.timePause);
 
-        readFile();
-
+        //set finishedScreen layout
         finishedScreenBackground = (ImageView) findViewById(R.id.finishedScreenBackground);
         nextLevelButton = (ImageView) findViewById(R.id.nextLevelButton);
 
-
+        //set the things that are depended of the screen resolution
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         screenWidth = size.x;
+        //TODO fix speed
         speedAdjustment=screenWidth/1920;
         block=(int)Math.round(screenWidth/90d);
 
-        loadingBackground = (ImageView) findViewById(R.id.loadingBackground);
-        loadingBar = (ImageView) findViewById(R.id.loadingBar);
+        sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+        readFile();
 
         start();
     }
@@ -229,13 +211,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
             }
         }
-
-
     }
 
     @Override
     public void onSensorChanged (SensorEvent event){
-
         //if sensor is unreliable, return void
         if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
             return;
@@ -258,7 +237,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         if (y < -15) {
             y = -15;
         }
-
 
         time = (int) (System.currentTimeMillis() - timeStart - pausedTime);
         for (int i = 0; i < wallNumber - 4; i++) {
@@ -289,7 +267,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
 
         move(x, y);
-
     }
 
     public void restartButtonClick(View v){
@@ -343,7 +320,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         callbacks defined in this class, and gather the sensor information as quick
         as possible*/
         sManager.registerListener(this, sManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_FASTEST);
-
     }
 
     //When this Activity isn't visible anymore
@@ -358,18 +334,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     public void onAccuracyChanged(Sensor arg0, int arg1) {
         //Do nothing.
     }
-
-    /*
-        This method is called when a wall has been hit.
-        It will then analyze from which way the ball came in relation to the wall it hit.
-        With that information it stores which movements are now still allowed (up, down, right or left).
-        This is done via the Minkowski addition formula: https://en.wikipedia.org/wiki/Minkowski_addition
-
-        This method receives a ball and a wall entity.
-        It returns nothing
-
-        It changes the allowedMovement boolean
-    */
 
     public void pauseScreen(){
         timeAtPause=(int) System.currentTimeMillis();
@@ -407,9 +371,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                 pauseScreenTimeText.setText(Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds) + "/0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
             }
         }
-
-
-
     }
 
     public void limitMovement(Ball ball, Wall wall) {
@@ -434,16 +395,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
     }
 
-    /*
-        This methods determines if a wall is hit by the ball.
-        If this is the case then it will make that wall visible and it will call the limitMovement() method to determine which movement should be blocked.
-
-        This method receives a ball and wall entity.
-        It returns nothing
-
-        It changes opacity of the wall that is hit
-    */
-
     public void intersectWall(Ball ball, Wall wall) {
         //top left corner of the ball
         if (ball.getTopLeftX() >= wall.getTopLeftX() && ball.getTopLeftX() <= wall.getTopRightX()) {                     //is the x position of the ball between those of the two sides of the wall
@@ -459,9 +410,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                 return;
             }
         }
-
-
-
 
         //top rigth corner of the ball
         if (ball.getTopRightX() >= wall.getTopLeftX() && ball.getTopRightX() <= wall.getTopRightX()) {                   //is the x position of the ball between those of the two sides of the wall
@@ -496,10 +444,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             }
         }
 
-
-
-
-
         //bottom rigth corner of the ball
         if (ball.getBottomRightX() >= wall.getBottomLeftX() && ball.getBottomRightX() <= wall.getBottomRightX()) {      //is the x position of the ball between those of the two sides of the wall
             if (ball.getBottomRightY() >= wall.getTopLeftY() && ball.getBottomRightY() <= wall.getBottomLeftY()) {      //is the y position of the ball between those of the two sides of the wall
@@ -516,15 +460,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
     }
 
-    /*
-        This methods determines if a power up is hit by the ball.
-        If this is the case then it will call the hitPowerUp() method, which determines what should happen.
-
-        This method receives a ball and powerUp entity.
-        It returns nothing
-
-        It changes nothing.
-     */
     public void intersectPowerUp(Ball ball, PowerUp powerUp) {
         //top left corner of the ball
         if (ball.getTopLeftX() >= powerUp.getTopLeftX() && ball.getTopLeftX() <= powerUp.getTopRightX()) {              //is the x position of the ball between those of the two sides of the power up
@@ -558,14 +493,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
     }
 
-    /*
-        This method determines what should happen if a power up is hit
-
-        It receives a powerUp entity
-        It returns nothing
-
-        It changes the opacity of the powerUp
-     */
     public void hitPowerUp(PowerUp powerUp){
         if(powerUp.getHittable()) {
             amountPowerUpsTouched = amountPowerUpsTouched + 1;
@@ -618,7 +545,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             nextLevelButton.setVisibility(View.VISIBLE);
             nextLevelButton.setClickable(true);
 
-
             pauseScreenTimeText.setVisibility(View.VISIBLE);
 
             if(finishTime>parTime){
@@ -643,7 +569,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             for (int i=0;i<powerUpCounter;i++){
                 powerUps[i].setInvisible();
             }
-
 
             quitLevelButton.setVisibility(View.VISIBLE);
             restartLevelButton.setVisibility(View.VISIBLE);
@@ -670,6 +595,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
     }
 
+    //TODO set the right colors to the right meaning
     //hides whole map
     public void yellowPowerUp(PowerUp powerUp){
         for(int i=0; i<wallNumber-4;i++){
@@ -691,7 +617,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
     //pause time
     public void greenPowerUp(PowerUp powerUp){
-
+        //TODO find a meaning
 
 
         powerUp.setInvisible();
@@ -724,30 +650,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         powerUp.setInvisible();
         powerUp.setHittable(false);
     }
-
-
-
-
-
-    /*
-        This method is called when there is a valid change in the values that are measured by the gyroscope.
-
-        The steps that this method takes are quite complicated.
-            The first step that is taken is to determine how may steps should be taken in the x and y direction.
-            It then keeps score of how many steps have been taken in both the x and y direction.
-            If this below the steps that have to be taken then the while loop will go through another cycle.
-            This loop moves the ball one pixel in both directions (if this is still necessary and a movement in that direction is still allowed) and then checks if there is a collision.
-            To detect this the intersectWall() method is called.
-            Right after this the intersectPowerUp() method is called to detect if a power up has been hit.
-            When this is all done the new position will be send to ImageView of the ball by setLayoutParams() method.
-
-        This method receives two integers, one for the angle in the x direction and one for the y direction.
-        It returns nothing
-
-        It changes the following:
-            * the layout of the ball
-            * the offset from the side and top
-     */
 
     public void move(int x, int y) {
         RelativeLayout.LayoutParams alp = playingBall.getLayoutParams();
@@ -806,25 +708,9 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         playingBall.setLayoutParams(alp);
     }
 
-    /*
-        This method sets all the data for the power ups, walls and the balls.
-        This can not be done in the onCreate method because the layout has not been initialized there.
-
-        It receives nothing
-        It returns nothing
-
-        It changes the same for all the objects:
-            * Width
-            * Height
-            * Centers
-            * Corners
-     */
-
     public void start() {
-
         double offsetX = 11.5;
         double offsetY = 4.7;
-
 
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 13; j++) {
@@ -884,7 +770,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                         imagePowerUp.setImageResource(R.drawable.pickup_multi_v2);
                     }
 
-
                     RelativeLayout rl = (RelativeLayout) findViewById(R.id.relativeLayout);
                     RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -933,7 +818,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             mazeWall[wallNumber].setCorners();
             wallNumber = wallNumber + 1;
 
-
             ImageView border = (ImageView) findViewById(R.id.border);
             border.getLayoutParams().height = (int) (39.20d * block);
             border.getLayoutParams().width = (int) (82d * block);
@@ -941,7 +825,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             borderLayout.topMargin = (int) (1.4d * block);
             borderLayout.leftMargin = (int) (4.4d * (double) block);
             border.setLayoutParams(borderLayout);
-
 
             playingBall.setWidth((int) (2d * block));
             playingBall.setHeight((int) (2d * block));
@@ -972,7 +855,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             paramsLevelText.topMargin=37*block;
             levelText.setLayoutParams(paramsLevelText);
 
-
             powerUpsTouched.setWidth(35 * block);
             powerUpsTouched.setHeight(30 * block);
             powerUpsTouched.setTextSize((int) (1.5d * block));
@@ -980,9 +862,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             paramsPowerUpsTouched.leftMargin = (int) (37d * block);
             paramsPowerUpsTouched.topMargin = 40 * block;
             powerUpsTouched.setLayoutParams(paramsPowerUpsTouched);
-
             powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "    /    " + Integer.toString(powerUpCounter));
-
 
             pauseScreenBackground2.requestLayout();
             pauseScreenBackground2.getLayoutParams().width = 4*(16*block);
@@ -992,7 +872,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             paramsBackground2.topMargin=(int)((5d+3d)*block);
             pauseScreenBackground2.setLayoutParams(paramsBackground2);
 
-
             playButton.requestLayout();
             playButton.getLayoutParams().width = (int)(3.1d*(9*block));
             playButton.getLayoutParams().height = (int)(3.1d*(9*block));
@@ -1001,7 +880,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             paramsPlayButton.topMargin=(int)((8.65d+3d)*block);
             playButton.setLayoutParams(paramsPlayButton);
 
-
             quitLevelButton.requestLayout();
             quitLevelButton.getLayoutParams().width = (int)(5*4.65d*block);
             quitLevelButton.getLayoutParams().height = 5*block;
@@ -1009,7 +887,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             paramsQuitLevel.leftMargin=(int)(48d*block);
             paramsQuitLevel.topMargin=28*block;
             quitLevelButton.setLayoutParams(paramsQuitLevel);
-
 
             restartLevelButton.requestLayout();
             restartLevelButton.getLayoutParams().width = (int)(5*4.65d*block);
@@ -1044,8 +921,5 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             finishedScreenBackground.setLayoutParams(paramsFinished);
 
         touchAllowed=true;
-
     }
-
-
 }
