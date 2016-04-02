@@ -69,7 +69,7 @@ public class LevelSelect extends AppCompatActivity {
 
     private void setUnlock(){       //checks whether next four are available
         HighScoreEditor highScoreEditor = new HighScoreEditor();
-
+        //TODO fix the unlock of the next 4 levels
         if(screenNumber == 0){
             backUnlocked = false;
             previous_button.setVisibility(View.INVISIBLE);
@@ -157,6 +157,7 @@ public class LevelSelect extends AppCompatActivity {
             level_array[i].setClickable(false);
         }
 
+        //TODO fix glitching loading bar!
         loadingBar.setVisibility(View.VISIBLE);
         loadingBackground.setVisibility(View.VISIBLE);
 
