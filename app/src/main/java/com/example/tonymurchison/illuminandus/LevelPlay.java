@@ -230,23 +230,29 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             return;
         }
 
-        //adjusts and then saves the angle of phone in the x and y direction.
-        x = Math.round((int)(((double)event.values[1]) /  ((3d * (double) invert * speedAdjustment)))*allowMovement);
-        y = Math.round((int)(((-(double)event.values[2]) / (3d * (double) invert * speedAdjustment)))*allowMovement);
+        double xb=event.values[1];
+        double yb=event.values[2];
 
-        //limits the speed
-        if (x > 15) {
-            x = 15;
+        if (xb > 15d*speedAdjustment) {
+            xb = 15d*speedAdjustment;
         }
-        if (x < -15) {
-            x = -15;
+        if (xb < -15d*speedAdjustment) {
+            xb = -15d*speedAdjustment;
         }
-        if (y > 15) {
-            y = 15;
+        if (yb > 15d*speedAdjustment) {
+            yb = 15d*speedAdjustment;
         }
-        if (y < -15) {
-            y = -15;
+        if (yb < -15d*speedAdjustment) {
+            yb = -15d*speedAdjustment;
         }
+
+
+
+        //adjusts and then saves the angle of phone in the x and y direction.
+
+        x = (int)Math.round((xb/(2d*(double)invert))*allowMovement);
+        y =(int) Math.round((-yb/(2d * (double) invert ))*allowMovement);
+
 
         time = (int) (System.currentTimeMillis() - timeStart - pausedTime);
         for (int i = 0; i < wallNumber - 4; i++) {
