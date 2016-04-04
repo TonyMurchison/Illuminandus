@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -24,6 +25,7 @@ public class LevelSelect extends AppCompatActivity {
     private boolean unlockedstate = false;
     private boolean backUnlocked = false;
     private boolean debug_timer = false;    //if true, always allows access to all levels
+    private float x1, x2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,6 @@ public class LevelSelect extends AppCompatActivity {
 
     private void setUnlock(){       //checks whether next four are available
         HighScoreEditor highScoreEditor = new HighScoreEditor();
-        //TODO fix the unlock of the next 4 levels
         if(screenNumber == 0){
             backUnlocked = false;
             previous_button.setVisibility(View.INVISIBLE);
@@ -124,6 +125,29 @@ public class LevelSelect extends AppCompatActivity {
             setUnlock();
         }
         return;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        switch(event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                return false;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                float deltaX = x2 - x1;
+                if (deltaX > 150){
+                    onPreviousButtonClick(previous_button);
+                    return false;
+                }
+                if (deltaX < -150){
+                    onNextButtonClick(next_button);
+                    return false;
+                }
+                else return true;
+        }
+        return super.onTouchEvent(event);
     }
 
     private void updateLevels(int screenNumber){

@@ -516,6 +516,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "  /  " + Integer.toString(powerUpCounter));
         }
 
+        else return;
+
         if(amountPowerUpsTouched==powerUpCounter) {
           finishedLevel();
         }

@@ -16,6 +16,7 @@ public class UnlockEditor{
         this.c = c;
         HighScoreEditor highScoreEditor = new HighScoreEditor();
         int total_time = 0;
+        int total_goal_time = 0;
 
         for(int i = 4 * screenNumber; i < (screenNumber * 4 + 4); i++){
             int local_value = highScoreEditor.getValue(this.c, "HighScore_" + i);
@@ -27,8 +28,10 @@ public class UnlockEditor{
             }
         }
         int tempArray[] = this.c.getResources().getIntArray(R.array.parTime);
-        //TODO vergelijk je hier niet de totale tijd over vier levels met de partime van 1 level?
-        if(total_time <= tempArray[screenNumber]){
+        for(int i = 4 * screenNumber; i < (screenNumber * 4 + 4); i++){
+            total_goal_time = total_goal_time + tempArray[i];
+        }
+        if(total_time <= total_goal_time){
             return true;
         }
         else return false;
