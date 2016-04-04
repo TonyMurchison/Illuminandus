@@ -10,6 +10,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -725,6 +726,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     }
 
     public void start() {
+        //TODO textview uitlijnen in spelscherm
         double offsetX = 11.5;
         double offsetY = 4.7;
 
@@ -850,12 +852,12 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             int ballPositionY=i;
             playingBall.setWidth((int) (2d * block));
             playingBall.setHeight((int) (2d * block));
-            playingBall.setCenter((int) ((4d + offsetX + ballPositionX*5) * block), (int) ((offsetY + 3.5d + ballPositionY*5) * block));
+            playingBall.setCenter((int) ((4d + offsetX + ballPositionX * 5) * block), (int) ((offsetY + 3.5d + ballPositionY * 5) * block));
             playingBall.setCorners();
 
             timeText.setWidth(30 * block);
             timeText.setHeight(10 * block);
-            timeText.setTextSize(block);
+            timeText.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) (4d*block));
             RelativeLayout.LayoutParams paramsTimeText = (RelativeLayout.LayoutParams)timeText.getLayoutParams();
             paramsTimeText.leftMargin=15*block;
             paramsTimeText.topMargin=46*block;
@@ -863,7 +865,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
             parTimeText.setWidth(30 * block);
             parTimeText.setHeight(10 * block);
-            parTimeText.setTextSize(block);
+            parTimeText.setTextSize(TypedValue.COMPLEX_UNIT_PX,(float)(4d*block));
             RelativeLayout.LayoutParams paramsParTimeText = (RelativeLayout.LayoutParams) parTimeText.getLayoutParams();
             paramsParTimeText.leftMargin=45*block;
             paramsParTimeText.topMargin=46*block;
@@ -871,7 +873,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
             levelText.setWidth(35 * block);
             levelText.setHeight(30 * block);
-            levelText.setTextSize(3 * block);
+            levelText.setTextSize(TypedValue.COMPLEX_UNIT_PX,(float)(12d * block));
             RelativeLayout.LayoutParams paramsLevelText = (RelativeLayout.LayoutParams)levelText.getLayoutParams();
             paramsLevelText.leftMargin=60*block;
             paramsLevelText.topMargin=37*block;
@@ -879,7 +881,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
             powerUpsTouched.setWidth(35 * block);
             powerUpsTouched.setHeight(30 * block);
-            powerUpsTouched.setTextSize((int) (1.5d * block));
+            powerUpsTouched.setTextSize(TypedValue.COMPLEX_UNIT_PX,(float) (4d * block));
             RelativeLayout.LayoutParams paramsPowerUpsTouched = (RelativeLayout.LayoutParams)powerUpsTouched.getLayoutParams();
             paramsPowerUpsTouched.leftMargin = (int) (37d * block);
             paramsPowerUpsTouched.topMargin = 40 * block;
@@ -920,7 +922,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
             pauseScreenTimeText.setWidth(35 * block);
             pauseScreenTimeText.setHeight(30 * block);
-            pauseScreenTimeText.setTextSize((int)(1.25d * block));
+            pauseScreenTimeText.setTextSize(TypedValue.COMPLEX_UNIT_PX,(float)(5d * block));
             RelativeLayout.LayoutParams paramsPauseTimeText = (RelativeLayout.LayoutParams)pauseScreenTimeText.getLayoutParams();
             paramsPauseTimeText.leftMargin=45*block;
             paramsPauseTimeText.topMargin=20*block;

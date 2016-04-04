@@ -27,6 +27,7 @@ public class UnlockEditor{
             }
         }
         int tempArray[] = this.c.getResources().getIntArray(R.array.parTime);
+        //TODO vergelijk je hier niet de totale tijd over vier levels met de partime van 1 level?
         if(total_time <= tempArray[screenNumber]){
             return true;
         }
