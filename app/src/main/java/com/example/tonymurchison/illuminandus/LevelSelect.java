@@ -228,4 +228,10 @@ public class LevelSelect extends AppCompatActivity {
             last_level++;
         }
     }
+
+    public void infoButtonClick(View v){
+        Intent intent = new Intent(LevelSelect.this, InformationScreen.class);
+        startActivity(intent);
+        finish();
+    }
 }

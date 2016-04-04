@@ -19,9 +19,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
@@ -53,6 +50,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     private int pausedTime=0;
     private int timeAtPause=0;
     private int parTime=50000;
+    private int timePlayingBallHit;
 
     //game items
     private Ball playingBall;
@@ -87,6 +85,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     private int screenWidth;
     private int block;
     private boolean touchAllowed = false;
+    private boolean ballHidden = false;
 
 
     @Override
@@ -158,7 +157,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     }
 
     public void onBackPressed(){
-        //TODO check if this is what we want
         super.onBackPressed();
         pauseScreen();
     }
@@ -231,6 +229,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             return;
         }
 
+        //TODO auto-calibrate
+
         double xb=event.values[1]*speedAdjustment;
         double yb=event.values[2]*speedAdjustment;
 
@@ -260,6 +260,11 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             if (time - mazeWall[i].getTimeTouched() > visibleThreshold) {
                 mazeWall[i].setVisibility(hide);
             }
+        }
+
+        if(ballHidden==true && time>timePlayingBallHit+3000){
+            playingBall.setVisibility(show);
+            ballHidden=false;
         }
 
         timeMinutes = (time / (1000 * 60)) % 60;
@@ -614,9 +619,9 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
     }
 
-    //TODO set the right colors to the right meaning
+
     //hides whole map
-    public void yellowPowerUp(PowerUp powerUp){
+    public void pinkPowerUp(PowerUp powerUp){
         for(int i=0; i<wallNumber-4;i++){
             mazeWall[i].setVisibility(hide);
         }
@@ -625,7 +630,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     }
 
     //shows whole map
-    public void pinkPowerUp(PowerUp powerUp){
+    public void bluePowerUp(PowerUp powerUp){
         for(int i=0; i<wallNumber;i++){
             mazeWall[i].setVisibility(show);
             mazeWall[i].setTimeTouched((int) System.currentTimeMillis() - timeStart-pausedTime);
@@ -634,10 +639,11 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         powerUp.setHittable(false);
     }
 
-    //pause time
-    public void greenPowerUp(PowerUp powerUp){
-        //TODO find a meaning
-
+    //hides ball
+    public void yellowPowerUp(PowerUp powerUp){
+        playingBall.setVisibility(hide);
+        timePlayingBallHit = (int) System.currentTimeMillis()-timeStart-pausedTime;
+        ballHidden=true;
 
         powerUp.setInvisible();
         powerUp.setHittable(false);
@@ -651,7 +657,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     }
 
     //shows certain walls
-    public void bluePowerUp(PowerUp powerUp){
+    public void greenPowerUp(PowerUp powerUp){
         for(int i=0;i<wallNumber;i++){
             double deltaDsquared = Math.pow(mazeWall[i].getCenterX() - powerUp.getCenterX(), 2) + Math.pow(mazeWall[i].getCenterY() - powerUp.getCenterY(), 2);
             if(deltaDsquared < Math.pow(pickup_range, 2)){
@@ -772,19 +778,19 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                     ImageView imagePowerUp = new ImageView(LevelPlay.this);
 
                     if (powerUpsPlacement[i][j] == 1) {
-                        imagePowerUp.setImageResource(R.drawable.pickup_blue_v2);
+                        imagePowerUp.setImageResource(R.drawable.pickup_yellow_v2);
                     }
                     if (powerUpsPlacement[i][j] == 2) {
-                        imagePowerUp.setImageResource(R.drawable.pickup_red_v2);
-                    }
-                    if (powerUpsPlacement[i][j] == 3) {
                         imagePowerUp.setImageResource(R.drawable.pickup_pink_v2);
                     }
-                    if (powerUpsPlacement[i][j] == 4) {
+                    if (powerUpsPlacement[i][j] == 3) {
                         imagePowerUp.setImageResource(R.drawable.pickup_green_v2);
                     }
+                    if (powerUpsPlacement[i][j] == 4) {
+                        imagePowerUp.setImageResource(R.drawable.pickup_red_v2);
+                    }
                     if (powerUpsPlacement[i][j] == 5) {
-                        imagePowerUp.setImageResource(R.drawable.pickup_yellow_v2);
+                        imagePowerUp.setImageResource(R.drawable.pickup_blue_v2);
                     }
                     if (powerUpsPlacement[i][j] == 6) {
                         imagePowerUp.setImageResource(R.drawable.pickup_multi_v2);
