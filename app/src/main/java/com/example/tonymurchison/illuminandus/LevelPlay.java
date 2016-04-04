@@ -80,10 +80,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     private float hide = 0;
     private double speedAdjustment;
     private int visibleThreshold=10000;
-    private int invert=1;
+    private double invert=1;
     private int pickup_range=500;
     private int levelNumber=0;  //level 1 equals levelNumber 0 etc
-    private int allowMovement =1;
+    private double allowMovement =1;
     private int screenWidth;
     private int block;
     private boolean touchAllowed = false;
@@ -231,8 +231,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             return;
         }
 
-        double xb=event.values[1];
-        double yb=event.values[2];
+        double xb=event.values[1]*speedAdjustment;
+        double yb=event.values[2]*speedAdjustment;
 
         if (xb > 15d*speedAdjustment) {
             xb = 15d*speedAdjustment;
@@ -251,8 +251,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
         //adjusts and then saves the angle of phone in the x and y direction.
 
-        x = (int)Math.round((xb/(2d*(double)invert))*allowMovement);
-        y =(int) Math.round((-yb/(2d * (double) invert ))*allowMovement);
+        x = (int)Math.round((xb/(2d*invert))*allowMovement);
+        y =(int) Math.round((-yb/(2d*invert ))*allowMovement);
 
 
         time = (int) (System.currentTimeMillis() - timeStart - pausedTime);
