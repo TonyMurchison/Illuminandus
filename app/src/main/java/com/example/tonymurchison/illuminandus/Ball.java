@@ -4,32 +4,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-/*
-    Class describes the ball
-        Includes:
-            * positions of the centers and the corners
-            * the width and height
-            * the ImageView itself
-
-        There are methods implemented to set and get this data.
- */
-
-public class Ball{
-    //coordinates of the ball
-    private int centerX;
-    private int centerY;
-    private int topLeftX;
-    private int topRightX;
-    private int bottomLeftX;
-    private int bottomRightX;
-    private int topLeftY;
-    private int topRightY;
-    private int bottomLeftY;
-    private int bottomRightY;
-
-    //information off the ball
-    private int width;
-    private int height;
+public class Ball extends GameObjects{
     private ImageView ballImage;
 
     //constructor
@@ -56,53 +31,6 @@ public class Ball{
         bottomLeftY=(centerY+(height/2));
     }
 
-    public int getWidth(){
-        return width;
-    }
-
-    public int getHeight(){
-        return height;
-    }
-
-    public int getCenterX(){
-        return centerX;
-    }
-
-    public int getCenterY(){
-        return centerY;
-    }
-
-    public int getTopLeftX(){
-        return topLeftX;
-    }
-
-    public int getTopRightX(){
-        return topRightX;
-    }
-
-    public int getBottomLeftX(){
-        return bottomLeftX;
-    }
-
-    public int getBottomRightX(){
-        return bottomRightX;
-    }
-
-    public int getTopLeftY(){
-        return topLeftY;
-    }
-
-    public int getTopRightY(){
-        return topRightY;
-    }
-
-    public int getBottomLeftY(){
-        return bottomLeftY;
-    }
-
-    public int getBottomRightY(){
-        return bottomRightY;
-    }
 
     public void setCenterX(int x){
         centerX=x;

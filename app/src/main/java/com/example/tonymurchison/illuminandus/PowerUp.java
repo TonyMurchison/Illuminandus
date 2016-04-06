@@ -1,37 +1,11 @@
 package com.example.tonymurchison.illuminandus;
 
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-/*
-    Class describes power ups
-        Includes:
-            * positions of the centers and the corners
-            * the width and height
-            * the ImageView itself
-            * the type of power up
 
-        There are methods implemented to set and get this data.
- */
-
-public class PowerUp extends AppCompatActivity {
-    //coordinates of the power ups
-    private int centerX;
-    private int centerY;
-    private int topLeftX;
-    private int topRightX;
-    private int bottomLeftX;
-    private int bottomRightX;
-    private int topLeftY;
-    private int topRightY;
-    private int bottomLeftY;
-    private int bottomRightY;
-
-    //information off the power ups
-    private int width;
-    private int height;
+public class PowerUp extends GameObjects {
     private ImageView powerUpImage;
     private int type;
     private boolean hittable=true;
@@ -67,53 +41,6 @@ public class PowerUp extends AppCompatActivity {
 
     public void setVisible(){powerUpImage.setVisibility(View.VISIBLE);}
 
-    public int getWidth(){
-        return width;
-    }
-
-    public int getHeight(){
-        return height;
-    }
-
-    public int getCenterX(){
-        return centerX;
-    }
-
-    public int getCenterY(){
-        return centerY;
-    }
-
-    public int getTopLeftX(){
-        return topLeftX;
-    }
-
-    public int getTopRightX(){
-        return topRightX;
-    }
-
-    public int getBottomLeftX(){
-        return bottomLeftX;
-    }
-
-    public int getBottomRightX(){
-        return bottomRightX;
-    }
-
-    public int getTopLeftY(){
-        return topLeftY;
-    }
-
-    public int getTopRightY(){
-        return topRightY;
-    }
-
-    public int getBottomLeftY(){
-        return bottomLeftY;
-    }
-
-    public int getBottomRightY(){
-        return bottomRightY;
-    }
 
     public void setWidth(int widthInput){
         width=widthInput;

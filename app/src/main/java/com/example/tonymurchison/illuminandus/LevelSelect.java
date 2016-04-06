@@ -131,6 +131,16 @@ public class LevelSelect extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume(){
+        super.onResume();
+
+        for(int i=0;i<4;i++){
+            level_array[i].setClickable(true);
+        }
+
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
 
         switch(event.getAction()) {
@@ -184,22 +194,20 @@ public class LevelSelect extends AppCompatActivity {
             level_array[i].setClickable(false);
         }
 
-        loadingBackground.setVisibility(View.VISIBLE);
-        loadingBar.setVisibility(View.VISIBLE);
+//        loadingBackground.setVisibility(View.VISIBLE);
+//        loadingBar.setVisibility(View.VISIBLE);
 
-        long timeCurrent = System.currentTimeMillis();
-        while(System.currentTimeMillis()<timeCurrent+500){
 
-        }
 
         int viewNumber = (Integer) v.getTag();
         int levelNumber = viewNumber + screenNumber * 4;
         Intent intent = new Intent(LevelSelect.this, LevelPlay.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
-        System.gc();
         finish();
     }
+
+
 
     private String secondsToMinutes(int numberOfSeconds){
         int timeMinutes = (numberOfSeconds / (1000 * 60)) % 60;
@@ -240,7 +248,6 @@ public class LevelSelect extends AppCompatActivity {
     public void infoButtonClick(View v){
         Intent intent = new Intent(LevelSelect.this, InformationScreen.class);
         startActivity(intent);
-        System.gc();
         finish();
 
     }

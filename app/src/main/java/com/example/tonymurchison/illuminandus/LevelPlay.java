@@ -89,14 +89,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     private boolean touchAllowed = false;
     private boolean ballHidden = false;
 
-    Handler h = new Handler();
+    Handler h;
     int delay = 20; //milliseconds
-    Handler sensorHandler = new Handler();
-    int delaySensorHandler = 1000;
 
-    int sensorChangeCounter=0;
-    int sensorChangesPrevious=0;
-    TextView displaySensor;
+
 
 
 
@@ -156,34 +152,20 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         speedAdjustment=screenWidth/1920d;
         block=(int)Math.round(screenWidth / 90d);
 
-        sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
 
         readFile();
 
         start();
 
-        h.postDelayed(new Runnable() {
-            public void run() {
-                move(x, y);
-                h.postDelayed(this, delay);
-            }
-        }, delay);
 
-        sensorHandler.postDelayed(new Runnable() {
-            public void run() {
-                displaySensor();
-                sensorHandler.postDelayed(this, delaySensorHandler);
-            }
-        }, delaySensorHandler);
 
-        displaySensor = (TextView) findViewById(R.id.SensorInfo);
 
     }
 
-    public void displaySensor(){
-        displaySensor.setText(Integer.toString(sensorChangeCounter - sensorChangesPrevious));
-        sensorChangesPrevious=sensorChangeCounter;
-    }
+
+
+
 
 
 
@@ -193,6 +175,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         pauseScreen();
     }
 
+    @Override
     public void onBackPressed(){
         super.onBackPressed();
         pauseScreen();
@@ -257,12 +240,11 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
             }
         }
+        scanner.close();
     }
 
     @Override
     public void onSensorChanged (SensorEvent event){
-
-        sensorChangeCounter=sensorChangeCounter+1;
 
         //if sensor is unreliable, return void
         if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
@@ -336,7 +318,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         Intent intent = new Intent(LevelPlay.this, LevelSelect.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
-        System.gc();
         finish();
     }
 
@@ -381,11 +362,33 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         sManager.registerListener(this, sManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_FASTEST);
     }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
+
+        sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+        h = new Handler();
+
+
+        h.postDelayed(new Runnable() {
+            public void run() {
+                move(x, y);
+                if (h!=null)
+                h.postDelayed(this, delay);
+            }
+        }, delay);
+
+
+
+    }
+
     //When this Activity isn't visible anymore
     @Override
     protected void onStop() {
         //unregister the sensor listener
         sManager.unregisterListener(this);
+        h = null;
         super.onStop();
     }
 
@@ -432,26 +435,230 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
     }
 
-    public void limitMovement(Ball ball, Wall wall) {
-        float wy = (ball.getWidth() + wall.getWidth()) * (ball.getCenterY() - wall.getCenterY());
-        float hx = (ball.getHeight() + wall.getHeight()) * (ball.getCenterX() - wall.getCenterX());
 
-        wall.setVisibility(show);
-        wall.setTimeTouched((int) System.currentTimeMillis()-timeStart-pausedTime);
 
-        if (wy > hx) {
-            if (wy > -hx) {//top
-                allowedMovement[1] = false;     //block downwards motion
-            } else {//left
-                allowedMovement[2] = false;     //block rightwards motion
+
+
+
+
+    public void hitPowerUp(PowerUp powerUp){
+        if(powerUp.getHittable()) {
+            amountPowerUpsTouched = amountPowerUpsTouched + 1;
+            powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "  /  " + Integer.toString(powerUpCounter));
+        }
+
+        else return;
+
+        if(amountPowerUpsTouched==powerUpCounter) {
+          finishedLevel();
+        }
+
+        if(powerUp.getType()==1 && powerUp.getHittable()){
+            yellowPowerUp(powerUp);
+        }
+
+        if(powerUp.getType()==2 && powerUp.getHittable()){
+            pinkPowerUp(powerUp);
+        }
+
+        if (powerUp.getType()==3 && powerUp.getHittable()){
+            greenPowerUp(powerUp);
+        }
+
+        if(powerUp.getType()==4 && powerUp.getHittable()){
+            redPowerUp(powerUp);
+        }
+
+        if(powerUp.getType()==5 && powerUp.getHittable()){
+            bluePowerUp(powerUp);
+        }
+
+        if(powerUp.getType()==6 && powerUp.getHittable()){
+            multiPowerUp(powerUp);
+        }
+    }
+
+    private void finishedLevel(){
+        HighScoreEditor highScoreEditor = new HighScoreEditor();
+        int previous_score = highScoreEditor.getValue(this, "HighScore_" + levelNumber);
+        if(time < previous_score || previous_score == 0) {
+            highScoreEditor.saveInt(this, "HighScore_" + levelNumber, time);
+        }
+
+        if(displayedFinishScreen==false) {
+            int finishTime= time;
+            timeMinutes = (finishTime / (1000 * 60)) % 60;
+            timeSeconds = ((finishTime - (timeMinutes * 60 * 1000)) / 1000) % 60;
+
+            finishedScreenBackground.setVisibility(View.VISIBLE);
+            pauseScreenBackground.setVisibility(View.VISIBLE);
+            nextLevelButton.setVisibility(View.VISIBLE);
+            nextLevelButton.setClickable(true);
+
+            pauseScreenTimeText.setVisibility(View.VISIBLE);
+
+            if(finishTime>parTime){
+                pauseScreenTimeText.setTextColor(getResources().getColor(R.color.red));
             }
-        } else {
-            if (wy > -hx) {//right
-                allowedMovement[3] = false;     //block leftwards motion
-            } else {//bottom
-                allowedMovement[0] = false;     //block upwards motion
+
+            if (timeMinutes < 10) {
+                if (timeSeconds < 10) {
+                    pauseScreenTimeText.setText("0" + Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds) + "/0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
+                } else {
+                    pauseScreenTimeText.setText("0" + Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds) + "/0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
+                }
+            } else {
+                if (timeSeconds < 10) {
+                    pauseScreenTimeText.setText(Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds) + "/0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
+                } else {
+                    pauseScreenTimeText.setText(Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds) + "/0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
+                }
+            }
+            displayedFinishScreen=true;
+
+            for (int i=0;i<powerUpCounter;i++){
+                powerUps[i].setInvisible();
+            }
+
+            quitLevelButton.setVisibility(View.VISIBLE);
+            restartLevelButton.setVisibility(View.VISIBLE);
+
+            quitLevelButton.setClickable(true);
+            restartLevelButton.setClickable(true);
+        }
+    }
+
+    public void nextLevelButtonClick(View v){
+        UnlockEditor unlockCheck = new UnlockEditor();
+        if(unlockCheck.requestUnlock(this, (levelNumber / 4)) || levelNumber % 4 != 3) {
+            Intent intent = new Intent(LevelPlay.this, LevelPlay.class);
+            intent.putExtra("levelNumber", levelNumber + 1);
+            loadingBackground.setVisibility(View.VISIBLE);
+            loadingBar.setVisibility(View.VISIBLE);
+
+
+            startActivity(intent);
+            finish();
+
+        }
+        else{
+            Toast toast = Toast.makeText(this, "Next level not yet unlocked", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+
+    //hides whole map
+    public void pinkPowerUp(PowerUp powerUp){
+        for(int i=0; i<wallNumber-4;i++){
+            mazeWall[i].setVisibility(hide);
+        }
+        powerUp.setInvisible();
+        powerUp.setHittable(false);
+    }
+
+    //shows whole map
+    public void bluePowerUp(PowerUp powerUp){
+        for(int i=0; i<wallNumber;i++){
+            mazeWall[i].setVisibility(show);
+            mazeWall[i].setTimeTouched((int) System.currentTimeMillis() - timeStart-pausedTime);
+        }
+        powerUp.setInvisible();
+        powerUp.setHittable(false);
+    }
+
+    //hides ball
+    public void yellowPowerUp(PowerUp powerUp){
+        playingBall.setVisibility(hide);
+        timePlayingBallHit = (int) System.currentTimeMillis()-timeStart-pausedTime;
+        ballHidden=true;
+
+        powerUp.setInvisible();
+        powerUp.setHittable(false);
+    }
+
+    //inverts controls
+    public void redPowerUp(PowerUp powerUp){
+        invert = -1;
+        powerUp.setInvisible();
+        powerUp.setHittable(false);
+    }
+
+    //shows certain walls
+    public void greenPowerUp(PowerUp powerUp){
+        for(int i=0;i<wallNumber;i++){
+            double deltaDsquared = Math.pow(mazeWall[i].getCenterX() - powerUp.getCenterX(), 2) + Math.pow(mazeWall[i].getCenterY() - powerUp.getCenterY(), 2);
+            if(deltaDsquared < Math.pow(pickup_range, 2)){
+                mazeWall[i].setVisibility(show);
+                mazeWall[i].setTimeTouched((int) System.currentTimeMillis()-timeStart-pausedTime);
             }
         }
+        powerUp.setInvisible();
+        powerUp.setHittable(false);
+    }
+
+    //choses a random effect
+    public void multiPowerUp(PowerUp powerUp){
+
+        powerUp.setInvisible();
+        powerUp.setHittable(false);
+    }
+
+    public void move(int x, int y) {
+        RelativeLayout.LayoutParams alp = playingBall.getLayoutParams();
+        int maxMovementX = Math.abs(x);
+        int maxMovenentY = Math.abs(y);
+        int stepsTakenX = 0;
+        int stepsTakenY = 0;
+        int a = alp.leftMargin;
+        int b = alp.topMargin;
+
+        while (maxMovementX > stepsTakenX || maxMovenentY > stepsTakenY) {
+            //up 0, down 1, right 3, left 2
+            for (int i = 0; i < wallNumber; i++) {
+                intersectWall(playingBall, mazeWall[i]);
+            }
+
+            for(int i=0; i< powerUpCounter; i++){
+                intersectPowerUp(playingBall, powerUps[i]);
+            }
+
+            if (stepsTakenX < maxMovementX) {
+                stepsTakenX = stepsTakenX + 1;
+                if (x > 0 && allowedMovement[3]) {//right
+                    playingBall.setCenterX(playingBall.getCenterX() - 1);
+                    playingBall.setCorners();
+                    a = a - 1;
+                }
+                if (x < 0 && allowedMovement[2]) {//left
+                    playingBall.setCenterX(playingBall.getCenterX() + 1);
+                    playingBall.setCorners();
+                    a = a + 1;
+                }
+            }
+
+            if (stepsTakenY < maxMovenentY) {
+                stepsTakenY = stepsTakenY + 1;
+                if (y > 0 && allowedMovement[1]) {//down
+                    playingBall.setCenterY(playingBall.getCenterY() - 1);
+                    playingBall.setCorners();
+                    b = b - 1;
+                }
+                if (y < 0 && allowedMovement[0]) {//up
+                    playingBall.setCenterY(playingBall.getCenterY() + 1);
+                    playingBall.setCorners();
+                    b = b + 1;
+                }
+            }
+        }
+
+        for (int i = 0; i < 4; i++) {
+            allowedMovement[i] = true;
+        }
+
+        alp.leftMargin = a;
+        alp.topMargin = b;
+        playingBall.setLayoutParams(alp);
     }
 
     public void intersectWall(Ball ball, Wall wall) {
@@ -552,228 +759,26 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
     }
 
-    public void hitPowerUp(PowerUp powerUp){
-        if(powerUp.getHittable()) {
-            amountPowerUpsTouched = amountPowerUpsTouched + 1;
-            powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "  /  " + Integer.toString(powerUpCounter));
-        }
+    public void limitMovement(Ball ball, Wall wall) {
+        float wy = (ball.getWidth() + wall.getWidth()) * (ball.getCenterY() - wall.getCenterY());
+        float hx = (ball.getHeight() + wall.getHeight()) * (ball.getCenterX() - wall.getCenterX());
 
-        else return;
+        wall.setVisibility(1f);
+        wall.setTimeTouched((int) System.currentTimeMillis() - timeStart - pausedTime);
 
-        if(amountPowerUpsTouched==powerUpCounter) {
-          finishedLevel();
-        }
-
-        if(powerUp.getType()==1 && powerUp.getHittable()){
-            yellowPowerUp(powerUp);
-        }
-
-        if(powerUp.getType()==2 && powerUp.getHittable()){
-            pinkPowerUp(powerUp);
-        }
-
-        if (powerUp.getType()==3 && powerUp.getHittable()){
-            greenPowerUp(powerUp);
-        }
-
-        if(powerUp.getType()==4 && powerUp.getHittable()){
-            redPowerUp(powerUp);
-        }
-
-        if(powerUp.getType()==5 && powerUp.getHittable()){
-            bluePowerUp(powerUp);
-        }
-
-        if(powerUp.getType()==6 && powerUp.getHittable()){
-            multiPowerUp(powerUp);
-        }
-    }
-
-    private void finishedLevel(){
-        HighScoreEditor highScoreEditor = new HighScoreEditor();
-        int previous_score = highScoreEditor.getValue(this, "HighScore_" + levelNumber);
-        if(time < previous_score || previous_score == 0) {
-            highScoreEditor.saveInt(this, "HighScore_" + levelNumber, time);
-        }
-
-        if(displayedFinishScreen==false) {
-            int finishTime= time;
-            timeMinutes = (finishTime / (1000 * 60)) % 60;
-            timeSeconds = ((finishTime - (timeMinutes * 60 * 1000)) / 1000) % 60;
-
-            finishedScreenBackground.setVisibility(View.VISIBLE);
-            pauseScreenBackground.setVisibility(View.VISIBLE);
-            nextLevelButton.setVisibility(View.VISIBLE);
-            nextLevelButton.setClickable(true);
-
-            pauseScreenTimeText.setVisibility(View.VISIBLE);
-
-            if(finishTime>parTime){
-                pauseScreenTimeText.setTextColor(getResources().getColor(R.color.red));
+        if (wy > hx) {
+            if (wy > -hx) {//top
+                allowedMovement[1] = false;     //block downwards motion
+            } else {//left
+                allowedMovement[2] = false;     //block rightwards motion
             }
-
-            if (timeMinutes < 10) {
-                if (timeSeconds < 10) {
-                    pauseScreenTimeText.setText("0" + Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds) + "/0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
-                } else {
-                    pauseScreenTimeText.setText("0" + Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds) + "/0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
-                }
-            } else {
-                if (timeSeconds < 10) {
-                    pauseScreenTimeText.setText(Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds) + "/0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
-                } else {
-                    pauseScreenTimeText.setText(Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds) + "/0" + Integer.toString(parTimeMinutes) + ":" + Integer.toString(parTimeSeconds));
-                }
-            }
-            displayedFinishScreen=true;
-
-            for (int i=0;i<powerUpCounter;i++){
-                powerUps[i].setInvisible();
-            }
-
-            quitLevelButton.setVisibility(View.VISIBLE);
-            restartLevelButton.setVisibility(View.VISIBLE);
-
-            quitLevelButton.setClickable(true);
-            restartLevelButton.setClickable(true);
-        }
-    }
-
-    public void nextLevelButtonClick(View v){
-        UnlockEditor unlockCheck = new UnlockEditor();
-        if(unlockCheck.requestUnlock(this, (levelNumber / 4)) || levelNumber % 4 != 3) {
-            Intent intent = new Intent(LevelPlay.this, LevelPlay.class);
-            intent.putExtra("levelNumber", levelNumber + 1);
-            loadingBackground.setVisibility(View.VISIBLE);
-            loadingBar.setVisibility(View.VISIBLE);
-
-            long timeCurrent = System.currentTimeMillis();
-            while(System.currentTimeMillis()<timeCurrent+500){
-
-            }
-            startActivity(intent);
-            System.gc();
-            finish();
-
-        }
-        else{
-            Toast toast = Toast.makeText(this, "Next level not yet unlocked", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }
-
-
-    //hides whole map
-    public void pinkPowerUp(PowerUp powerUp){
-        for(int i=0; i<wallNumber-4;i++){
-            mazeWall[i].setVisibility(hide);
-        }
-        powerUp.setInvisible();
-        powerUp.setHittable(false);
-    }
-
-    //shows whole map
-    public void bluePowerUp(PowerUp powerUp){
-        for(int i=0; i<wallNumber;i++){
-            mazeWall[i].setVisibility(show);
-            mazeWall[i].setTimeTouched((int) System.currentTimeMillis() - timeStart-pausedTime);
-        }
-        powerUp.setInvisible();
-        powerUp.setHittable(false);
-    }
-
-    //hides ball
-    public void yellowPowerUp(PowerUp powerUp){
-        playingBall.setVisibility(hide);
-        timePlayingBallHit = (int) System.currentTimeMillis()-timeStart-pausedTime;
-        ballHidden=true;
-
-        powerUp.setInvisible();
-        powerUp.setHittable(false);
-    }
-
-    //inverts controls
-    public void redPowerUp(PowerUp powerUp){
-        invert = -1;
-        powerUp.setInvisible();
-        powerUp.setHittable(false);
-    }
-
-    //shows certain walls
-    public void greenPowerUp(PowerUp powerUp){
-        for(int i=0;i<wallNumber;i++){
-            double deltaDsquared = Math.pow(mazeWall[i].getCenterX() - powerUp.getCenterX(), 2) + Math.pow(mazeWall[i].getCenterY() - powerUp.getCenterY(), 2);
-            if(deltaDsquared < Math.pow(pickup_range, 2)){
-                mazeWall[i].setVisibility(show);
-                mazeWall[i].setTimeTouched((int) System.currentTimeMillis()-timeStart-pausedTime);
+        } else {
+            if (wy > -hx) {//right
+                allowedMovement[3] = false;     //block leftwards motion
+            } else {//bottom
+                allowedMovement[0] = false;     //block upwards motion
             }
         }
-        powerUp.setInvisible();
-        powerUp.setHittable(false);
-    }
-
-    //choses a random effect
-    public void multiPowerUp(PowerUp powerUp){
-
-        powerUp.setInvisible();
-        powerUp.setHittable(false);
-    }
-
-    public void move(int x, int y) {
-        RelativeLayout.LayoutParams alp = playingBall.getLayoutParams();
-        int maxMovementX = Math.abs(x);
-        int maxMovenentY = Math.abs(y);
-        int stepsTakenX = 0;
-        int stepsTakenY = 0;
-        a = alp.leftMargin;
-        b = alp.topMargin;
-
-        while (maxMovementX > stepsTakenX || maxMovenentY > stepsTakenY) {
-            //up 0, down 1, right 3, left 2
-            for (int i = 0; i < wallNumber; i++) {
-                intersectWall(playingBall, mazeWall[i]);
-            }
-
-            for(int i=0; i< powerUpCounter; i++){
-                intersectPowerUp(playingBall, powerUps[i]);
-            }
-
-            if (stepsTakenX < maxMovementX) {
-                stepsTakenX = stepsTakenX + 1;
-                if (x > 0 && allowedMovement[3]) {//right
-                    playingBall.setCenterX(playingBall.getCenterX() - 1);
-                    playingBall.setCorners();
-                    a = a - 1;
-                }
-                if (x < 0 && allowedMovement[2]) {//left
-                    playingBall.setCenterX(playingBall.getCenterX() + 1);
-                    playingBall.setCorners();
-                    a = a + 1;
-                }
-            }
-
-            if (stepsTakenY < maxMovenentY) {
-                stepsTakenY = stepsTakenY + 1;
-                if (y > 0 && allowedMovement[1]) {//down
-                    playingBall.setCenterY(playingBall.getCenterY() - 1);
-                    playingBall.setCorners();
-                    b = b - 1;
-                }
-                if (y < 0 && allowedMovement[0]) {//up
-                    playingBall.setCenterY(playingBall.getCenterY() + 1);
-                    playingBall.setCorners();
-                    b = b + 1;
-                }
-            }
-        }
-
-        for (int i = 0; i < 4; i++) {
-            allowedMovement[i] = true;
-        }
-
-        alp.leftMargin = a;
-        alp.topMargin = b;
-        playingBall.setLayoutParams(alp);
     }
 
     public void start() {

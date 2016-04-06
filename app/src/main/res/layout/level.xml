@@ -11,11 +11,6 @@
     android:background="@drawable/titlescreen_background"
     android:id="@+id/relativeLayout">
 
-
-
-
-
-
     <ImageView
         android:layout_width="50dp"
         android:layout_height="6dp"
@@ -1281,22 +1276,4 @@
         android:text="Sensor"
         android:layout_alignParentBottom="true"
         />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </RelativeLayout>
