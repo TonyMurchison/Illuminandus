@@ -8,6 +8,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
@@ -100,6 +101,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,10 +177,11 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }, delaySensorHandler);
 
         displaySensor = (TextView) findViewById(R.id.SensorInfo);
+
     }
 
     public void displaySensor(){
-        displaySensor.setText(Integer.toString(sensorChangeCounter-sensorChangesPrevious));
+        displaySensor.setText(Integer.toString(sensorChangeCounter - sensorChangesPrevious));
         sensorChangesPrevious=sensorChangeCounter;
     }
 
@@ -258,6 +261,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
     @Override
     public void onSensorChanged (SensorEvent event){
+
         sensorChangeCounter=sensorChangeCounter+1;
 
         //if sensor is unreliable, return void
@@ -641,6 +645,11 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             intent.putExtra("levelNumber", levelNumber + 1);
             loadingBackground.setVisibility(View.VISIBLE);
             loadingBar.setVisibility(View.VISIBLE);
+
+            long timeCurrent = System.currentTimeMillis();
+            while(System.currentTimeMillis()<timeCurrent+500){
+
+            }
             startActivity(intent);
             finish();
         }
@@ -779,7 +788,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                     mazeWall[wallNumber].setHeight(1 * block);
                     mazeWall[wallNumber].setCenter((int) ((double) j * 5d * (double) block + (4d + offsetX) * (double) block), (int) ((double) i * 5d * (double) block + (double) block * (6d + offsetY)));
                     mazeWall[wallNumber].setCorners();
-                    mazeWall[wallNumber].setVisibility(show);
+                    mazeWall[wallNumber].setVisibility(hide);
                     wallNumber = wallNumber + 1;
                 }
             }
@@ -795,7 +804,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                     mazeWall[wallNumber].setHeight(5 * block);
                     mazeWall[wallNumber].setCenter((int) ((double) i * 5d * (double) block + (double) block * (6.5d + offsetX)), (int) ((double) j * 5d * (double) block + ((double) block * (offsetY + 3d))));
                     mazeWall[wallNumber].setCorners();
-                    mazeWall[wallNumber].setVisibility(show);
+                    mazeWall[wallNumber].setVisibility(hide);
                     wallNumber = wallNumber + 1;
                 }
 
