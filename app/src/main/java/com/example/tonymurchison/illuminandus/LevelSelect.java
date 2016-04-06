@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +69,8 @@ public class LevelSelect extends AppCompatActivity {
         updateLevels(screenNumber);
         setUnlock();
         }
+
+
 
     private void setUnlock(){       //checks whether next four are available
         HighScoreEditor highScoreEditor = new HighScoreEditor();
@@ -181,9 +184,13 @@ public class LevelSelect extends AppCompatActivity {
             level_array[i].setClickable(false);
         }
 
-        //TODO fix glitching loading bar!
-        loadingBar.setVisibility(View.VISIBLE);
         loadingBackground.setVisibility(View.VISIBLE);
+        loadingBar.setVisibility(View.VISIBLE);
+
+        long timeCurrent = System.currentTimeMillis();
+        while(System.currentTimeMillis()<timeCurrent+500){
+
+        }
 
         int viewNumber = (Integer) v.getTag();
         int levelNumber = viewNumber + screenNumber * 4;
@@ -233,5 +240,6 @@ public class LevelSelect extends AppCompatActivity {
         Intent intent = new Intent(LevelSelect.this, InformationScreen.class);
         startActivity(intent);
         finish();
+
     }
 }

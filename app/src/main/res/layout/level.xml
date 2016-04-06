@@ -1274,7 +1274,13 @@
         android:visibility="gone"
         />
 
-
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:id="@+id/SensorInfo"
+        android:text="Sensor"
+        android:layout_alignParentBottom="true"
+        />
 
 
 

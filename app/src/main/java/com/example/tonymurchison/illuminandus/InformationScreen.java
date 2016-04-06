@@ -26,20 +26,19 @@ public class InformationScreen extends AppCompatActivity {
 
     }
 
+
+
     public void onBackPressed(){
         super.onBackPressed();
         Intent intent = new Intent(InformationScreen.this, LevelSelect.class);
         startActivity(intent);
-        System.gc();
         finish();
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
+
+    public void returnClick(View view) {
         Intent intent = new Intent(InformationScreen.this, LevelSelect.class);
         startActivity(intent);
-        System.gc();
         finish();
-        return super.onTouchEvent(event);
     }
 }

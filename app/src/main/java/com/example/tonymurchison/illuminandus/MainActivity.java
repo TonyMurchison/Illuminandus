@@ -1,27 +1,15 @@
 package com.example.tonymurchison.illuminandus;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.media.Image;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.ImageView;
-import android.widget.Toast;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private ImageView startButton;
@@ -64,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         if(notYetStarted==true) {
             Intent intent = new Intent(MainActivity.this, LevelSelect.class);
             startActivity(intent);
+            System.gc();
             finish();
         }
     }
@@ -71,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         notYetStarted=false;
         Intent intent = new Intent(MainActivity.this,LevelSelect.class);
         startActivity(intent);
+        System.gc();
         finish();
     }
 }

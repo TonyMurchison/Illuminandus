@@ -27,11 +27,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:text="The blue powerup will reveal the whole map"
             android:gravity="center_vertical"
             android:textSize="@dimen/info_text_demension"
             />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/return_button"
+            android:layout_weight="5"
+            android:onClick="returnClick"/>
 
 
     </LinearLayout>

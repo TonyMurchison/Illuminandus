@@ -22,6 +22,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
+import android.os.Handler;
 
 public class LevelPlay extends AppCompatActivity implements SensorEventListener {
    //layout items
@@ -49,12 +50,12 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     private int parTimeSeconds;
     private int pausedTime=0;
     private int timeAtPause=0;
-    private int parTime=50000;
+    private int parTime;
     private int timePlayingBallHit;
 
     //game items
     private Ball playingBall;
-    private int ballPosition=0;
+    private int ballPosition;
 
     private PowerUp powerUps[] = new PowerUp[15];
     private int powerUpsPlacement[][]= new int[6][13];
@@ -86,6 +87,17 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     private int block;
     private boolean touchAllowed = false;
     private boolean ballHidden = false;
+
+    Handler h = new Handler();
+    int delay = 20; //milliseconds
+    Handler sensorHandler = new Handler();
+    int delaySensorHandler = 1000;
+
+    int sensorChangeCounter=0;
+    int sensorChangesPrevious=0;
+    TextView displaySensor;
+
+
 
 
     @Override
@@ -139,16 +151,38 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         Point size = new Point();
         display.getSize(size);
         screenWidth = size.x;
-        //TODO check if speed is fixed
-        speedAdjustment=screenWidth/1920;
-        block=(int)Math.round(screenWidth/90d);
+        speedAdjustment=screenWidth/1920d;
+        block=(int)Math.round(screenWidth / 90d);
 
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
         readFile();
 
         start();
+
+        h.postDelayed(new Runnable() {
+            public void run() {
+                move(x, y);
+                h.postDelayed(this, delay);
+            }
+        }, delay);
+
+        sensorHandler.postDelayed(new Runnable() {
+            public void run() {
+                displaySensor();
+                sensorHandler.postDelayed(this, delaySensorHandler);
+            }
+        }, delaySensorHandler);
+
+        displaySensor = (TextView) findViewById(R.id.SensorInfo);
     }
+
+    public void displaySensor(){
+        displaySensor.setText(Integer.toString(sensorChangeCounter-sensorChangesPrevious));
+        sensorChangesPrevious=sensorChangeCounter;
+    }
+
+
 
     @Override
     public void onPause(){
@@ -224,12 +258,12 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
     @Override
     public void onSensorChanged (SensorEvent event){
+        sensorChangeCounter=sensorChangeCounter+1;
+
         //if sensor is unreliable, return void
         if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
             return;
         }
-
-        //TODO auto-calibrate
 
         double xb=event.values[1]*speedAdjustment;
         double yb=event.values[2]*speedAdjustment;
@@ -251,9 +285,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
         //adjusts and then saves the angle of phone in the x and y direction.
 
-        x = (int)Math.round((xb/(2d*invert))*allowMovement);
-        y =(int) Math.round((-yb/(2d*invert ))*allowMovement);
-
+        x = (int)Math.round((xb/(1d*invert))*allowMovement);
+        y =(int) Math.round((-yb/(1d*invert ))*allowMovement);
 
         time = (int) (System.currentTimeMillis() - timeStart - pausedTime);
         for (int i = 0; i < wallNumber - 4; i++) {
@@ -288,7 +321,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             timeText.setTextColor(getResources().getColor(R.color.red));
         }
 
-        move(x, y);
+
     }
 
     public void restartButtonClick(View v){
@@ -299,7 +332,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         Intent intent = new Intent(LevelPlay.this, LevelSelect.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
-        System.gc();
         finish();
     }
 
@@ -610,7 +642,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             loadingBackground.setVisibility(View.VISIBLE);
             loadingBar.setVisibility(View.VISIBLE);
             startActivity(intent);
-            System.gc();
             finish();
         }
         else{
@@ -812,146 +843,147 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             }
         }
 
-            ImageView leftBorderWallImage = (ImageView) findViewById(R.id.leftBorderWall);
-            mazeWall[wallNumber] = new Wall(leftBorderWallImage);
-            mazeWall[wallNumber].setWidth(1 * block);
-            mazeWall[wallNumber].setHeight(32 * block);
-            mazeWall[wallNumber].setCenter((int) ((offsetX + 0.5d) * (double) block), (int) ((offsetY + 15.5d) * (double) block));
-            mazeWall[wallNumber].setCorners();
-            wallNumber = wallNumber + 1;
+        ImageView leftBorderWallImage = (ImageView) findViewById(R.id.leftBorderWall);
+        mazeWall[wallNumber] = new Wall(leftBorderWallImage);
+        mazeWall[wallNumber].setWidth(1 * block);
+        mazeWall[wallNumber].setHeight(32 * block);
+        mazeWall[wallNumber].setCenter((int) ((offsetX + 0.5d) * (double) block), (int) ((offsetY + 15.5d) * (double) block));
+        mazeWall[wallNumber].setCorners();
+        wallNumber = wallNumber + 1;
 
-            ImageView rightBorderWallImage = (ImageView) findViewById(R.id.rightBorderWall);
-            mazeWall[wallNumber] = new Wall(rightBorderWallImage);
-            mazeWall[wallNumber].setWidth(1 * block);
-            mazeWall[wallNumber].setHeight(32 * block);
-            mazeWall[wallNumber].setCenter((int) ((67.5d + offsetX) * (double) block), (int) ((offsetY + 15.5d) * (double) block));
-            mazeWall[wallNumber].setCorners();
-            wallNumber = wallNumber + 1;
+        ImageView rightBorderWallImage = (ImageView) findViewById(R.id.rightBorderWall);
+        mazeWall[wallNumber] = new Wall(rightBorderWallImage);
+        mazeWall[wallNumber].setWidth(1 * block);
+        mazeWall[wallNumber].setHeight(32 * block);
+        mazeWall[wallNumber].setCenter((int) ((67.5d + offsetX) * (double) block), (int) ((offsetY + 15.5d) * (double) block));
+        mazeWall[wallNumber].setCorners();
+        wallNumber = wallNumber + 1;
 
-            ImageView topBorderWallImage = (ImageView) findViewById(R.id.topBorderWall);
-            mazeWall[wallNumber] = new Wall(topBorderWallImage);
-            mazeWall[wallNumber].setWidth(68 * block);
-            mazeWall[wallNumber].setHeight(1 * block);
-            mazeWall[wallNumber].setCenter((int) ((offsetX + 34d) * (double) block), (int) ((offsetY) * (double) block));
-            mazeWall[wallNumber].setCorners();
-            wallNumber = wallNumber + 1;
+        ImageView topBorderWallImage = (ImageView) findViewById(R.id.topBorderWall);
+        mazeWall[wallNumber] = new Wall(topBorderWallImage);
+        mazeWall[wallNumber].setWidth(68 * block);
+        mazeWall[wallNumber].setHeight(1 * block);
+        mazeWall[wallNumber].setCenter((int) ((offsetX + 34d) * (double) block), (int) ((offsetY) * (double) block));
+        mazeWall[wallNumber].setCorners();
+        wallNumber = wallNumber + 1;
 
-            ImageView bottomBorderWallImage = (ImageView) findViewById(R.id.bottomBorderWall);
-            mazeWall[wallNumber] = new Wall(bottomBorderWallImage);
-            mazeWall[wallNumber].setWidth(68 * block);
-            mazeWall[wallNumber].setHeight(1 * block);
-            mazeWall[wallNumber].setCenter((int) ((offsetX + 34d) * (double) block), (int) ((31d + offsetY) * (double) block));
-            mazeWall[wallNumber].setCorners();
-            wallNumber = wallNumber + 1;
+        ImageView bottomBorderWallImage = (ImageView) findViewById(R.id.bottomBorderWall);
+        mazeWall[wallNumber] = new Wall(bottomBorderWallImage);
+        mazeWall[wallNumber].setWidth(68 * block);
+        mazeWall[wallNumber].setHeight(1 * block);
+        mazeWall[wallNumber].setCenter((int) ((offsetX + 34d) * (double) block), (int) ((31d + offsetY) * (double) block));
+        mazeWall[wallNumber].setCorners();
+        wallNumber = wallNumber + 1;
 
-            ImageView border = (ImageView) findViewById(R.id.border);
-            border.getLayoutParams().height = (int) (39.20d * block);
-            border.getLayoutParams().width = (int) (82d * block);
-            RelativeLayout.LayoutParams borderLayout = (RelativeLayout.LayoutParams) border.getLayoutParams();
-            borderLayout.topMargin = (int) (1.4d * block);
-            borderLayout.leftMargin = (int) (4.4d * (double) block);
-            border.setLayoutParams(borderLayout);
+        ImageView border = (ImageView) findViewById(R.id.border);
+        border.getLayoutParams().height = (int) (39.20d * block);
+        border.getLayoutParams().width = (int) (82d * block);
+        RelativeLayout.LayoutParams borderLayout = (RelativeLayout.LayoutParams) border.getLayoutParams();
+        borderLayout.topMargin = (int) (1.4d * block);
+        borderLayout.leftMargin = (int) (4.4d * (double) block);
+        border.setLayoutParams(borderLayout);
 
-            int ballPositionX=(ballPosition-1)%13;
-            int i=0;
-            while(ballPosition-(i*13)>13){
-             i=i+1;
-            }
-            int ballPositionY=i;
-            playingBall.setWidth((int) (2d * block));
-            playingBall.setHeight((int) (2d * block));
-            playingBall.setCenter((int) ((4d + offsetX + ballPositionX * 5) * block), (int) ((offsetY + 3.5d + ballPositionY * 5) * block));
-            playingBall.setCorners();
+        int ballPositionX = (ballPosition - 1) % 13;
+        int i = 0;
+        while (ballPosition - (i * 13) > 13) {
+            i = i + 1;
+        }
+        int ballPositionY = i;
+        playingBall.setWidth((int) (2d * block));
+        playingBall.setHeight((int) (2d * block));
+        playingBall.setCenter((int) ((4d + offsetX + ballPositionX * 5) * block), (int) ((offsetY + 3.5d + ballPositionY * 5) * block));
+        playingBall.setCorners();
 
-            timeText.setWidth(30 * block);
-            timeText.setHeight(10 * block);
-            timeText.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) (4d*block));
-            RelativeLayout.LayoutParams paramsTimeText = (RelativeLayout.LayoutParams)timeText.getLayoutParams();
-            paramsTimeText.leftMargin=15*block;
-            paramsTimeText.topMargin=46*block;
-            timeText.setLayoutParams(paramsTimeText);
+        timeText.setWidth(30 * block);
+        timeText.setHeight(10 * block);
+        timeText.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) (4d * block));
+        RelativeLayout.LayoutParams paramsTimeText = (RelativeLayout.LayoutParams) timeText.getLayoutParams();
+        paramsTimeText.leftMargin = 15 * block;
+        paramsTimeText.topMargin = 46 * block;
+        timeText.setLayoutParams(paramsTimeText);
 
-            parTimeText.setWidth(30 * block);
-            parTimeText.setHeight(10 * block);
-            parTimeText.setTextSize(TypedValue.COMPLEX_UNIT_PX,(float)(4d*block));
-            RelativeLayout.LayoutParams paramsParTimeText = (RelativeLayout.LayoutParams) parTimeText.getLayoutParams();
-            paramsParTimeText.leftMargin=45*block;
-            paramsParTimeText.topMargin=46*block;
-            parTimeText.setLayoutParams(paramsParTimeText);
+        parTimeText.setWidth(30 * block);
+        parTimeText.setHeight(10 * block);
+        parTimeText.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) (4d * block));
+        RelativeLayout.LayoutParams paramsParTimeText = (RelativeLayout.LayoutParams) parTimeText.getLayoutParams();
+        paramsParTimeText.leftMargin = 45 * block;
+        paramsParTimeText.topMargin = 46 * block;
+        parTimeText.setLayoutParams(paramsParTimeText);
 
-            levelText.setWidth(35 * block);
-            levelText.setHeight(30 * block);
-            levelText.setTextSize(TypedValue.COMPLEX_UNIT_PX,(float)(12d * block));
-            RelativeLayout.LayoutParams paramsLevelText = (RelativeLayout.LayoutParams)levelText.getLayoutParams();
-            paramsLevelText.leftMargin=60*block;
-            paramsLevelText.topMargin=37*block;
-            levelText.setLayoutParams(paramsLevelText);
+        levelText.setWidth(35 * block);
+        levelText.setHeight(30 * block);
+        levelText.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) (12d * block));
+        RelativeLayout.LayoutParams paramsLevelText = (RelativeLayout.LayoutParams) levelText.getLayoutParams();
+        paramsLevelText.leftMargin = 60 * block;
+        paramsLevelText.topMargin = 37 * block;
+        levelText.setLayoutParams(paramsLevelText);
 
-            powerUpsTouched.setWidth(35 * block);
-            powerUpsTouched.setHeight(30 * block);
-            powerUpsTouched.setTextSize(TypedValue.COMPLEX_UNIT_PX,(float) (4d * block));
-            RelativeLayout.LayoutParams paramsPowerUpsTouched = (RelativeLayout.LayoutParams)powerUpsTouched.getLayoutParams();
-            paramsPowerUpsTouched.leftMargin = (int) (37d * block);
-            paramsPowerUpsTouched.topMargin = 40 * block;
-            powerUpsTouched.setLayoutParams(paramsPowerUpsTouched);
-            powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "    /    " + Integer.toString(powerUpCounter));
+        powerUpsTouched.setWidth(35 * block);
+        powerUpsTouched.setHeight(30 * block);
+        powerUpsTouched.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) (4d * block));
+        RelativeLayout.LayoutParams paramsPowerUpsTouched = (RelativeLayout.LayoutParams) powerUpsTouched.getLayoutParams();
+        paramsPowerUpsTouched.leftMargin = (int) (37d * block);
+        paramsPowerUpsTouched.topMargin = 40 * block;
+        powerUpsTouched.setLayoutParams(paramsPowerUpsTouched);
+        powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "    /    " + Integer.toString(powerUpCounter));
 
-            pauseScreenBackground2.requestLayout();
-            pauseScreenBackground2.getLayoutParams().width = 4*(16*block);
-            pauseScreenBackground2.getLayoutParams().height = 4*(9*block);
-            RelativeLayout.LayoutParams paramsBackground2 = (RelativeLayout.LayoutParams)pauseScreenBackground2.getLayoutParams();
-            paramsBackground2.leftMargin=(int)((5d+7d)*block);
-            paramsBackground2.topMargin=(int)((5d+3d)*block);
-            pauseScreenBackground2.setLayoutParams(paramsBackground2);
+        pauseScreenBackground2.requestLayout();
+        pauseScreenBackground2.getLayoutParams().width = 4 * (16 * block);
+        pauseScreenBackground2.getLayoutParams().height = 4 * (9 * block);
+        RelativeLayout.LayoutParams paramsBackground2 = (RelativeLayout.LayoutParams) pauseScreenBackground2.getLayoutParams();
+        paramsBackground2.leftMargin = (int) ((5d + 7d) * block);
+        paramsBackground2.topMargin = (int) ((5d + 3d) * block);
+        pauseScreenBackground2.setLayoutParams(paramsBackground2);
 
-            playButton.requestLayout();
-            playButton.getLayoutParams().width = (int)(3.1d*(9*block));
-            playButton.getLayoutParams().height = (int)(3.1d*(9*block));
-            RelativeLayout.LayoutParams paramsPlayButton = (RelativeLayout.LayoutParams)playButton.getLayoutParams();
-            paramsPlayButton.leftMargin=(int)((8.35d+7d)*block);
-            paramsPlayButton.topMargin=(int)((8.65d+3d)*block);
-            playButton.setLayoutParams(paramsPlayButton);
+        playButton.requestLayout();
+        playButton.getLayoutParams().width = (int) (3.1d * (9 * block));
+        playButton.getLayoutParams().height = (int) (3.1d * (9 * block));
+        RelativeLayout.LayoutParams paramsPlayButton = (RelativeLayout.LayoutParams) playButton.getLayoutParams();
+        paramsPlayButton.leftMargin = (int) ((8.35d + 7d) * block);
+        paramsPlayButton.topMargin = (int) ((8.65d + 3d) * block);
+        playButton.setLayoutParams(paramsPlayButton);
 
-            quitLevelButton.requestLayout();
-            quitLevelButton.getLayoutParams().width = (int)(5*4.65d*block);
-            quitLevelButton.getLayoutParams().height = 5*block;
-            RelativeLayout.LayoutParams paramsQuitLevel = (RelativeLayout.LayoutParams) quitLevelButton.getLayoutParams();
-            paramsQuitLevel.leftMargin=(int)(48d*block);
-            paramsQuitLevel.topMargin=28*block;
-            quitLevelButton.setLayoutParams(paramsQuitLevel);
+        quitLevelButton.requestLayout();
+        quitLevelButton.getLayoutParams().width = (int) (5 * 4.65d * block);
+        quitLevelButton.getLayoutParams().height = 5 * block;
+        RelativeLayout.LayoutParams paramsQuitLevel = (RelativeLayout.LayoutParams) quitLevelButton.getLayoutParams();
+        paramsQuitLevel.leftMargin = (int) (48d * block);
+        paramsQuitLevel.topMargin = 28 * block;
+        quitLevelButton.setLayoutParams(paramsQuitLevel);
 
-            restartLevelButton.requestLayout();
-            restartLevelButton.getLayoutParams().width = (int)(5*4.65d*block);
-            restartLevelButton.getLayoutParams().height = 5*block;
-            RelativeLayout.LayoutParams paramsRestartLevel = (RelativeLayout.LayoutParams)restartLevelButton.getLayoutParams();
-            paramsRestartLevel.leftMargin=(int)(42d*block);
-            paramsRestartLevel.topMargin=35*block;
-            restartLevelButton.setLayoutParams(paramsRestartLevel);
+        restartLevelButton.requestLayout();
+        restartLevelButton.getLayoutParams().width = (int) (5 * 4.65d * block);
+        restartLevelButton.getLayoutParams().height = 5 * block;
+        RelativeLayout.LayoutParams paramsRestartLevel = (RelativeLayout.LayoutParams) restartLevelButton.getLayoutParams();
+        paramsRestartLevel.leftMargin = (int) (42d * block);
+        paramsRestartLevel.topMargin = 35 * block;
+        restartLevelButton.setLayoutParams(paramsRestartLevel);
 
-            pauseScreenTimeText.setWidth(35 * block);
-            pauseScreenTimeText.setHeight(30 * block);
-            pauseScreenTimeText.setTextSize(TypedValue.COMPLEX_UNIT_PX,(float)(5d * block));
-            RelativeLayout.LayoutParams paramsPauseTimeText = (RelativeLayout.LayoutParams)pauseScreenTimeText.getLayoutParams();
-            paramsPauseTimeText.leftMargin=45*block;
-            paramsPauseTimeText.topMargin=20*block;
-            pauseScreenTimeText.setLayoutParams(paramsPauseTimeText);
+        pauseScreenTimeText.setWidth(35 * block);
+        pauseScreenTimeText.setHeight(30 * block);
+        pauseScreenTimeText.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) (5d * block));
+        RelativeLayout.LayoutParams paramsPauseTimeText = (RelativeLayout.LayoutParams) pauseScreenTimeText.getLayoutParams();
+        paramsPauseTimeText.leftMargin = 45 * block;
+        paramsPauseTimeText.topMargin = 20 * block;
+        pauseScreenTimeText.setLayoutParams(paramsPauseTimeText);
 
-            nextLevelButton.requestLayout();
-            nextLevelButton.getLayoutParams().width = (int)(3.1d*(9*block));
-            nextLevelButton.getLayoutParams().height = (int)(3.1d*(9*block));
-            RelativeLayout.LayoutParams paramsNextLevelButton = (RelativeLayout.LayoutParams)nextLevelButton.getLayoutParams();
-            paramsNextLevelButton.leftMargin=(int)((8.35d+7d)*block);
-            paramsNextLevelButton.topMargin=(int)((8.65d+3d)*block);
-            nextLevelButton.setLayoutParams(paramsNextLevelButton);
+        nextLevelButton.requestLayout();
+        nextLevelButton.getLayoutParams().width = (int) (3.1d * (9 * block));
+        nextLevelButton.getLayoutParams().height = (int) (3.1d * (9 * block));
+        RelativeLayout.LayoutParams paramsNextLevelButton = (RelativeLayout.LayoutParams) nextLevelButton.getLayoutParams();
+        paramsNextLevelButton.leftMargin = (int) ((8.35d + 7d) * block);
+        paramsNextLevelButton.topMargin = (int) ((8.65d + 3d) * block);
+        nextLevelButton.setLayoutParams(paramsNextLevelButton);
 
-            finishedScreenBackground.requestLayout();
-            finishedScreenBackground.getLayoutParams().width = 4*(16*block);
-            finishedScreenBackground.getLayoutParams().height = 4*(9*block);
-            RelativeLayout.LayoutParams paramsFinished = (RelativeLayout.LayoutParams)finishedScreenBackground.getLayoutParams();
-            paramsFinished.leftMargin=(int)((5d+7d)*block);
-            paramsFinished.topMargin=(int)((5d+3d)*block);
-            finishedScreenBackground.setLayoutParams(paramsFinished);
+        finishedScreenBackground.requestLayout();
+        finishedScreenBackground.getLayoutParams().width = 4 * (16 * block);
+        finishedScreenBackground.getLayoutParams().height = 4 * (9 * block);
+        RelativeLayout.LayoutParams paramsFinished = (RelativeLayout.LayoutParams) finishedScreenBackground.getLayoutParams();
+        paramsFinished.leftMargin = (int) ((5d + 7d) * block);
+        paramsFinished.topMargin = (int) ((5d + 3d) * block);
+        finishedScreenBackground.setLayoutParams(paramsFinished);
 
-        touchAllowed=true;
+        touchAllowed = true;
+
     }
 }
