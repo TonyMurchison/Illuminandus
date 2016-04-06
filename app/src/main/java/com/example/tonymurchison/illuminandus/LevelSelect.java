@@ -197,6 +197,7 @@ public class LevelSelect extends AppCompatActivity {
         Intent intent = new Intent(LevelSelect.this, LevelPlay.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
+        System.gc();
         finish();
     }
 
@@ -239,6 +240,7 @@ public class LevelSelect extends AppCompatActivity {
     public void infoButtonClick(View v){
         Intent intent = new Intent(LevelSelect.this, InformationScreen.class);
         startActivity(intent);
+        System.gc();
         finish();
 
     }

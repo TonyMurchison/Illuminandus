@@ -336,6 +336,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         Intent intent = new Intent(LevelPlay.this, LevelSelect.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
+        System.gc();
         finish();
     }
 
@@ -651,7 +652,9 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
             }
             startActivity(intent);
+            System.gc();
             finish();
+
         }
         else{
             Toast toast = Toast.makeText(this, "Next level not yet unlocked", Toast.LENGTH_SHORT);
