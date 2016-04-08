@@ -58,11 +58,10 @@ public class LevelSelect extends AppCompatActivity {
             level_array[i].setClickable(true);
         }
 
-        Bundle extras = getIntent().getExtras();
+        Bundle extras = getIntent().getExtras();                //Receives levelNumber from played level, and returns view to corresponding four levels.
         if(extras == null || extras.getInt("levelNumber") == 0){
             screenNumber = getPreviousScreenNumber();
         }
-
         else{
             screenNumber = extras.getInt("levelNumber") / 4;
         }
@@ -71,10 +70,25 @@ public class LevelSelect extends AppCompatActivity {
         setUnlock();
         }
 
-    private void setUnlock(){
+    @Override
+    protected void onStart(){
+        super.onStart();
 
-        //checks whether next four are available. Refers to UnlockEditor. Also locks and unlocks back button.
+        loadingBar.setVisibility(View.GONE);
+        loadingBackground.setVisibility(View.GONE);
 
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+
+        loadingBackground.setVisibility(View.GONE);
+        loadingBar.setVisibility(View.GONE);
+    }
+
+
+    private void setUnlock(){       //checks whether next four are available
         HighScoreEditor highScoreEditor = new HighScoreEditor();
         if(screenNumber == 0){
             backUnlocked = false;
@@ -99,7 +113,7 @@ public class LevelSelect extends AppCompatActivity {
         }
 
         UnlockEditor unlockEditor = new UnlockEditor();
-        if(!unlockEditor.requestUnlock(this, screenNumber)){
+        if(unlockEditor.requestUnlock(this, screenNumber) == false){
             setNextButtonLocked();
         }
 
@@ -202,8 +216,8 @@ public class LevelSelect extends AppCompatActivity {
             level_array[i].setClickable(false);
         }
 
-//        loadingBackground.setVisibility(View.VISIBLE);
-//        loadingBar.setVisibility(View.VISIBLE);
+        loadingBackground.setVisibility(View.VISIBLE);
+        loadingBar.setVisibility(View.VISIBLE);
 
 
 
@@ -252,7 +266,9 @@ public class LevelSelect extends AppCompatActivity {
         int last_level = 0;
         while(true){
             if(highScoreEditor.getValue(this, "HighScore_" + last_level) == 0){
-                return (last_level / 4);
+                //TODO alleen volgende scherm als je ook onder de par time zit
+                //return (last_level / 4);
+                return 0;
             }
             last_level++;
         }

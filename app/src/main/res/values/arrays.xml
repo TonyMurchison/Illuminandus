@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer-array name="parTime">
-        <item>50000</item>  <!-- 1 -->
+        <item>51000</item>  <!-- 1 -->
+        <item>45000</item>
+        <item>51000</item>
+        <item>34000</item>
+        <item>36000</item>  <!-- 5 -->
         <item>50000</item>
-        <item>50000</item>
-        <item>50000</item>
-        <item>50000</item>  <!-- 5 -->
-        <item>50000</item>
-        <item>50000</item>
-        <item>50000</item>
+        <item>18000</item>
+        <item>45000</item>
     </integer-array>
 
 </resources>

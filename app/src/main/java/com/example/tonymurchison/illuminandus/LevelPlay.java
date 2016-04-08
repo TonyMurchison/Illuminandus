@@ -8,7 +8,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
@@ -56,7 +55,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
     //game items
     private Ball playingBall;
-    private int ballPosition;
+    private int ballPositionX;
+    private int ballPositionY;
 
     private PowerUp powerUps[] = new PowerUp[15];
     private int powerUpsPlacement[][]= new int[6][13];
@@ -79,7 +79,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     private float show = 1;
     private float hide = 0;
     private double speedAdjustment;
-    private int visibleThreshold=10000;
+    private int visibleThreshold=8000;
     private double invert=1;
     private int pickup_range=500;
     private int levelNumber=0;  //level 1 equals levelNumber 0 etc
@@ -235,7 +235,9 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                 scanner.nextLine();
 
                 String line = scanner.nextLine();
-                ballPosition=Integer.parseInt(line);
+                ballPositionX=Integer.parseInt(line)-1;
+                line = scanner.nextLine();
+                ballPositionY=Integer.parseInt(line)-1;
                 reading=false;
 
             }
@@ -531,15 +533,20 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     public void nextLevelButtonClick(View v){
         UnlockEditor unlockCheck = new UnlockEditor();
         if(unlockCheck.requestUnlock(this, (levelNumber / 4)) || levelNumber % 4 != 3) {
-            Intent intent = new Intent(LevelPlay.this, LevelPlay.class);
-            intent.putExtra("levelNumber", levelNumber + 1);
-            loadingBackground.setVisibility(View.VISIBLE);
-            loadingBar.setVisibility(View.VISIBLE);
+            if(levelNumber!=8) {
+                Intent intent = new Intent(LevelPlay.this, LevelPlay.class);
+                intent.putExtra("levelNumber", levelNumber + 1);
+                loadingBackground.setVisibility(View.VISIBLE);
+                loadingBar.setVisibility(View.VISIBLE);
 
 
-            startActivity(intent);
-            finish();
-
+                startActivity(intent);
+                finish();
+            }
+            else {
+                Toast toast = Toast.makeText(this, "Coming soon!", Toast.LENGTH_SHORT);
+                toast.show();
+            }
         }
         else{
             Toast toast = Toast.makeText(this, "Next level not yet unlocked", Toast.LENGTH_SHORT);
@@ -579,7 +586,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
     //inverts controls
     public void redPowerUp(PowerUp powerUp){
-        invert = -1;
+        invert = invert*-1;
         powerUp.setInvisible();
         powerUp.setHittable(false);
     }
@@ -900,12 +907,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         borderLayout.leftMargin = (int) (4.4d * (double) block);
         border.setLayoutParams(borderLayout);
 
-        int ballPositionX = (ballPosition - 1) % 13;
-        int i = 0;
-        while (ballPosition - (i * 13) > 13) {
-            i = i + 1;
-        }
-        int ballPositionY = i;
+
         playingBall.setWidth((int) (2d * block));
         playingBall.setHeight((int) (2d * block));
         playingBall.setCenter((int) ((4d + offsetX + ballPositionX * 5) * block), (int) ((offsetY + 3.5d + ballPositionY * 5) * block));
