@@ -121,6 +121,11 @@ public class LevelSelect extends AppCompatActivity {
     }
 
     public void onNextButtonClick(View view){
+        if(screenNumber == 1){
+            Toast toast = Toast.makeText(getApplicationContext(), "Coming soon...", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
         if(unlockedstate) {
             screenNumber++;
             updateLevels(screenNumber);
