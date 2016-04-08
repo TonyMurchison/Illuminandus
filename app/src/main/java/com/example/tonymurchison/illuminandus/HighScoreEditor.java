@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 public class HighScoreEditor {
     public static final String PREFS_NAME = "AOP_PREFS";
-    public static final String PREFS_KEY = "AOP_PREFS_String";
 
     public void saveInt(Context context, String Key, int Int) {
         SharedPreferences settings;
@@ -22,8 +21,7 @@ public class HighScoreEditor {
     public int getValue(Context context, String valueName) {
         SharedPreferences settings;
         int value;
-
-        //settings = PreferenceManager.getDefaultSharedPreferences(context);
+        
         settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         value = settings.getInt(valueName, 0);
         return value;

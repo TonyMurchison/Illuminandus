@@ -398,8 +398,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     }
 
     public void pauseScreen(){
-        timeAtPause=(int) System.currentTimeMillis();
-        allowMovement =0;
+        timeAtPause= (int) System.currentTimeMillis();
+        allowMovement = 0;
 
         for (int i=0;i<powerUpCounter;i++){
             powerUps[i].setInvisible();

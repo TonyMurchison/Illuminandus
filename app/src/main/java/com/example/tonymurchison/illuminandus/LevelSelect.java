@@ -58,10 +58,11 @@ public class LevelSelect extends AppCompatActivity {
             level_array[i].setClickable(true);
         }
 
-        Bundle extras = getIntent().getExtras();                //Receives levelNumber from played level, and returns view to corresponding four levels.
+        Bundle extras = getIntent().getExtras();
         if(extras == null || extras.getInt("levelNumber") == 0){
             screenNumber = getPreviousScreenNumber();
         }
+
         else{
             screenNumber = extras.getInt("levelNumber") / 4;
         }
@@ -70,9 +71,10 @@ public class LevelSelect extends AppCompatActivity {
         setUnlock();
         }
 
+    private void setUnlock(){
 
+        //checks whether next four are available. Refers to UnlockEditor. Also locks and unlocks back button.
 
-    private void setUnlock(){       //checks whether next four are available
         HighScoreEditor highScoreEditor = new HighScoreEditor();
         if(screenNumber == 0){
             backUnlocked = false;
@@ -97,7 +99,7 @@ public class LevelSelect extends AppCompatActivity {
         }
 
         UnlockEditor unlockEditor = new UnlockEditor();
-        if(unlockEditor.requestUnlock(this, screenNumber) == false){
+        if(!unlockEditor.requestUnlock(this, screenNumber)){
             setNextButtonLocked();
         }
 
@@ -127,7 +129,6 @@ public class LevelSelect extends AppCompatActivity {
             updateLevels(screenNumber);
             setUnlock();
         }
-        return;
     }
 
     @Override
@@ -142,6 +143,9 @@ public class LevelSelect extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        /*
+        Detects swipes with a length of > 100dp, and activates corresponding buttons for scrolling
+         */
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -150,11 +154,11 @@ public class LevelSelect extends AppCompatActivity {
             case MotionEvent.ACTION_UP:
                 x2 = event.getX();
                 float deltaX = x2 - x1;
-                if (deltaX > 150){
+                if (deltaX > 100){
                     onPreviousButtonClick(previous_button);
                     return false;
                 }
-                if (deltaX < -150){
+                if (deltaX < -100){
                     onNextButtonClick(next_button);
                     return false;
                 }
@@ -164,8 +168,11 @@ public class LevelSelect extends AppCompatActivity {
     }
 
     private void updateLevels(int screenNumber){
+        /*
+        Should be called on changing the screenNumber. Sets levels to correspond with the screenNumber.
+         */
         HighScoreEditor highScoreEditor = new HighScoreEditor();
-        for(int i = screenNumber * 4; i < screenNumber * 4 + 4; i++){ //Sets images to the correct source in a horrible way
+        for(int i = screenNumber * 4; i < screenNumber * 4 + 4; i++){
             if(highScoreEditor.getValue(this, "HighScore_" + i) == 0) {
                 int id = getResources().getIdentifier("locked_level_" + i, "drawable", getPackageName());
                 level_array[i -screenNumber * 4].setImageResource(id);
@@ -179,7 +186,8 @@ public class LevelSelect extends AppCompatActivity {
         setGoalTime(screenNumber);
     }
 
-    private int setGoalTime(int screenNumber) {      //sets goaltime for any screenNumber, then returns said time in milliseconds
+    private int setGoalTime(int screenNumber) {
+        //sets goaltime for any screenNumber, then returns said time in milliseconds
         int tempArray[] = getResources().getIntArray(R.array.parTime);
         int totalGoalTime = 0;
         for(int i = screenNumber * 4; i < screenNumber * 4 + 4; i++){
@@ -204,12 +212,14 @@ public class LevelSelect extends AppCompatActivity {
         Intent intent = new Intent(LevelSelect.this, LevelPlay.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
-        finish();
-    }
+        finish();    }
 
 
 
     private String secondsToMinutes(int numberOfSeconds){
+        /*
+        Returns millisecond time as String "MM:SS"
+         */
         int timeMinutes = (numberOfSeconds / (1000 * 60)) % 60;
         String time_minutes;
         String time_seconds;
@@ -235,6 +245,9 @@ public class LevelSelect extends AppCompatActivity {
     }
 
     private int getPreviousScreenNumber(){
+        /*
+        Gets called during onCreate. Returns screenNumber containing first unfinished level.
+         */
         HighScoreEditor highScoreEditor = new HighScoreEditor();
         int last_level = 0;
         while(true){
