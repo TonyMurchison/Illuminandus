@@ -117,12 +117,7 @@ public class LevelSelect extends AppCompatActivity {
             setNextButtonLocked();
         }
 
-        if(unlockEditor.requestTotalTime(this, screenNumber) > 0){
-            time_scored.setText(secondsToMinutes(unlockEditor.requestTotalTime(this, screenNumber)));
-        }
-        else{
-            time_scored.setText("");
-        }
+        time_scored.setText(secondsToMinutes(unlockEditor.requestTotalTime(this, screenNumber)));
     }
 
     public void onNextButtonClick(View view){
