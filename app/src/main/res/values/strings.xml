@@ -3,4 +3,5 @@
     <string name="time_goal_0">240000</string>
     <string name="time_goal_1">240000</string>
     <string name="title_activity_information_screen">InformationScreen</string>
+    <string name="versionNumber">V 0.31415</string>
 </resources>

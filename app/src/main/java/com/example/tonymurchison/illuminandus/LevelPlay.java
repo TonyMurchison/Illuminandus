@@ -1,31 +1,31 @@
 package com.example.tonymurchison.illuminandus;
 
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.res.AssetManager;
-import android.graphics.Point;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.TypedValue;
-import android.view.Display;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Scanner;
-import android.os.Handler;
+        import android.content.Intent;
+        import android.content.pm.ActivityInfo;
+        import android.content.res.AssetManager;
+        import android.graphics.Point;
+        import android.hardware.Sensor;
+        import android.hardware.SensorEvent;
+        import android.hardware.SensorEventListener;
+        import android.hardware.SensorManager;
+        import android.os.Bundle;
+        import android.support.v7.app.AppCompatActivity;
+        import android.util.TypedValue;
+        import android.view.Display;
+        import android.view.MotionEvent;
+        import android.view.View;
+        import android.view.WindowManager;
+        import android.widget.ImageView;
+        import android.widget.RelativeLayout;
+        import android.widget.TextView;
+        import android.widget.Toast;
+        import java.io.IOException;
+        import java.io.InputStream;
+        import java.util.Scanner;
+        import android.os.Handler;
 
 public class LevelPlay extends AppCompatActivity implements SensorEventListener {
-   //layout items
+    //layout items
     private TextView pauseScreenTimeText;
     private TextView timeText;
     private TextView powerUpsTouched;
@@ -335,7 +335,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         playButton.setClickable(false);
         quitLevelButton.setClickable(false);
         restartLevelButton.setClickable(false);
-        
+
         allowMovement =1;
         pausedTime=pausedTime+((int)System.currentTimeMillis()-timeAtPause);
 
@@ -373,17 +373,13 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
         h = new Handler();
 
-
         h.postDelayed(new Runnable() {
             public void run() {
                 move(x, y);
                 if (h!=null)
-                h.postDelayed(this, delay);
+                    h.postDelayed(this, delay);
             }
         }, delay);
-
-
-
     }
 
     //When this Activity isn't visible anymore
@@ -438,12 +434,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
     }
 
-
-
-
-
-
-
     public void hitPowerUp(PowerUp powerUp){
         if(powerUp.getHittable()) {
             amountPowerUpsTouched = amountPowerUpsTouched + 1;
@@ -453,7 +443,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         else return;
 
         if(amountPowerUpsTouched==powerUpCounter) {
-          finishedLevel();
+            finishedLevel();
         }
 
         if(powerUp.getType()==1 && powerUp.getHittable()){
@@ -497,7 +487,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             pauseScreenBackground.setVisibility(View.VISIBLE);
             nextLevelButton.setVisibility(View.VISIBLE);
             nextLevelButton.setClickable(true);
-
             pauseScreenTimeText.setVisibility(View.VISIBLE);
 
             if(finishTime>parTime){
@@ -528,6 +517,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
             quitLevelButton.setClickable(true);
             restartLevelButton.setClickable(true);
+
+            displayedFinishScreen=true;
         }
     }
 
@@ -539,7 +530,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                 intent.putExtra("levelNumber", levelNumber + 1);
                 loadingBackground.setVisibility(View.VISIBLE);
                 loadingBar.setVisibility(View.VISIBLE);
-
 
                 startActivity(intent);
                 finish();
@@ -607,7 +597,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
     //choses a random effect
     public void multiPowerUp(PowerUp powerUp){
-
+        //TODO add multi effects
         powerUp.setInvisible();
         powerUp.setHittable(false);
     }
@@ -700,9 +690,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             }
         }
 
-
-
-
         //bottom left corner of the ball
         if (ball.getBottomLeftX() >= wall.getBottomLeftX() && ball.getBottomLeftX() <= wall.getBottomRightX()) {        //is the x position of the ball between those of the two sides of the wall
             if (ball.getBottomLeftY() >= wall.getTopLeftY() && ball.getBottomLeftY() <= wall.getBottomLeftY()) {        //is the y position of the ball between those of the two sides of the wall
@@ -731,7 +718,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                 limitMovement(ball, wall);
             }
         }
-
     }
 
     public void intersectPowerUp(Ball ball, PowerUp powerUp) {
@@ -823,7 +809,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                     mazeWall[wallNumber].setVisibility(hide);
                     wallNumber = wallNumber + 1;
                 }
-
             }
         }
 
@@ -1004,6 +989,5 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         finishedScreenBackground.setLayoutParams(paramsFinished);
 
         touchAllowed = true;
-
     }
 }
