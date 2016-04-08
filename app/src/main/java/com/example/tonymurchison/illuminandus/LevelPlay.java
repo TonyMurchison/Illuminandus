@@ -110,6 +110,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         //set ball
         ImageView ballImage = (ImageView)findViewById(R.id.ball);

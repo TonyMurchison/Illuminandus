@@ -23,6 +23,7 @@
             android:name=".InformationScreen"
             android:label="@string/title_activity_information_screen"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <uses-permission android:name="android.permission.WAKE_LOCK"/>
     </application>
 
 </manifest>
