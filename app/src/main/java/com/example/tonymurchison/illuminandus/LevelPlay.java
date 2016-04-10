@@ -71,8 +71,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     //remaining items
     private boolean displayedFinishScreen= false;
     private SensorManager sManager;
-    private int a;      //stores x position for the layout of the ball
-    private int b;      //stores y position for the layout of the ball
     private int x = 0;          //stores the angle of the phone around the x-axis
     private int y = 0;          //stores the angle of the phone around the y-axis
     private boolean allowedMovement[] = {true, true, true, true};
@@ -88,9 +86,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     private int block;
     private boolean touchAllowed = false;
     private boolean ballHidden = false;
-
-    Handler h;
-    int delay = 20; //milliseconds
+    private Handler h;
+    private int delay = 20;
 
 
 
@@ -154,14 +151,11 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         block=(int)Math.round(screenWidth / 90d);
 
 
-
+        //read all the information from the levelsFile.txt
         readFile();
 
+        //run the method that initializes the layout
         start();
-
-
-
-
     }
 
 
@@ -254,9 +248,11 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             return;
         }
 
+        //read the data from the gyroscopes
         double xb=event.values[1]*speedAdjustment;
         double yb=event.values[2]*speedAdjustment;
 
+        //max out the speed
         if (xb > 15d*speedAdjustment) {
             xb = 15d*speedAdjustment;
         }
@@ -272,11 +268,12 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
 
 
-        //adjusts and then saves the angle of phone in the x and y direction.
 
+        //determine the amount of steps in each direction to be taken for the next move
         x = (int)Math.round((xb/(1d*invert))*allowMovement);
         y =(int) Math.round((-yb/(1d*invert ))*allowMovement);
 
+        //check if a wall should be set invisible, this happens when the "visibleThreshold" has been reached
         time = (int) (System.currentTimeMillis() - timeStart - pausedTime);
         for (int i = 0; i < wallNumber - 4; i++) {
             if (time - mazeWall[i].getTimeTouched() > visibleThreshold) {
@@ -284,14 +281,17 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             }
         }
 
+        //show the ball when it has been hidden for more than 3 seconds
         if(ballHidden==true && time>timePlayingBallHit+3000){
             playingBall.setVisibility(show);
             ballHidden=false;
         }
 
+        //determine the current playing time in seconds and minutes
         timeMinutes = (time / (1000 * 60)) % 60;
         timeSeconds = ((time - (timeMinutes * 60 * 1000)) / 1000) % 60;
 
+        //display current time in game
         if (timeMinutes < 10) {
             if (timeSeconds < 10) {
                 timeText.setText("0" + Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds));
@@ -306,17 +306,18 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
             }
         }
 
+        //if current time is above partime then set the text color to red
         if (time > (parTime + 1000)) {
             timeText.setTextColor(getResources().getColor(R.color.red));
         }
-
-
     }
 
+    //restart level
     public void restartButtonClick(View v){
         super.recreate();
     }
 
+    //go back to the level select screen
     public void quitLevelClick(View v){
         Intent intent = new Intent(LevelPlay.this, LevelSelect.class);
         intent.putExtra("levelNumber", levelNumber);
@@ -324,6 +325,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         finish();
     }
 
+    //continue after the pause screen
     public void playButtonClick(View v){
         pauseScreenBackground.setVisibility(View.GONE);
         pauseScreenBackground2.setVisibility(View.GONE);
@@ -347,6 +349,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
     }
 
 
+    //if the screen is touched then the pause screen should appear
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(touchAllowed==true) {
@@ -355,13 +358,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         return super.onTouchEvent(event);
     }
 
-    //when this Activity starts
+
     @Override
     protected void onResume() {
         super.onResume();
-        /*register the sensor listener to listen to the gyroscope sensor, use the
-        callbacks defined in this class, and gather the sensor information as quick
-        as possible*/
         sManager.registerListener(this, sManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_FASTEST);
     }
 
@@ -371,8 +371,8 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
+        //set a handler that every 20ms calls the move method.
         h = new Handler();
-
         h.postDelayed(new Runnable() {
             public void run() {
                 move(x, y);
@@ -396,6 +396,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         //Do nothing.
     }
 
+    //open up the pause screen
     public void pauseScreen(){
         timeAtPause= (int) System.currentTimeMillis();
         allowMovement = 0;
@@ -434,7 +435,9 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
     }
 
+    //if a power up is hit this method will determine what has to happen
     public void hitPowerUp(PowerUp powerUp){
+        //hide the powerup and count it as hit
         if(powerUp.getHittable()) {
             amountPowerUpsTouched = amountPowerUpsTouched + 1;
             powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "  /  " + Integer.toString(powerUpCounter));
@@ -471,7 +474,9 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
     }
 
+    //this method is called when the last powerup has been picked up
     private void finishedLevel(){
+        //checks if a new high score has been achieved. If so this will be stored.
         HighScoreEditor highScoreEditor = new HighScoreEditor();
         int previous_score = highScoreEditor.getValue(this, "HighScore_" + levelNumber);
         if(time < previous_score || previous_score == 0) {
@@ -522,8 +527,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
     }
 
+    //This method is called when the player hits the next level button
     public void nextLevelButtonClick(View v){
         UnlockEditor unlockCheck = new UnlockEditor();
+        //checks if the next level is unlocked
         if(unlockCheck.requestUnlock(this, (levelNumber / 4)) || levelNumber % 4 != 3) {
             if(levelNumber!=8) {
                 Intent intent = new Intent(LevelPlay.this, LevelPlay.class);
@@ -602,6 +609,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         powerUp.setHittable(false);
     }
 
+    //this method will move the ball
     public void move(int x, int y) {
         RelativeLayout.LayoutParams alp = playingBall.getLayoutParams();
         int maxMovementX = Math.abs(x);
@@ -611,16 +619,17 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         int a = alp.leftMargin;
         int b = alp.topMargin;
 
+        //while steps have to be taken:
         while (maxMovementX > stepsTakenX || maxMovenentY > stepsTakenY) {
-            //up 0, down 1, right 3, left 2
+            //check all the walls
             for (int i = 0; i < wallNumber; i++) {
                 intersectWall(playingBall, mazeWall[i]);
             }
-
+            //checks all the powerups
             for(int i=0; i< powerUpCounter; i++){
                 intersectPowerUp(playingBall, powerUps[i]);
             }
-
+            //this will run if there are steps left to be done in the x direction
             if (stepsTakenX < maxMovementX) {
                 stepsTakenX = stepsTakenX + 1;
                 if (x > 0 && allowedMovement[3]) {//right
@@ -634,7 +643,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
                     a = a + 1;
                 }
             }
-
+            //this will run if there are steps left to be done in the y direction
             if (stepsTakenY < maxMovenentY) {
                 stepsTakenY = stepsTakenY + 1;
                 if (y > 0 && allowedMovement[1]) {//down
@@ -656,9 +665,10 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
         alp.leftMargin = a;
         alp.topMargin = b;
-        playingBall.setLayoutParams(alp);
+        playingBall.setLayoutParams(alp);   //render layout
     }
 
+    //checks if a certain wall and the playing ball intersect
     public void intersectWall(Ball ball, Wall wall) {
         //top left corner of the ball
         if (ball.getTopLeftX() >= wall.getTopLeftX() && ball.getTopLeftX() <= wall.getTopRightX()) {                     //is the x position of the ball between those of the two sides of the wall
@@ -720,6 +730,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
     }
 
+    //checks if a certain powerup and the playing ball intersect
     public void intersectPowerUp(Ball ball, PowerUp powerUp) {
         //top left corner of the ball
         if (ball.getTopLeftX() >= powerUp.getTopLeftX() && ball.getTopLeftX() <= powerUp.getTopRightX()) {              //is the x position of the ball between those of the two sides of the power up
@@ -753,7 +764,9 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
     }
 
+    //if a wall is hit this method will be called. It decides which side of the wall is hit and therefor decides in which direction the movement of the ball should be stopped.
     public void limitMovement(Ball ball, Wall wall) {
+        //this is calculated with the minkowski sum method: (https://en.wikipedia.org/wiki/Minkowski_addition)
         float wy = (ball.getWidth() + wall.getWidth()) * (ball.getCenterY() - wall.getCenterY());
         float hx = (ball.getHeight() + wall.getHeight()) * (ball.getCenterX() - wall.getCenterX());
 
@@ -775,6 +788,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         }
     }
 
+    //initializes the layout
     public void start() {
         //TODO textview uitlijnen in spelscherm
         double offsetX = 11.5;
