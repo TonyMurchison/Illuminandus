@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/titlescreen_background"
+    android:paddingBottom="20dp"
+    android:paddingTop="20dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:id="@+id/info_screen_level_id"
+    android:onClick="infoScreenLevelClicked">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:layout_weight="8"
+        android:gravity="center"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Level String"
+            android:textSize="@dimen/info_level_text"
+            android:textColor="@color/black"
+            android:layout_gravity="center"
+            android:id="@+id/info_screen_level_level_string"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Info String"
+            android:textSize="@dimen/info_text_demension"
+            android:layout_gravity="center"
+            android:id="@+id/info_screen_level_info_string"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tap the screen to continue"
+            android:textSize="@dimen/info_text_demension"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            />
+
+    </LinearLayout>
+
+
+
+
+
+
+
+</LinearLayout>

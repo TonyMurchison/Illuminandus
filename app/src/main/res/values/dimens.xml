@@ -6,5 +6,6 @@
     <dimen name="ball_dimension">15dp</dimen>
     <dimen name="info_demension">5dp</dimen>"
     <dimen name="info_text_demension">12sp</dimen>
+    <dimen name="info_level_text">40sp</dimen>
     <dimen name="fab_margin">16dp</dimen>"
 </resources>

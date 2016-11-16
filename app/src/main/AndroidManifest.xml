@@ -20,6 +20,10 @@
         <activity android:name=".LevelSelect" />
         <activity android:name=".LevelPlay" />
         <activity
+            android:name=".InfoScreenLevel"
+            android:label="InfoScreenLevel"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".InformationScreen"
             android:label="@string/title_activity_information_screen"
             android:theme="@style/AppTheme.NoActionBar"></activity>

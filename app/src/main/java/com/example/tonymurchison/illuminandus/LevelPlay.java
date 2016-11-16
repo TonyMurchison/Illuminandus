@@ -794,6 +794,7 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         double offsetX = 11.5;
         double offsetY = 4.7;
 
+
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 13; j++) {
                 if (horizontalWalls[i][j] == true) {

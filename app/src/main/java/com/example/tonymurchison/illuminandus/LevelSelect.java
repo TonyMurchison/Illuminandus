@@ -216,14 +216,14 @@ public class LevelSelect extends AppCompatActivity {
             level_array[i].setClickable(false);
         }
 
-        loadingBackground.setVisibility(View.VISIBLE);
-        loadingBar.setVisibility(View.VISIBLE);
+        //loadingBackground.setVisibility(View.VISIBLE);
+        //loadingBar.setVisibility(View.VISIBLE);
 
 
 
         int viewNumber = (Integer) v.getTag();
         int levelNumber = viewNumber + screenNumber * 4;
-        Intent intent = new Intent(LevelSelect.this, LevelPlay.class);
+        Intent intent = new Intent(LevelSelect.this, InfoScreenLevel.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
         finish();    }
