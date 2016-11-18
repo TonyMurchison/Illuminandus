@@ -283,6 +283,8 @@ public class LevelSelect extends AppCompatActivity {
 
     public void testLevel(View v){
         Intent intent = new Intent(LevelSelect.this, LevelPlay2.class);
+        int levelNumber = 1;
+        intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
         finish();
     }

@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Random;
 import java.util.Scanner;
 import android.os.Handler;
 
@@ -41,16 +42,18 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
     private float show = 1;
     private float hide = 0;
 
+    int ballPositionX;
+    int ballPositionY;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //setup level
-        /*
+
         Bundle extras = getIntent().getExtras();
         levelNumber = extras.getInt("levelNumber");
-        */
+
         setContentView(R.layout.vertical_level);
         getSupportActionBar().hide();
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -58,33 +61,6 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        for(int i=0;i<7;i++){
-            for(int j=0;j<9;j++){
-                horizontalWalls[i][j] = true;
-/*
-                if(i%2==0) {
-                    horizontalWalls[i][j] = true;
-                }
-                else{
-                    horizontalWalls[i][j] = false;
-                }
-*/
-            }
-        }
-
-        for(int i=0;i<10;i++){
-            for(int j=0;j<6;j++){
-                verticalWalls[i][j] = true;
-/*
-                if(i%2==0) {
-                    verticalWalls[i][j] = true;
-                }
-                else{
-                    verticalWalls[i][j] = false;
-                }
-*/
-            }
-        }
 
         //set the things that are depended of the screen resolution
         Display display = getWindowManager().getDefaultDisplay();
@@ -94,9 +70,75 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         speedAdjustment=screenWidth/1920d;
         block=(int)Math.round(screenWidth / 90d);
 
+        readFile();
+
         //run the method that initializes the layout
         start();
 
+    }
+
+    void readFile(){
+        AssetManager assetManager = getResources().getAssets();
+        InputStream inputStream = null;
+
+        try {
+            inputStream = assetManager.open("levelsFile2.txt");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Scanner scanner = new Scanner(inputStream);
+        boolean reading = true;
+        String level = "Level 1"; //+Integer.toString(levelNumber+1);
+        while(reading==true){
+            if(level.equals(scanner.nextLine())){
+                for(int i=0;i<10;i++){
+                    String line = scanner.nextLine();
+                    for(int j=0;j<7;j++){
+                        //powerUpsPlacement[i][j]=Character.getNumericValue(line.charAt(j));
+                    }
+                }
+
+                scanner.nextLine();
+
+                for(int i=0;i<9;i++){
+                    String line = scanner.nextLine();
+                    for(int j=0;j<7;j++){
+                        if(Character.getNumericValue(line.charAt(j))==1){
+                            horizontalWalls[j][i]=true;
+                        }
+                        else{
+                            horizontalWalls[j][i]=false;
+                        }
+                    }
+                }
+
+                scanner.nextLine();
+
+                for(int i=0;i<10;i++){
+                    String line = scanner.nextLine();
+                    for(int j=0;j<6;j++){
+                        if(Character.getNumericValue(line.charAt(5-j))==1){
+                            verticalWalls[i][j]=true;
+                        }
+                        else{
+                            verticalWalls[i][j]=false;
+                        }
+                    }
+                }
+
+                scanner.nextLine();
+
+                String line = scanner.nextLine();
+                ballPositionX=Integer.parseInt(line)-1;
+                line = scanner.nextLine();
+                ballPositionY=Integer.parseInt(line)-1;
+                reading=false;
+
+            }
+        }
+        scanner.close();
     }
 
 
