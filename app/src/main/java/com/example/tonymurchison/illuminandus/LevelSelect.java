@@ -280,4 +280,10 @@ public class LevelSelect extends AppCompatActivity {
         finish();
 
     }
+
+    public void testLevel(View v){
+        Intent intent = new Intent(LevelSelect.this, LevelPlay2.class);
+        startActivity(intent);
+        finish();
+    }
 }

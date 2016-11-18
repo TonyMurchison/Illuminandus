@@ -19,6 +19,7 @@
         </activity>
         <activity android:name=".LevelSelect" />
         <activity android:name=".LevelPlay" />
+        <activity android:name=".LevelPlay2" />
         <activity
             android:name=".InfoScreenLevel"
             android:label="InfoScreenLevel"

@@ -900,15 +900,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
         mazeWall[wallNumber].setCorners();
         wallNumber = wallNumber + 1;
 
-        ImageView border = (ImageView) findViewById(R.id.border);
-        border.getLayoutParams().height = (int) (39.20d * block);
-        border.getLayoutParams().width = (int) (82d * block);
-        RelativeLayout.LayoutParams borderLayout = (RelativeLayout.LayoutParams) border.getLayoutParams();
-        borderLayout.topMargin = (int) (1.4d * block);
-        borderLayout.leftMargin = (int) (4.4d * (double) block);
-        border.setLayoutParams(borderLayout);
-
-
         playingBall.setWidth((int) (2d * block));
         playingBall.setHeight((int) (2d * block));
         playingBall.setCenter((int) ((4d + offsetX + ballPositionX * 5) * block), (int) ((offsetY + 3.5d + ballPositionY * 5) * block));
