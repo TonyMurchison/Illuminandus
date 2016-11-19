@@ -22,6 +22,7 @@
         <activity android:name=".LevelSelect" />
         <activity android:name=".LevelPlay" />
         <activity android:name=".LevelPlay2" />
+        <activity android:name=".PauseScreen"/>
 
         <activity android:name=".InfoScreenLevel"/>
         <activity android:name=".InformationScreen"/>

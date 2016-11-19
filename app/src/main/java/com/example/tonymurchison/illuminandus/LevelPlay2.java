@@ -12,9 +12,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.TypedValue;
 import android.view.Display;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -24,13 +22,10 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 import android.os.Handler;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
+
 
 public class LevelPlay2 extends AppCompatActivity implements SensorEventListener{
     //TODO nieuwe activity als je een op pauze drukt
@@ -88,12 +83,17 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
     private float hide = 0;
 
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
-    //private PowerUp powerUps[] = new PowerUp[70]; //TODO maak hier misschien een ArrayList van
     private int powerUpsPlacement[][]= new int[10][7];
     private int powerUpCounter=0;
     private int amountPowerUpsTouched=0;
 
-    private AdView mAdView;
+
+    private TextView levelTextView;
+    private TextView powerUpsCounterTextView;
+    private TextView timeTextView;
+    private String parTimeString;
+
+    private boolean started = false; //dit is hopelijk tijdelijk om te zorgen dat de tijd niet negatief is bij de start
 
 
     @Override
@@ -128,24 +128,45 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         parTime = parTimeArray[levelNumber];
         parTimeMinutes=(parTime/(1000*60))%60;
         parTimeSeconds=((parTime-(parTimeMinutes*60*1000))/1000)%60;
+        if(parTimeMinutes>9){
+            if(parTimeSeconds>9){
+                parTimeString=Integer.toString(parTimeMinutes)+":"+Integer.toString(parTimeSeconds);
+            }
+            else{
+                parTimeString=Integer.toString(parTimeMinutes)+":0"+Integer.toString(parTimeSeconds);
+            }
+        }
+        else{
+            if(parTimeSeconds>9){
+                parTimeString="0"+Integer.toString(parTimeMinutes)+":"+Integer.toString(parTimeSeconds);
+            }
+            else{
+                parTimeString="0"+Integer.toString(parTimeMinutes)+":0"+Integer.toString(parTimeSeconds);
+            }
+        }
+
+
         timeStart=(int)System.currentTimeMillis();
 
         readFile();
+
+        levelTextView = (TextView)findViewById(R.id.levelTextView);
+        levelTextView.setText("Level "+Integer.toString(levelNumber+1));
+
+        powerUpsCounterTextView = (TextView)findViewById(R.id.powerUpsCounterTextView);
+        timeTextView = (TextView)findViewById(R.id.timeTextView);
 
         //run the method that initializes the layout
         start();
 
 
-        mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
 
     }
 
     @Override
     public void onPause(){
         super.onPause();
-        //TODO
+        timeAtPause = (int)System.currentTimeMillis();
     }
 
     @Override
@@ -279,22 +300,19 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         //display current time in game
         if (timeMinutes < 10) {
             if (timeSeconds < 10) {
-                //timeText.setText("0" + Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds));
+                timeTextView.setText("0" + Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds)+"/"+parTimeString);
             } else {
-                //timeText.setText("0" + Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds));
+                timeTextView.setText("0" + Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds)+"/"+parTimeString);
             }
         } else {
             if (timeSeconds < 10) {
-               // timeText.setText(Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds));
+                timeTextView.setText(Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds)+"/"+parTimeString);
             } else {
-                //timeText.setText(Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds));
+                timeTextView.setText(Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds)+"/"+parTimeString);
             }
         }
 
-        //if current time is above partime then set the text color to red
-        if (time > (parTime + 1000)) {
-           // timeText.setTextColor(getResources().getColor(R.color.red));
-        }
+
 
     }
 
@@ -315,12 +333,18 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
     @Override
     protected void onResume() {
         super.onResume();
+        if(started==true) {
+            pausedTime = pausedTime + ((int) System.currentTimeMillis() - timeAtPause);
+        }
+        started=true;
+
         sManager.registerListener(this, sManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     @Override
     protected void onStart(){
         super.onStart();
+
 
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
@@ -342,11 +366,14 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         sManager.unregisterListener(this);
         h = null;
         super.onStop();
+        timeAtPause = (int)System.currentTimeMillis();
     }
 
     //open up the pause screen
     public void pauseScreen(View v){
-        timeAtPause= (int) System.currentTimeMillis();
+        //timeAtPause= (int) System.currentTimeMillis();
+        Intent intent = new Intent(LevelPlay2.this, PauseScreen.class);
+        startActivity(intent);
 
     }
 
@@ -355,8 +382,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         //hide the powerup and count it as hit
         if(powerUp.getHittable()) {
             amountPowerUpsTouched = amountPowerUpsTouched + 1;
-            //TODO
-            //powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "  /  " + Integer.toString(powerUpCounter));
+            powerUpsCounterTextView.setText(Integer.toString(amountPowerUpsTouched) + " / " + Integer.toString(powerUpCounter));
         }
 
         else return;
@@ -411,8 +437,6 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
             if(levelNumber!=8) {
                 Intent intent = new Intent(LevelPlay2.this, LevelPlay2.class);
                 intent.putExtra("levelNumber", levelNumber + 1);
-                //loadingBackground.setVisibility(View.VISIBLE);
-                //loadingBar.setVisibility(View.VISIBLE);
 
                 startActivity(intent);
                 finish();
@@ -495,6 +519,10 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         int a = alp.leftMargin;
         int b = alp.topMargin;
 
+        if (time > (parTime + 1000)) {
+            timeTextView.setTextColor(getResources().getColor(R.color.red));
+        }
+
         //while steps have to be taken:
         while (maxMovementX > stepsTakenX || maxMovenentY > stepsTakenY) {
             //check all the walls
@@ -503,7 +531,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
             }
             //checks all the powerups
             for(int i=0; i< powerUpCounter; i++){
-                intersectPowerUp(playingBall, powerUps[i]);
+                intersectPowerUp(playingBall, powerUps.get(i));
             }
             //this will run if there are steps left to be done in the x direction
             if (stepsTakenX < maxMovementX) {
@@ -732,11 +760,11 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
                             RelativeLayout.LayoutParams.WRAP_CONTENT);
                     rl.addView(imagePowerUp, lp);
 
-                    powerUps[powerUpCounter] = new PowerUp(powerUpsPlacement[i][j], imagePowerUp);
-                    powerUps[powerUpCounter].setWidth((int) (2d * block));
-                    powerUps[powerUpCounter].setHeight((int) (2d * block));
-                    powerUps[powerUpCounter].setCenter((int) ((double) j * 7.25d * (double) block + (3.88d) * (double) block), (int) ((double) i * 7.25d * (double) block + (double) block * (22.38d)));
-                    powerUps[powerUpCounter].setCorners();
+                    powerUps.add(powerUpCounter,new PowerUp(powerUpsPlacement[i][j], imagePowerUp));
+                    powerUps.get(powerUpCounter).setWidth((int) (2d * block));
+                    powerUps.get(powerUpCounter).setHeight((int) (2d * block));
+                    powerUps.get(powerUpCounter).setCenter((int) ((double) j * 7.25d * (double) block + (3.88d) * (double) block), (int) ((double) i * 7.25d * (double) block + (double) block * (22.38d)));
+                    powerUps.get(powerUpCounter).setCorners();
                     powerUpCounter = powerUpCounter + 1;
                 }
             }
@@ -782,98 +810,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         playingBall.setCenter((int) ((3.88d + ballPositionX * 7.25) * block), (int) ((22.38d + ballPositionY * 7.25) * block));
         playingBall.setCorners();
 
-/*
-        timeText.setWidth(30 * block);
-        timeText.setHeight(10 * block);
-        timeText.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) (4d * block));
-        RelativeLayout.LayoutParams paramsTimeText = (RelativeLayout.LayoutParams) timeText.getLayoutParams();
-        paramsTimeText.leftMargin = 15 * block;
-        paramsTimeText.topMargin = 46 * block;
-        timeText.setLayoutParams(paramsTimeText);
-
-        parTimeText.setWidth(30 * block);
-        parTimeText.setHeight(10 * block);
-        parTimeText.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) (4d * block));
-        RelativeLayout.LayoutParams paramsParTimeText = (RelativeLayout.LayoutParams) parTimeText.getLayoutParams();
-        paramsParTimeText.leftMargin = 45 * block;
-        paramsParTimeText.topMargin = 46 * block;
-        parTimeText.setLayoutParams(paramsParTimeText);
-
-        levelText.setWidth(35 * block);
-        levelText.setHeight(30 * block);
-        levelText.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) (12d * block));
-        RelativeLayout.LayoutParams paramsLevelText = (RelativeLayout.LayoutParams) levelText.getLayoutParams();
-        paramsLevelText.leftMargin = 60 * block;
-        paramsLevelText.topMargin = 37 * block;
-        levelText.setLayoutParams(paramsLevelText);
-
-        powerUpsTouched.setWidth(35 * block);
-        powerUpsTouched.setHeight(30 * block);
-        powerUpsTouched.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) (4d * block));
-        RelativeLayout.LayoutParams paramsPowerUpsTouched = (RelativeLayout.LayoutParams) powerUpsTouched.getLayoutParams();
-        paramsPowerUpsTouched.leftMargin = (int) (37d * block);
-        paramsPowerUpsTouched.topMargin = 40 * block;
-        powerUpsTouched.setLayoutParams(paramsPowerUpsTouched);
-        powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "    /    " + Integer.toString(powerUpCounter));
-
-        pauseScreenBackground2.requestLayout();
-        pauseScreenBackground2.getLayoutParams().width = 4 * (16 * block);
-        pauseScreenBackground2.getLayoutParams().height = 4 * (9 * block);
-        RelativeLayout.LayoutParams paramsBackground2 = (RelativeLayout.LayoutParams) pauseScreenBackground2.getLayoutParams();
-        paramsBackground2.leftMargin = (int) ((5d + 7d) * block);
-        paramsBackground2.topMargin = (int) ((5d + 3d) * block);
-        pauseScreenBackground2.setLayoutParams(paramsBackground2);
-
-        playButton.requestLayout();
-        playButton.getLayoutParams().width = (int) (3.1d * (9 * block));
-        playButton.getLayoutParams().height = (int) (3.1d * (9 * block));
-        RelativeLayout.LayoutParams paramsPlayButton = (RelativeLayout.LayoutParams) playButton.getLayoutParams();
-        paramsPlayButton.leftMargin = (int) ((8.35d + 7d) * block);
-        paramsPlayButton.topMargin = (int) ((8.65d + 3d) * block);
-        playButton.setLayoutParams(paramsPlayButton);
-
-        quitLevelButton.requestLayout();
-        quitLevelButton.getLayoutParams().width = (int) (5 * 4.65d * block);
-        quitLevelButton.getLayoutParams().height = 5 * block;
-        RelativeLayout.LayoutParams paramsQuitLevel = (RelativeLayout.LayoutParams) quitLevelButton.getLayoutParams();
-        paramsQuitLevel.leftMargin = (int) (48d * block);
-        paramsQuitLevel.topMargin = 28 * block;
-        quitLevelButton.setLayoutParams(paramsQuitLevel);
-
-        restartLevelButton.requestLayout();
-        restartLevelButton.getLayoutParams().width = (int) (5 * 4.65d * block);
-        restartLevelButton.getLayoutParams().height = 5 * block;
-        RelativeLayout.LayoutParams paramsRestartLevel = (RelativeLayout.LayoutParams) restartLevelButton.getLayoutParams();
-        paramsRestartLevel.leftMargin = (int) (42d * block);
-        paramsRestartLevel.topMargin = 35 * block;
-        restartLevelButton.setLayoutParams(paramsRestartLevel);
-
-        pauseScreenTimeText.setWidth(35 * block);
-        pauseScreenTimeText.setHeight(30 * block);
-        pauseScreenTimeText.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) (5d * block));
-        RelativeLayout.LayoutParams paramsPauseTimeText = (RelativeLayout.LayoutParams) pauseScreenTimeText.getLayoutParams();
-        paramsPauseTimeText.leftMargin = 45 * block;
-        paramsPauseTimeText.topMargin = 20 * block;
-        pauseScreenTimeText.setLayoutParams(paramsPauseTimeText);
-
-        nextLevelButton.requestLayout();
-        nextLevelButton.getLayoutParams().width = (int) (3.1d * (9 * block));
-        nextLevelButton.getLayoutParams().height = (int) (3.1d * (9 * block));
-        RelativeLayout.LayoutParams paramsNextLevelButton = (RelativeLayout.LayoutParams) nextLevelButton.getLayoutParams();
-        paramsNextLevelButton.leftMargin = (int) ((8.35d + 7d) * block);
-        paramsNextLevelButton.topMargin = (int) ((8.65d + 3d) * block);
-        nextLevelButton.setLayoutParams(paramsNextLevelButton);
-
-        finishedScreenBackground.requestLayout();
-        finishedScreenBackground.getLayoutParams().width = 4 * (16 * block);
-        finishedScreenBackground.getLayoutParams().height = 4 * (9 * block);
-        RelativeLayout.LayoutParams paramsFinished = (RelativeLayout.LayoutParams) finishedScreenBackground.getLayoutParams();
-        paramsFinished.leftMargin = (int) ((5d + 7d) * block);
-        paramsFinished.topMargin = (int) ((5d + 3d) * block);
-        finishedScreenBackground.setLayoutParams(paramsFinished);
-
-        touchAllowed = true;
-        */
+        powerUpsCounterTextView.setText("0 / "+Integer.toString(powerUpCounter));
     }
 
 }
