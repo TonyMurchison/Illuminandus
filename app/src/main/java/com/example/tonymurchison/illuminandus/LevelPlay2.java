@@ -323,7 +323,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
 
     //go back to the level select screen
     public void quitLevelClick(View v){
-        Intent intent = new Intent(LevelPlay2.this, LevelSelect.class);
+        Intent intent = new Intent(LevelPlay2.this, LevelSelectV2.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
         finish();
