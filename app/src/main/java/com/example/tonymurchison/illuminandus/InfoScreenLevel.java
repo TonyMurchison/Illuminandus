@@ -33,7 +33,7 @@ public class InfoScreenLevel extends AppCompatActivity {
         infoText.setText(infoString[levelNumber]);
 
         //getSupportActionBar().hide();
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -43,7 +43,7 @@ public class InfoScreenLevel extends AppCompatActivity {
 
 
     public void infoScreenLevelClicked(View v){
-        Intent intent = new Intent(InfoScreenLevel.this, LevelPlay.class);
+        Intent intent = new Intent(InfoScreenLevel.this, LevelPlay2.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
         finish();

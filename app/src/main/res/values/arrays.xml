@@ -13,11 +13,17 @@
 
     <string-array name="levelNames">
         <item>Level 1: The Blue Ball</item>
+        <item>Level 1: The Blue Ball</item>
+        <item>Level 1: The Blue Ball</item>
+        <item>Level 1: The Blue Ball</item>
 
 
     </string-array>
 
     <string-array name="infoStrings">
+        <item>The blue ball will reveal the whole map for 8 seconds. Use this time wisely!</item>
+        <item>The blue ball will reveal the whole map for 8 seconds. Use this time wisely!</item>
+        <item>The blue ball will reveal the whole map for 8 seconds. Use this time wisely!</item>
         <item>The blue ball will reveal the whole map for 8 seconds. Use this time wisely!</item>
 
 

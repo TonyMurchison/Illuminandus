@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "368230649996",
+    "firebase_url": "https://illuminandus.firebaseio.com",
+    "project_id": "illuminandus",
+    "storage_bucket": "illuminandus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368230649996:android:dfd6d09dc22d83fc",
+        "android_client_info": {
+          "package_name": "com.example.tonymurchison.illuminandus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "368230649996-dhmc3v6hqaie8m1hif3l26cabqlqcmil.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tonymurchison.illuminandus",
+            "certificate_hash": "F542911AA4F71BE5D9CF34B9C9DFB726ABBE8E76"
+          }
+        },
+        {
+          "client_id": "368230649996-bbhjfve5apt7kfl9ha43rrueu1hpk3dt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANzh4MLemxzggpgvX9TDqqkMSqGsme0Sg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "368230649996-bbhjfve5apt7kfl9ha43rrueu1hpk3dt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

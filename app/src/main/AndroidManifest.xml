@@ -8,8 +8,10 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        >
+        android:theme="@style/AppTheme">
+
+
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +22,11 @@
         <activity android:name=".LevelSelect" />
         <activity android:name=".LevelPlay" />
         <activity android:name=".LevelPlay2" />
+
+        <activity android:name=".InfoScreenLevel"/>
+        <activity android:name=".InformationScreen"/>
+
+        <!--
         <activity
             android:name=".InfoScreenLevel"
             android:label="InfoScreenLevel"
@@ -28,7 +35,11 @@
             android:name=".InformationScreen"
             android:label="@string/title_activity_information_screen"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+            -->
         <uses-permission android:name="android.permission.WAKE_LOCK"/>
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

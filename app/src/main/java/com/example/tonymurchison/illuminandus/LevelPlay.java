@@ -790,7 +790,6 @@ public class LevelPlay extends AppCompatActivity implements SensorEventListener 
 
     //initializes the layout
     public void start() {
-        //TODO textview uitlijnen in spelscherm
         double offsetX = 11.5;
         double offsetY = 4.7;
 

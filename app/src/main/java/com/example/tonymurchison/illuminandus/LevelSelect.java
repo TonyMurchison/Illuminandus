@@ -33,7 +33,7 @@ public class LevelSelect extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_select);
 
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
@@ -70,22 +70,9 @@ public class LevelSelect extends AppCompatActivity {
         setUnlock();
         }
 
-    @Override
-    protected void onStart(){
-        super.onStart();
 
-        loadingBar.setVisibility(View.GONE);
-        loadingBackground.setVisibility(View.GONE);
 
-    }
 
-    @Override
-    protected void onStop(){
-        super.onStop();
-
-        loadingBackground.setVisibility(View.GONE);
-        loadingBar.setVisibility(View.GONE);
-    }
 
 
     private void setUnlock(){       //checks whether next four are available

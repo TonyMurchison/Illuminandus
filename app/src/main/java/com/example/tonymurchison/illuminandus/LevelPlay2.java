@@ -23,26 +23,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 import android.os.Handler;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+
 public class LevelPlay2 extends AppCompatActivity implements SensorEventListener{
-    //layout items
-    private TextView pauseScreenTimeText;
-    private TextView timeText;
-    private TextView powerUpsTouched;
-    private TextView parTimeText;
-    private TextView levelText;
-    private ImageView loadingBackground;
-    private ImageView loadingBar;
-    private ImageView pauseScreenBackground;
-    private ImageView pauseScreenBackground2;
-    private ImageView playButton;
-    private ImageView quitLevelButton;
-    private ImageView restartLevelButton;
-    private ImageView nextLevelButton;
-    private ImageView finishedScreenBackground;
+    //TODO nieuwe activity als je een op pauze drukt
+    //TODO waar komen de advertenties?
+
+
+
+
+
 
     //time items
     private int timeStart;
@@ -90,10 +87,13 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
     private float show = 1;
     private float hide = 0;
 
-    private PowerUp powerUps[] = new PowerUp[15];
-    private int powerUpsPlacement[][]= new int[6][13];
+    private ArrayList<PowerUp> powerUps = new ArrayList<>();
+    //private PowerUp powerUps[] = new PowerUp[70]; //TODO maak hier misschien een ArrayList van
+    private int powerUpsPlacement[][]= new int[10][7];
     private int powerUpCounter=0;
     private int amountPowerUpsTouched=0;
+
+    private AdView mAdView;
 
 
     @Override
@@ -123,14 +123,36 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         speedAdjustment=screenWidth/1920d;
         block=(int)Math.round(screenWidth / 90d);
 
+        //set times
+        int parTimeArray [] = getResources().getIntArray(R.array.parTime);
+        parTime = parTimeArray[levelNumber];
+        parTimeMinutes=(parTime/(1000*60))%60;
+        parTimeSeconds=((parTime-(parTimeMinutes*60*1000))/1000)%60;
+        timeStart=(int)System.currentTimeMillis();
+
         readFile();
 
         //run the method that initializes the layout
         start();
 
+
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        //TODO
+    }
 
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        //TODO
+    }
 
     void readFile(){
         AssetManager assetManager = getResources().getAssets();
@@ -145,13 +167,13 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
 
         Scanner scanner = new Scanner(inputStream);
         boolean reading = true;
-        String level = "Level 1"; //+Integer.toString(levelNumber+1);
+        String level = "Level "+Integer.toString(levelNumber+1);
         while(reading==true){
             if(level.equals(scanner.nextLine())){
                 for(int i=0;i<10;i++){
                     String line = scanner.nextLine();
                     for(int j=0;j<7;j++){
-                        //powerUpsPlacement[i][j]=Character.getNumericValue(line.charAt(j));
+                        powerUpsPlacement[i][j]=Character.getNumericValue(line.charAt(j));
                     }
                 }
 
@@ -205,15 +227,15 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
     }
 
     public void onSensorChanged (SensorEvent event){
-/*
+
         //if sensor is unreliable, return void
         if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
             return;
         }
 
         //read the data from the gyroscopes
-        double xb=event.values[1]*speedAdjustment;
-        double yb=event.values[2]*speedAdjustment;
+        double xb=event.values[2]*speedAdjustment;
+        double yb=event.values[1]*speedAdjustment*-1;
 
         //max out the speed
         if (xb > 15d*speedAdjustment) {
@@ -257,30 +279,393 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         //display current time in game
         if (timeMinutes < 10) {
             if (timeSeconds < 10) {
-                timeText.setText("0" + Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds));
+                //timeText.setText("0" + Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds));
             } else {
-                timeText.setText("0" + Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds));
+                //timeText.setText("0" + Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds));
             }
         } else {
             if (timeSeconds < 10) {
-                timeText.setText(Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds));
+               // timeText.setText(Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds));
             } else {
-                timeText.setText(Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds));
+                //timeText.setText(Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds));
             }
         }
 
         //if current time is above partime then set the text color to red
         if (time > (parTime + 1000)) {
-            timeText.setTextColor(getResources().getColor(R.color.red));
+           // timeText.setTextColor(getResources().getColor(R.color.red));
         }
-*/
+
+    }
+
+    //restart level
+    public void restartButtonClick(View v){
+        super.recreate();
+    }
+
+    //go back to the level select screen
+    public void quitLevelClick(View v){
+        Intent intent = new Intent(LevelPlay2.this, LevelSelect.class);
+        intent.putExtra("levelNumber", levelNumber);
+        startActivity(intent);
+        finish();
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sManager.registerListener(this, sManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_FASTEST);
+    }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
+
+        sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+        //set a handler that every 20ms calls the move method.
+        h = new Handler();
+        h.postDelayed(new Runnable() {
+            public void run() {
+                move(x, y);
+                if (h!=null)
+                    h.postDelayed(this, delay);
+            }
+        }, delay);
+    }
+
+    //When this Activity isn't visible anymore
+    @Override
+    protected void onStop() {
+        //unregister the sensor listener
+        sManager.unregisterListener(this);
+        h = null;
+        super.onStop();
+    }
+
+    //open up the pause screen
+    public void pauseScreen(View v){
+        timeAtPause= (int) System.currentTimeMillis();
+
+    }
+
+    //if a power up is hit this method will determine what has to happen
+    public void hitPowerUp(PowerUp powerUp){
+        //hide the powerup and count it as hit
+        if(powerUp.getHittable()) {
+            amountPowerUpsTouched = amountPowerUpsTouched + 1;
+            //TODO
+            //powerUpsTouched.setText(Integer.toString(amountPowerUpsTouched) + "  /  " + Integer.toString(powerUpCounter));
+        }
+
+        else return;
+
+        if(amountPowerUpsTouched==powerUpCounter) {
+            finishedLevel();
+        }
+
+        if(powerUp.getType()==1 && powerUp.getHittable()){
+            yellowPowerUp(powerUp);
+        }
+
+        if(powerUp.getType()==2 && powerUp.getHittable()){
+            pinkPowerUp(powerUp);
+        }
+
+        if (powerUp.getType()==3 && powerUp.getHittable()){
+            greenPowerUp(powerUp);
+        }
+
+        if(powerUp.getType()==4 && powerUp.getHittable()){
+            redPowerUp(powerUp);
+        }
+
+        if(powerUp.getType()==5 && powerUp.getHittable()){
+            bluePowerUp(powerUp);
+        }
+
+        if(powerUp.getType()==6 && powerUp.getHittable()){
+            multiPowerUp(powerUp);
+        }
+    }
+
+    //this method is called when the last powerup has been picked up
+    private void finishedLevel(){
+        //TODO
+        //checks if a new high score has been achieved. If so this will be stored.
+        HighScoreEditor highScoreEditor = new HighScoreEditor();
+        int previous_score = highScoreEditor.getValue(this, "HighScore_" + levelNumber);
+        if(time < previous_score || previous_score == 0) {
+            highScoreEditor.saveInt(this, "HighScore_" + levelNumber, time);
+        }
+
+
+    }
+
+    //This method is called when the player hits the next level button
+    public void nextLevelButtonClick(View v){
+        UnlockEditor unlockCheck = new UnlockEditor();
+        //checks if the next level is unlocked
+        if(unlockCheck.requestUnlock(this, (levelNumber / 4)) || levelNumber % 4 != 3) {
+            if(levelNumber!=8) {
+                Intent intent = new Intent(LevelPlay2.this, LevelPlay2.class);
+                intent.putExtra("levelNumber", levelNumber + 1);
+                //loadingBackground.setVisibility(View.VISIBLE);
+                //loadingBar.setVisibility(View.VISIBLE);
+
+                startActivity(intent);
+                finish();
+            }
+            else {
+                Toast toast = Toast.makeText(this, "Coming soon!", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        }
+        else{
+            Toast toast = Toast.makeText(this, "Next level not yet unlocked", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+
+    //hides whole map
+    public void pinkPowerUp(PowerUp powerUp){
+        for(int i=0; i<wallNumber-4;i++){
+            mazeWall[i].setVisibility(hide);
+        }
+        powerUp.setInvisible();
+        powerUp.setHittable(false);
+    }
+
+    //shows whole map
+    public void bluePowerUp(PowerUp powerUp){
+        for(int i=0; i<wallNumber;i++){
+            mazeWall[i].setVisibility(show);
+            mazeWall[i].setTimeTouched((int) System.currentTimeMillis() - timeStart-pausedTime);
+        }
+        powerUp.setInvisible();
+        powerUp.setHittable(false);
+    }
+
+    //hides ball
+    public void yellowPowerUp(PowerUp powerUp){
+        playingBall.setVisibility(hide);
+        timePlayingBallHit = (int) System.currentTimeMillis()-timeStart-pausedTime;
+        ballHidden=true;
+
+        powerUp.setInvisible();
+        powerUp.setHittable(false);
+    }
+
+    //inverts controls
+    public void redPowerUp(PowerUp powerUp){
+        invert = invert*-1;
+        powerUp.setInvisible();
+        powerUp.setHittable(false);
+    }
+
+    //shows certain walls
+    public void greenPowerUp(PowerUp powerUp){
+        for(int i=0;i<wallNumber;i++){
+            double deltaDsquared = Math.pow(mazeWall[i].getCenterX() - powerUp.getCenterX(), 2) + Math.pow(mazeWall[i].getCenterY() - powerUp.getCenterY(), 2);
+            if(deltaDsquared < Math.pow(pickup_range, 2)){
+                mazeWall[i].setVisibility(show);
+                mazeWall[i].setTimeTouched((int) System.currentTimeMillis()-timeStart-pausedTime);
+            }
+        }
+        powerUp.setInvisible();
+        powerUp.setHittable(false);
+    }
+
+    //choses a random effect
+    public void multiPowerUp(PowerUp powerUp){
+        //TODO add multi effects
+        powerUp.setInvisible();
+        powerUp.setHittable(false);
+    }
+
+    //this method will move the ball
+    public void move(int x, int y) {
+        RelativeLayout.LayoutParams alp = playingBall.getLayoutParams();
+        int maxMovementX = Math.abs(x);
+        int maxMovenentY = Math.abs(y);
+        int stepsTakenX = 0;
+        int stepsTakenY = 0;
+        int a = alp.leftMargin;
+        int b = alp.topMargin;
+
+        //while steps have to be taken:
+        while (maxMovementX > stepsTakenX || maxMovenentY > stepsTakenY) {
+            //check all the walls
+            for (int i = 0; i < wallNumber; i++) {
+                intersectWall(playingBall, mazeWall[i]);
+            }
+            //checks all the powerups
+            for(int i=0; i< powerUpCounter; i++){
+                intersectPowerUp(playingBall, powerUps[i]);
+            }
+            //this will run if there are steps left to be done in the x direction
+            if (stepsTakenX < maxMovementX) {
+                stepsTakenX = stepsTakenX + 1;
+                if (x > 0 && allowedMovement[3]) {//right
+                    playingBall.setCenterX(playingBall.getCenterX() - 1);
+                    playingBall.setCorners();
+                    a = a - 1;
+                }
+                if (x < 0 && allowedMovement[2]) {//left
+                    playingBall.setCenterX(playingBall.getCenterX() + 1);
+                    playingBall.setCorners();
+                    a = a + 1;
+                }
+            }
+            //this will run if there are steps left to be done in the y direction
+            if (stepsTakenY < maxMovenentY) {
+                stepsTakenY = stepsTakenY + 1;
+                if (y > 0 && allowedMovement[1]) {//down
+                    playingBall.setCenterY(playingBall.getCenterY() - 1);
+                    playingBall.setCorners();
+                    b = b - 1;
+                }
+                if (y < 0 && allowedMovement[0]) {//up
+                    playingBall.setCenterY(playingBall.getCenterY() + 1);
+                    playingBall.setCorners();
+                    b = b + 1;
+                }
+            }
+        }
+
+        for (int i = 0; i < 4; i++) {
+            allowedMovement[i] = true;
+        }
+
+        alp.leftMargin = a;
+        alp.topMargin = b;
+        playingBall.setLayoutParams(alp);   //render layout
+    }
+
+    //checks if a certain wall and the playing ball intersect
+    public void intersectWall(Ball ball, Wall wall) {
+        //top left corner of the ball
+        if (ball.getTopLeftX() >= wall.getTopLeftX() && ball.getTopLeftX() <= wall.getTopRightX()) {                     //is the x position of the ball between those of the two sides of the wall
+            if (ball.getTopLeftY() >= wall.getTopLeftY() && ball.getTopLeftY() <= wall.getBottomLeftY()) {               //is the y position of the ball between those of the two sides of the wall
+                limitMovement(ball, wall);
+                return;
+            }
+        }
+
+        if(wall.getTopLeftX() >= ball.getTopLeftX() && wall.getTopLeftX() <= ball.getTopRightX() ){
+            if (wall.getTopLeftY() >= ball.getTopLeftY() && wall.getTopLeftY() <= ball.getBottomLeftY()) {
+                limitMovement(ball, wall);
+                return;
+            }
+        }
+
+        //top rigth corner of the ball
+        if (ball.getTopRightX() >= wall.getTopLeftX() && ball.getTopRightX() <= wall.getTopRightX()) {                   //is the x position of the ball between those of the two sides of the wall
+            if (ball.getTopRightY() >= wall.getTopLeftY() && ball.getTopRightY() <= wall.getBottomLeftY()) {             //is the y position of the ball between those of the two sides of the wall
+                limitMovement(ball, wall);
+                return;
+            }
+        }
+
+        if (wall.getTopRightX() >= ball.getTopLeftX() && wall.getTopRightX() <= ball.getTopRightX()) {
+            if (wall.getTopRightY() >= ball.getTopLeftY() && wall.getTopRightY() <= ball.getBottomLeftY()) {
+                limitMovement(ball, wall);
+                return;
+            }
+        }
+
+        //bottom left corner of the ball
+        if (ball.getBottomLeftX() >= wall.getBottomLeftX() && ball.getBottomLeftX() <= wall.getBottomRightX()) {        //is the x position of the ball between those of the two sides of the wall
+            if (ball.getBottomLeftY() >= wall.getTopLeftY() && ball.getBottomLeftY() <= wall.getBottomLeftY()) {        //is the y position of the ball between those of the two sides of the wall
+                limitMovement(ball, wall);
+                return;
+            }
+        }
+
+        if (wall.getBottomLeftX() >= ball.getBottomLeftX() && wall.getBottomLeftX() <= ball.getBottomRightX()) {        //is the x position of the ball between those of the two sides of the wall
+            if (wall.getBottomLeftY() >= ball.getTopLeftY() && wall.getBottomLeftY() <= ball.getBottomLeftY()) {        //is the y position of the ball between those of the two sides of the wall
+                limitMovement(ball, wall);
+                return;
+            }
+        }
+
+        //bottom rigth corner of the ball
+        if (ball.getBottomRightX() >= wall.getBottomLeftX() && ball.getBottomRightX() <= wall.getBottomRightX()) {      //is the x position of the ball between those of the two sides of the wall
+            if (ball.getBottomRightY() >= wall.getTopLeftY() && ball.getBottomRightY() <= wall.getBottomLeftY()) {      //is the y position of the ball between those of the two sides of the wall
+                limitMovement(ball, wall);
+                return;
+            }
+        }
+
+        if (wall.getBottomRightX() >= ball.getBottomLeftX() && wall.getBottomRightX() <= ball.getBottomRightX()) {      //is the x position of the ball between those of the two sides of the wall
+            if (wall.getBottomRightY() >= ball.getTopLeftY() && wall.getBottomRightY() <= ball.getBottomLeftY()) {      //is the y position of the ball between those of the two sides of the wall
+                limitMovement(ball, wall);
+            }
+        }
+    }
+
+    //checks if a certain powerup and the playing ball intersect
+    public void intersectPowerUp(Ball ball, PowerUp powerUp) {
+        //top left corner of the ball
+        if (ball.getTopLeftX() >= powerUp.getTopLeftX() && ball.getTopLeftX() <= powerUp.getTopRightX()) {              //is the x position of the ball between those of the two sides of the power up
+            if (ball.getTopLeftY() >= powerUp.getTopLeftY() && ball.getTopLeftY() <= powerUp.getBottomLeftY()) {        //is the y position of the ball between those of the two sides of the power up
+                hitPowerUp(powerUp);
+                return;
+            }
+        }
+
+        //top rigth corner of the ball
+        if (ball.getTopRightX() >= powerUp.getTopLeftX() && ball.getTopRightX() <= powerUp.getTopRightX()) {            //is the x position of the ball between those of the two sides of the power up
+            if (ball.getTopRightY() >= powerUp.getTopLeftY() && ball.getTopRightY() <= powerUp.getBottomLeftY()) {      //is the y position of the ball between those of the two sides of the power up
+                hitPowerUp(powerUp);
+                return;
+            }
+        }
+
+        //bottom left corner of the ball
+        if (ball.getBottomLeftX() >= powerUp.getBottomLeftX() && ball.getBottomLeftX() <= powerUp.getBottomRightX()) {  //is the x position of the ball between those of the two sides of the power up
+            if (ball.getBottomLeftY() >= powerUp.getTopLeftY() && ball.getBottomLeftY() <= powerUp.getBottomLeftY()) {  //is the y position of the ball between those of the two sides of the power up
+                hitPowerUp(powerUp);
+                return;
+            }
+        }
+
+        //bottom rigth corner of the ball
+        if (ball.getBottomRightX() >= powerUp.getBottomLeftX() && ball.getBottomRightX() <= powerUp.getBottomRightX()) {//is the x position of the ball between those of the two sides of the power up
+            if (ball.getBottomRightY() >= powerUp.getTopLeftY() && ball.getBottomRightY() <= powerUp.getBottomLeftY()) {//is the y position of the ball between those of the two sides of the power up
+                hitPowerUp(powerUp);
+            }
+        }
+    }
+
+    //if a wall is hit this method will be called. It decides which side of the wall is hit and therefor decides in which direction the movement of the ball should be stopped.
+    public void limitMovement(Ball ball, Wall wall) {
+        //this is calculated with the minkowski sum method: (https://en.wikipedia.org/wiki/Minkowski_addition)
+        float wy = (ball.getWidth() + wall.getWidth()) * (ball.getCenterY() - wall.getCenterY());
+        float hx = (ball.getHeight() + wall.getHeight()) * (ball.getCenterX() - wall.getCenterX());
+
+        wall.setVisibility(1f);
+        wall.setTimeTouched((int) System.currentTimeMillis() - timeStart - pausedTime);
+
+        if (wy > hx) {
+            if (wy > -hx) {//top
+                allowedMovement[1] = false;     //block downwards motion
+            } else {//left
+                allowedMovement[2] = false;     //block rightwards motion
+            }
+        } else {
+            if (wy > -hx) {//right
+                allowedMovement[3] = false;     //block leftwards motion
+            } else {//bottom
+                allowedMovement[0] = false;     //block upwards motion
+            }
+        }
+    }
 
     public void start() {
-        //TODO textview uitlijnen in spelscherm
+
 
 
         for (int i = 0; i < 9; i++) {
@@ -315,12 +700,12 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
                 }
             }
         }
-/*
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 13; j++) {
+
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 7; j++) {
                 if (powerUpsPlacement[i][j] > 0) {
 
-                    ImageView imagePowerUp = new ImageView(LevelPlay.this);
+                    ImageView imagePowerUp = new ImageView(LevelPlay2.this);
 
                     if (powerUpsPlacement[i][j] == 1) {
                         imagePowerUp.setImageResource(R.drawable.pickup_yellow_v2);
@@ -350,13 +735,13 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
                     powerUps[powerUpCounter] = new PowerUp(powerUpsPlacement[i][j], imagePowerUp);
                     powerUps[powerUpCounter].setWidth((int) (2d * block));
                     powerUps[powerUpCounter].setHeight((int) (2d * block));
-                    powerUps[powerUpCounter].setCenter((int) ((double) j * 5d * (double) block + (4d + offsetX) * (double) block), (int) ((double) i * 5d * (double) block + (double) block * (3.5d + offsetY)));
+                    powerUps[powerUpCounter].setCenter((int) ((double) j * 7.25d * (double) block + (3.88d) * (double) block), (int) ((double) i * 7.25d * (double) block + (double) block * (22.38d)));
                     powerUps[powerUpCounter].setCorners();
                     powerUpCounter = powerUpCounter + 1;
                 }
             }
         }
-*/
+
 
         ImageView leftBorderWallImage = (ImageView) findViewById(R.id.leftBorderWall);
         mazeWall[wallNumber] = new Wall(leftBorderWallImage);
