@@ -32,10 +32,11 @@ public class InfoScreenLevel extends AppCompatActivity {
         levelText.setText(levelString[levelNumber]);
         infoText.setText(infoString[levelNumber]);
 
-        //getSupportActionBar().hide();
+        getSupportActionBar().hide();
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 
     }

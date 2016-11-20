@@ -123,7 +123,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         Point size = new Point();
         display.getSize(size);
         screenWidth = size.x;
-        speedAdjustment=screenWidth/1920d;
+        speedAdjustment=screenWidth/1000d;
         block=screenWidth / 60d;
 
         //set times
@@ -493,6 +493,11 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
             highScoreEditor.saveInt(this, "HighScore_" + levelNumber, time);
         }
 
+        Intent intent = new Intent(LevelPlay2.this, FinishedScreen.class);
+        intent.putExtra("levelNumber", levelNumber);
+        startActivity(intent);
+        finish();
+
 
     }
 
@@ -829,7 +834,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
                     powerUps.add(powerUpCounter,new PowerUp(powerUpsPlacement[i][j], imagePowerUp));
                     powerUps.get(powerUpCounter).setWidth((int) (2d * block));
                     powerUps.get(powerUpCounter).setHeight((int) (2d * block));
-                    powerUps.get(powerUpCounter).setCenter((int) ((double) j * 7.25d * (double) block + (3.88d) * (double) block), (int) ((double) i * 7.25d * (double) block + (double) block * (22.38d)));
+                    powerUps.get(powerUpCounter).setCenter((int) ((double) j * 8.428d * block + 4.714d * block), (int) ((double) i * 8.428d *  block + block * 26.29d));
                     powerUps.get(powerUpCounter).setCorners();
                     powerUpCounter = powerUpCounter + 1;
                 }
@@ -873,7 +878,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
 
         playingBall.setWidth((int) (2d * block));
         playingBall.setHeight((int) (2d * block));
-        playingBall.setCenter((int) ((3.88d + ballPositionX * 7.25) * block), (int) ((22.38d + ballPositionY * 7.25) * block));
+        playingBall.setCenter((int) ((4.714d + ballPositionX * 8.428) * block), (int) ((26.29d + ballPositionY * 8.428) * block));
         playingBall.setCorners();
 
         powerUpsCounterTextView.setText("0 / "+Integer.toString(powerUpCounter));
