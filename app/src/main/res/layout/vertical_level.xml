@@ -6,6 +6,7 @@
     tools:context=".LevelPlay2"
     android:background="@drawable/titlescreen_background"
     android:id="@+id/relativeLayout"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
 
     >
 
@@ -1117,6 +1118,8 @@
         android:id="@+id/horizontal_wall_62"
         android:visibility="gone"
         android:scaleType="fitXY"/>
+
+
 
 
 
