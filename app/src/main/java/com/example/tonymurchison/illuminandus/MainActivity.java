@@ -49,12 +49,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void autoStart() {
         //User was too busy contemplating life. The lovely developers helped him out a little
+
         if(notYetStarted==true) {
             Intent intent = new Intent(MainActivity.this, LevelSelectV2.class);
             startActivity(intent);
             System.gc();
             finish();
         }
+
     }
     public void startButtonClick(View v){
         notYetStarted=false;

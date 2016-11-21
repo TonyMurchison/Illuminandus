@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -15,6 +16,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -30,11 +33,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import android.os.Handler;
 
-
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class LevelPlay2 extends AppCompatActivity implements SensorEventListener{
 
-
+    private AdView mAdView;
 
 
     //time items
@@ -112,6 +116,10 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
 
         //set ball
@@ -485,7 +493,6 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
 
     //this method is called when the last powerup has been picked up
     private void finishedLevel(){
-        //TODO
         //checks if a new high score has been achieved. If so this will be stored.
         HighScoreEditor highScoreEditor = new HighScoreEditor();
         int previous_score = highScoreEditor.getValue(this, "HighScore_" + levelNumber);
@@ -765,6 +772,20 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
     }
 
     public void start() {
+        Resources r = getResources();
+        double offset;
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+
+        if(metrics.densityDpi>400 && metrics.densityDpi <=720){
+            offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
+        }
+        else{
+
+            offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, r.getDisplayMetrics());
+        }
+        //TODO testen of dit op alle schermen werkt
+
+
 
 
 
@@ -776,9 +797,9 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
                     mazeWall[wallNumber] = new Wall(wallImage);
                     mazeWall[wallNumber].setWidth((int)(9.428d * block));
                     mazeWall[wallNumber].setHeight((int)(1d * block));
-                    mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d * block + 4.714d *  block), (int) ((double) i * 8.428d *  block +  block * 30.504d));
+                    mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d * block + 4.714d *  block), (int) ((double) i * 8.428d *  block +  block * 30.504d-offset));
                     mazeWall[wallNumber].setCorners();
-                    mazeWall[wallNumber].setVisibility(show);
+                    mazeWall[wallNumber].setVisibility(hide);
                     wallNumber = wallNumber + 1;
                 }
             }
@@ -792,9 +813,9 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
                     mazeWall[wallNumber] = new Wall(wallImage);
                     mazeWall[wallNumber].setWidth((int)(1d * block));
                     mazeWall[wallNumber].setHeight((int)(9.428d * block)); //8.25
-                    mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d *  block +  block * 8.928d), (int) ((double) i * 8.428d * block +  block * 26.29d));
+                    mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d *  block +  block * 8.928d), (int) ((double) i * 8.428d * block +  block * 26.29d-offset));
                     mazeWall[wallNumber].setCorners();
-                    mazeWall[wallNumber].setVisibility(show);
+                    mazeWall[wallNumber].setVisibility(hide);
                     wallNumber = wallNumber + 1;
                 }
             }
@@ -834,7 +855,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
                     powerUps.add(powerUpCounter,new PowerUp(powerUpsPlacement[i][j], imagePowerUp));
                     powerUps.get(powerUpCounter).setWidth((int) (2d * block));
                     powerUps.get(powerUpCounter).setHeight((int) (2d * block));
-                    powerUps.get(powerUpCounter).setCenter((int) ((double) j * 8.428d * block + 4.714d * block), (int) ((double) i * 8.428d *  block + block * 26.29d));
+                    powerUps.get(powerUpCounter).setCenter((int) ((double) j * 8.428d * block + 4.714d * block), (int) ((double) i * 8.428d *  block + block * 26.29d-offset));
                     powerUps.get(powerUpCounter).setCorners();
                     powerUpCounter = powerUpCounter + 1;
                 }
@@ -846,7 +867,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         mazeWall[wallNumber] = new Wall(leftBorderWallImage);
         mazeWall[wallNumber].setWidth((int)(1 * block));
         mazeWall[wallNumber].setHeight((int)(84 * block));
-        mazeWall[wallNumber].setCenter((int) ((0.5d) * block), (int) (64.123d * block));
+        mazeWall[wallNumber].setCenter((int) ((0.5d) * block), (int) (64.123d * block-offset));
         mazeWall[wallNumber].setCorners();
         wallNumber = wallNumber + 1;
 
@@ -854,7 +875,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         mazeWall[wallNumber] = new Wall(rightBorderWallImage);
         mazeWall[wallNumber].setWidth((int)(1 * block));
         mazeWall[wallNumber].setHeight((int)(84 * block));
-        mazeWall[wallNumber].setCenter((int) (59.5d * block), (int) (64.123d * block));
+        mazeWall[wallNumber].setCenter((int) (59.5d * block), (int) (64.123d * block-offset));
         mazeWall[wallNumber].setCorners();
         wallNumber = wallNumber + 1;
 
@@ -862,7 +883,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         mazeWall[wallNumber] = new Wall(topBorderWallImage);
         mazeWall[wallNumber].setWidth((int)(60 * block));
         mazeWall[wallNumber].setHeight((int)(1 * block));
-        mazeWall[wallNumber].setCenter((int) (30d *  block), (int) (22.076d * block));
+        mazeWall[wallNumber].setCenter((int) (30d *  block), (int) (22.076d * block-offset));
         mazeWall[wallNumber].setCorners();
         wallNumber = wallNumber + 1;
 
@@ -870,7 +891,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         mazeWall[wallNumber] = new Wall(bottomBorderWallImage);
         mazeWall[wallNumber].setWidth((int)(60 * block));
         mazeWall[wallNumber].setHeight((int)(1 * block));
-        mazeWall[wallNumber].setCenter((int) (30d * block),(int)(106.17d *block));
+        mazeWall[wallNumber].setCenter((int) (30d * block),(int)(106.17d *block-offset));
         mazeWall[wallNumber].setCorners();
         wallNumber = wallNumber + 1;
 
@@ -878,7 +899,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
 
         playingBall.setWidth((int) (2d * block));
         playingBall.setHeight((int) (2d * block));
-        playingBall.setCenter((int) ((4.714d + ballPositionX * 8.428) * block), (int) ((26.29d + ballPositionY * 8.428) * block));
+        playingBall.setCenter((int) ((4.714d + ballPositionX * 8.428) * block), (int) (((26.29d + ballPositionY * 8.428) * block)-offset));
         playingBall.setCorners();
 
         powerUpsCounterTextView.setText("0 / "+Integer.toString(powerUpCounter));

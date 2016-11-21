@@ -8,7 +8,8 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     tools:context="com.example.tonymurchison.illuminandus.MainActivity"
-    android:background="@drawable/titlescreen_background">
+
+    >
 
 
     <ImageView

@@ -8,7 +8,6 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     tools:context="com.example.tonymurchison.illuminandus.LevelSelectV2"
-    android:background="@drawable/level_select_background"
     android:orientation="vertical">
 
     <LinearLayout
