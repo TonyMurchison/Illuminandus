@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class InfoScreenLevel extends AppCompatActivity {
@@ -44,7 +43,7 @@ public class InfoScreenLevel extends AppCompatActivity {
 
 
     public void infoScreenLevelClicked(View v){
-        Intent intent = new Intent(InfoScreenLevel.this, LevelPlay2.class);
+        Intent intent = new Intent(InfoScreenLevel.this, LevelPlayHiddenWalls.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
         finish();

@@ -22,7 +22,9 @@
         <activity android:name=".LevelSelect" />
         <activity android:name=".LevelSelectV2" />
         <activity android:name=".LevelPlay" />
-        <activity android:name=".LevelPlay2" />
+        <activity android:name=".LevelPlayHiddenWalls" />
+        <activity android:name=".LevelPlayChangingWalls" />
+        <activity android:name=".LevelPlayKeys"/>
         <activity android:name=".PauseScreen"/>
         <activity android:name=".FinishedScreen"/>
         <activity android:name=".InfoScreenLevel"/>

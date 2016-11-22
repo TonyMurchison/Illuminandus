@@ -14,12 +14,10 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -36,10 +34,9 @@ import android.os.Handler;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-public class LevelPlay2 extends AppCompatActivity implements SensorEventListener{
+public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEventListener{
 
     private AdView mAdView;
-
 
     //time items
     private int timeStart;
@@ -58,9 +55,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
     private int ballPositionX;
     private int ballPositionY;
 
-
     //remaining items
-    private boolean displayedFinishScreen= false;
     private SensorManager sManager;
     private int x = 0;          //stores the angle of the phone around the x-axis
     private int y = 0;          //stores the angle of the phone around the y-axis
@@ -70,7 +65,6 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
     private int pickup_range=500;
     private int levelNumber=0;  //level 1 equals levelNumber 0 etc
     private double allowMovement =1;
-    private boolean touchAllowed = false;
     private boolean ballHidden = false;
     private Handler h;
     private int delay = 20;
@@ -110,7 +104,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         Bundle extras = getIntent().getExtras();
         levelNumber = extras.getInt("levelNumber");
 
-        setContentView(R.layout.vertical_level);
+        setContentView(R.layout.level_hidden_walls);
         getSupportActionBar().hide();
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -247,7 +241,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
     }
 
     public void pause(){
-        Intent intent = new Intent(LevelPlay2.this, PauseScreen.class);
+        Intent intent = new Intent(LevelPlayHiddenWalls.this, PauseScreen.class);
         //TODO moet in het pauze scherm te zien wat de huidige tijd en score is?
         startActivity(intent);
     }
@@ -257,7 +251,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         InputStream inputStream = null;
 
         try {
-            inputStream = assetManager.open("levelsFile2.txt");
+            inputStream = assetManager.open("LevelsHiddenWall.txt");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -400,7 +394,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
 
     //go back to the level select screen
     public void quitLevelClick(View v){
-        Intent intent = new Intent(LevelPlay2.this, LevelSelectV2.class);
+        Intent intent = new Intent(LevelPlayHiddenWalls.this, LevelSelectV2.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
         finish();
@@ -500,7 +494,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
             highScoreEditor.saveInt(this, "HighScore_" + levelNumber, time);
         }
 
-        Intent intent = new Intent(LevelPlay2.this, FinishedScreen.class);
+        Intent intent = new Intent(LevelPlayHiddenWalls.this, FinishedScreen.class);
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);
         finish();
@@ -514,7 +508,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
         //checks if the next level is unlocked
         if(unlockCheck.requestUnlock(this, (levelNumber / 4)) || levelNumber % 4 != 3) {
             if(levelNumber!=8) {
-                Intent intent = new Intent(LevelPlay2.this, LevelPlay2.class);
+                Intent intent = new Intent(LevelPlayHiddenWalls.this, LevelPlayHiddenWalls.class);
                 intent.putExtra("levelNumber", levelNumber + 1);
 
                 startActivity(intent);
@@ -825,7 +819,7 @@ public class LevelPlay2 extends AppCompatActivity implements SensorEventListener
             for (int j = 0; j < 7; j++) {
                 if (powerUpsPlacement[i][j] > 0) {
 
-                    ImageView imagePowerUp = new ImageView(LevelPlay2.this);
+                    ImageView imagePowerUp = new ImageView(LevelPlayHiddenWalls.this);
 
                     if (powerUpsPlacement[i][j] == 1) {
                         imagePowerUp.setImageResource(R.drawable.pickup_yellow_v2);

@@ -7,4 +7,8 @@
     <color name="wallColor">#666060</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+
+    <color name="greenKey">#3abc00</color>
+    <color name="blueKey">#002aff</color>
+    <color name="redKey">#cb0000</color>
 </resources>

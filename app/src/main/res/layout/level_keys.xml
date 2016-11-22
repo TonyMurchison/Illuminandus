@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LevelPlay2"
+    tools:context=".LevelPlayHiddenWalls"
     android:id="@+id/relativeLayout"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
 
@@ -47,36 +47,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Level 1"
-                android:id="@+id/levelTextView"
-                android:layout_weight="1"
-                />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/pickup_multi_v2"
-                android:layout_weight="1"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0/0"
-                android:id="@+id/powerUpsCounterTextView"
-                android:layout_weight="1"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="00:00/00:00"
-                android:id="@+id/timeTextView"
-                android:layout_weight="1"
-                />
-
         </LinearLayout>
 
 
@@ -97,39 +67,7 @@
         >
     </com.google.android.gms.ads.AdView>
 
-    <ImageView
-        android:layout_width="6dp"
-        android:layout_height="50dp"
-        android:background="@color/wallColor"
-        android:id="@+id/leftBorderWall"
-        android:scaleType="fitXY"/>
 
-    <ImageView
-        android:layout_width="6dp"
-        android:layout_height="50dp"
-        android:background="@color/wallColor"
-        android:id="@+id/rightBorderWall"
-        android:scaleType="fitXY"/>
-
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="6dp"
-        android:background="@color/wallColor"
-        android:id="@+id/topBorderWall"
-        android:scaleType="fitXY"/>
-
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="6dp"
-        android:background="@color/wallColor"
-        android:id="@+id/bottomBorderWall"
-        android:scaleType="fitXY"/>
-
-    <ImageView
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:id="@+id/ball"
-        android:src="@drawable/player_character_v2"/>
 
 
 
@@ -1128,6 +1066,40 @@
         android:id="@+id/horizontal_wall_62"
         android:visibility="gone"
         android:scaleType="fitXY"/>
+
+    <ImageView
+        android:layout_width="6dp"
+        android:layout_height="50dp"
+        android:background="@color/wallColor"
+        android:id="@+id/leftBorderWall"
+        android:scaleType="fitXY"/>
+
+    <ImageView
+        android:layout_width="6dp"
+        android:layout_height="50dp"
+        android:background="@color/wallColor"
+        android:id="@+id/rightBorderWall"
+        android:scaleType="fitXY"/>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="6dp"
+        android:background="@color/wallColor"
+        android:id="@+id/topBorderWall"
+        android:scaleType="fitXY"/>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="6dp"
+        android:background="@color/wallColor"
+        android:id="@+id/bottomBorderWall"
+        android:scaleType="fitXY"/>
+
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:id="@+id/ball"
+        android:src="@drawable/player_character_v2"/>
 
 
 

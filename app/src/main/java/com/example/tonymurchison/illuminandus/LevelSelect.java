@@ -8,7 +8,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -269,7 +268,7 @@ public class LevelSelect extends AppCompatActivity {
     }
 
     public void testLevel(View v){
-        Intent intent = new Intent(LevelSelect.this, LevelPlay2.class);
+        Intent intent = new Intent(LevelSelect.this, LevelPlayHiddenWalls.class);
         int levelNumber = 1;
         intent.putExtra("levelNumber", levelNumber);
         startActivity(intent);

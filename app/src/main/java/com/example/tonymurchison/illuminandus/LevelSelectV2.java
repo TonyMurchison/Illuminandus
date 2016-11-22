@@ -39,7 +39,21 @@ public class LevelSelectV2 extends AppCompatActivity {
         finish();
     }
 
+    public void onNewModeClick(View v){
+        int buttonNumber = 1;
+        Intent intent = new Intent(LevelSelectV2.this, LevelPlayChangingWalls.class);
+        intent.putExtra("levelNumber", buttonNumber-1);
+        startActivity(intent);
+        finish();
+    }
 
+    public void onNewMode2Click(View v){
+        int buttonNumber = 1;
+        Intent intent = new Intent(LevelSelectV2.this, LevelPlayKeys.class);
+        intent.putExtra("levelNumber", buttonNumber-1);
+        startActivity(intent);
+        finish();
+    }
 
 
 
