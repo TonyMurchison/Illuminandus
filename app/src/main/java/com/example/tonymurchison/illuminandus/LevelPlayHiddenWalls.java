@@ -288,7 +288,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
                 for(int i=0;i<10;i++){
                     String line = scanner.nextLine();
                     for(int j=0;j<6;j++){
-                        if(Character.getNumericValue(line.charAt(5-j))==1){
+                        if(Character.getNumericValue(line.charAt(j))==1){
                             verticalWalls[i][j]=true;
                         }
                         else{
@@ -354,7 +354,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         time = (int) (System.currentTimeMillis() - timeStart - pausedTime);
         for (int i = 0; i < wallNumber - 4; i++) {
             if (time - mazeWall[i].getTimeTouched() > visibleThreshold) {
-                mazeWall[i].setVisibility(hide);
+                mazeWall[i].setVisibility(show);
             }
         }
 
@@ -793,7 +793,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
                     mazeWall[wallNumber].setHeight((int)(1d * block));
                     mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d * block + 4.714d *  block), (int) ((double) i * 8.428d *  block +  block * 30.504d-offset));
                     mazeWall[wallNumber].setCorners();
-                    mazeWall[wallNumber].setVisibility(hide);
+                    mazeWall[wallNumber].setVisibility(show);
                     wallNumber = wallNumber + 1;
                 }
             }
@@ -809,7 +809,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
                     mazeWall[wallNumber].setHeight((int)(9.428d * block)); //8.25
                     mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d *  block +  block * 8.928d), (int) ((double) i * 8.428d * block +  block * 26.29d-offset));
                     mazeWall[wallNumber].setCorners();
-                    mazeWall[wallNumber].setVisibility(hide);
+                    mazeWall[wallNumber].setVisibility(show);
                     wallNumber = wallNumber + 1;
                 }
             }

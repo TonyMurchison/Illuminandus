@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -59,7 +60,8 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
     private ArrayList<Key> keys = new ArrayList<>();
     private int keysPosition[][] = new int[10][7];
     private int keysCounter=0;
-
+    private ArrayList<Integer> wallsToMark = new ArrayList<>();
+    private ArrayList<Integer> special = new ArrayList<>();
 
     int screenWidth;
     double speedAdjustment;
@@ -232,7 +234,7 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
                 for(int i=0;i<10;i++){
                     String line = scanner.nextLine();
                     for(int j=0;j<6;j++){
-                        if(Character.getNumericValue(line.charAt(5-j))==1){
+                        if(Character.getNumericValue(line.charAt(j))==1){
                             verticalWalls[i][j]=true;
                         }
                         else{
@@ -247,6 +249,20 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
                 ballPositionX=Integer.parseInt(line)-1;
                 line = scanner.nextLine();
                 ballPositionY=Integer.parseInt(line)-1;
+                scanner.nextLine();
+
+                String lineMark = scanner.nextLine();
+                while(lineMark.isEmpty()==false) {
+                    wallsToMark.add(Integer.parseInt(lineMark));
+                    lineMark = scanner.nextLine();
+                    special.add(Integer.parseInt(lineMark));
+                    scanner.nextLine();
+                    lineMark = scanner.nextLine();
+                }
+
+
+
+
                 reading=false;
 
             }
@@ -654,8 +670,7 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
             }
         }
 
-        mazeWall[63].setSpecial(1);
-        mazeWall[63].setColor(this.getApplicationContext());
+
 
         ImageView leftBorderWallImage = (ImageView) findViewById(R.id.leftBorderWall);
         mazeWall[wallNumber] = new Wall(leftBorderWallImage);
@@ -697,6 +712,11 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
         playingBall.setHeight((int) (2d * block));
         playingBall.setCenter((int) ((4.714d + ballPositionX * 8.428) * block), (int) (((26.29d + ballPositionY * 8.428) * block)-offset));
         playingBall.setCorners();
+
+        for(int i=0;i<wallsToMark.size();i++){
+            mazeWall[wallsToMark.get(i)].setSpecial(special.get(i));
+            mazeWall[wallsToMark.get(i)].setColor(this.getApplicationContext());
+        }
 
         wallAmount = wallNumber-4;
 
