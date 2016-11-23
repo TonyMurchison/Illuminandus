@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         //User was too busy contemplating life. The lovely developers helped him out a little
 
         if(notYetStarted==true) {
-            Intent intent = new Intent(MainActivity.this, LevelSelectV2.class);
+            Intent intent = new Intent(MainActivity.this, MainLevelSelect.class);
             startActivity(intent);
             System.gc();
             finish();
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void startButtonClick(View v){
         notYetStarted=false;
-        Intent intent = new Intent(MainActivity.this,LevelSelectV2.class);
+        Intent intent = new Intent(MainActivity.this,MainLevelSelect.class);
         startActivity(intent);
         System.gc();
         finish();
