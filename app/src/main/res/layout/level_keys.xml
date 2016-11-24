@@ -6,6 +6,7 @@
     tools:context=".LevelPlayHiddenWalls"
     android:id="@+id/relativeLayout"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background"
 
     >
 

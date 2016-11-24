@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/hiddenWallsLayout"
+    android:id="@+id/changingWallsLayout"
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
     android:paddingTop="15dp">
@@ -19,11 +19,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="HIDDEN MAZE"
+            android:text="CHANGING MAZE"
             android:textColor="@color/white"
             android:gravity="center"
             android:textSize="30sp"
-            android:background="@drawable/button_hidden"
+            android:background="@drawable/button_changing"
             />
 
     </LinearLayout>
@@ -61,7 +61,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="1"
                         android:id="@+id/Button_1"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -76,7 +76,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="2"
                         android:id="@+id/Button_2"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -91,7 +91,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="3"
                         android:id="@+id/Button_3"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -106,7 +106,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="4"
                         android:id="@+id/Button_4"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -121,7 +121,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="5"
                         android:id="@+id/Button_5"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                 </LinearLayout>
@@ -143,7 +143,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="6"
                         android:id="@+id/Button_6"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -158,7 +158,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="7"
                         android:id="@+id/Button_7"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -173,7 +173,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="8"
                         android:id="@+id/Button_8"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -188,7 +188,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="9"
                         android:id="@+id/Button_9"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -203,7 +203,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="10"
                         android:id="@+id/Button_10"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                 </LinearLayout>
@@ -225,7 +225,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="11"
                         android:id="@+id/Button_11"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -240,7 +240,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="12"
                         android:id="@+id/Button_12"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -255,7 +255,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="13"
                         android:id="@+id/Button_13"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -270,7 +270,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="14"
                         android:id="@+id/Button_14"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -285,7 +285,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="15"
                         android:id="@+id/Button_15"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                 </LinearLayout>
@@ -307,7 +307,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="16"
                         android:id="@+id/Button_16"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -322,7 +322,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="17"
                         android:id="@+id/Button_17"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -337,7 +337,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="18"
                         android:id="@+id/Button_18"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -352,7 +352,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="19"
                         android:id="@+id/Button_19"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -367,7 +367,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="20"
                         android:id="@+id/Button_20"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                 </LinearLayout>
@@ -389,7 +389,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="21"
                         android:id="@+id/Button_21"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -404,7 +404,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="22"
                         android:id="@+id/Button_22"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -419,7 +419,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="23"
                         android:id="@+id/Button_23"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -434,7 +434,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="24"
                         android:id="@+id/Button_24"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -449,7 +449,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="25"
                         android:id="@+id/Button_25"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                 </LinearLayout>
@@ -471,7 +471,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="26"
                         android:id="@+id/Button_26"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -486,7 +486,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="27"
                         android:id="@+id/Button_27"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -501,7 +501,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="28"
                         android:id="@+id/Button_28"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -516,7 +516,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="29"
                         android:id="@+id/Button_29"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -531,7 +531,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="30"
                         android:id="@+id/Button_30"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                 </LinearLayout>
@@ -553,7 +553,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="31"
                         android:id="@+id/Button_31"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -568,7 +568,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="32"
                         android:id="@+id/Button_32"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -583,7 +583,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="33"
                         android:id="@+id/Button_33"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -598,7 +598,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="34"
                         android:id="@+id/Button_34"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -613,7 +613,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="35"
                         android:id="@+id/Button_35"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                 </LinearLayout>
@@ -635,7 +635,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="36"
                         android:id="@+id/Button_36"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -650,7 +650,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="37"
                         android:id="@+id/Button_37"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -665,7 +665,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="38"
                         android:id="@+id/Button_38"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -680,7 +680,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="39"
                         android:id="@+id/Button_39"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -695,7 +695,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="40"
                         android:id="@+id/Button_40"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                 </LinearLayout>
@@ -717,7 +717,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="41"
                         android:id="@+id/Button_41"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -732,7 +732,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="42"
                         android:id="@+id/Button_42"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -747,7 +747,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="43"
                         android:id="@+id/Button_43"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -762,7 +762,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="44"
                         android:id="@+id/Button_44"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -777,7 +777,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="45"
                         android:id="@+id/Button_45"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                 </LinearLayout>
@@ -799,7 +799,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="46"
                         android:id="@+id/Button_46"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -814,7 +814,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="47"
                         android:id="@+id/Button_47"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -829,7 +829,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="48"
                         android:id="@+id/Button_48"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -844,7 +844,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="49"
                         android:id="@+id/Button_49"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -859,7 +859,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="50"
                         android:id="@+id/Button_50"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                 </LinearLayout>
@@ -881,7 +881,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="51"
                         android:id="@+id/Button_51"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -896,7 +896,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="52"
                         android:id="@+id/Button_52"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -911,7 +911,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="53"
                         android:id="@+id/Button_53"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -926,7 +926,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="54"
                         android:id="@+id/Button_54"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -941,7 +941,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="55"
                         android:id="@+id/Button_55"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                 </LinearLayout>
@@ -963,7 +963,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="56"
                         android:id="@+id/Button_56"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -978,7 +978,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="57"
                         android:id="@+id/Button_57"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -993,7 +993,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="58"
                         android:id="@+id/Button_58"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -1008,7 +1008,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="59"
                         android:id="@+id/Button_59"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                     <Button
@@ -1023,7 +1023,7 @@
                         android:layout_marginRight="5dp"
                         android:tag="60"
                         android:id="@+id/Button_60"
-                        android:onClick="onButtonClickHiddenLevels"
+                        android:onClick="onButtonClickChangingLevels"
                         />
 
                 </LinearLayout>

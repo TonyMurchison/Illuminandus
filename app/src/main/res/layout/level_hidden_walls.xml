@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".LevelPlayHiddenWalls"
     android:id="@+id/relativeLayout"
+    android:background="@color/background"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
 
     >
@@ -13,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="125dp"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -42,42 +44,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Level 1"
-                android:id="@+id/levelTextView"
-                android:layout_weight="1"
-                />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/pickup_multi_v2"
-                android:layout_weight="1"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0/0"
-                android:id="@+id/powerUpsCounterTextView"
-                android:layout_weight="1"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="00:00/00:00"
-                android:id="@+id/timeTextView"
-                android:layout_weight="1"
-                />
-
-        </LinearLayout>
 
 
 

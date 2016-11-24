@@ -287,9 +287,7 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
 
     //go back to the level select screen
     public void quitLevelClick(View v){
-        Intent intent = new Intent(LevelPlayChangingWalls.this, LevelSelectV2.class);
-        //TODO dit goed zetten
-        intent.putExtra("levelNumber", levelNumber);
+        Intent intent = new Intent(LevelPlayChangingWalls.this, ChangingLevelSelect.class);
         startActivity(intent);
         finish();
     }

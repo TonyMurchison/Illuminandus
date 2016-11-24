@@ -28,6 +28,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 import android.os.Handler;
 
@@ -43,11 +44,8 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
     private int time;
     private int timeMinutes;
     private int timeSeconds;
-    private int parTimeMinutes;
-    private int parTimeSeconds;
     private int pausedTime=0;
     private int timeAtPause=0;
-    private int parTime;
     private int timePlayingBallHit;
 
     //game items
@@ -86,12 +84,6 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
     private int powerUpCounter=0;
     private int amountPowerUpsTouched=0;
 
-
-    private TextView levelTextView;
-    private TextView powerUpsCounterTextView;
-    private TextView timeTextView;
-    private String parTimeString;
-
     private boolean started = false; //dit is hopelijk tijdelijk om te zorgen dat de tijd niet negatief is bij de start
     private int currentApiVersion;
 
@@ -128,38 +120,14 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         speedAdjustment=screenWidth/1000d;
         block=screenWidth / 60d;
 
-        //set times
-        int parTimeArray [] = getResources().getIntArray(R.array.parTime);
-        parTime = parTimeArray[levelNumber];
-        parTimeMinutes=(parTime/(1000*60))%60;
-        parTimeSeconds=((parTime-(parTimeMinutes*60*1000))/1000)%60;
-        if(parTimeMinutes>9){
-            if(parTimeSeconds>9){
-                parTimeString=Integer.toString(parTimeMinutes)+":"+Integer.toString(parTimeSeconds);
-            }
-            else{
-                parTimeString=Integer.toString(parTimeMinutes)+":0"+Integer.toString(parTimeSeconds);
-            }
-        }
-        else{
-            if(parTimeSeconds>9){
-                parTimeString="0"+Integer.toString(parTimeMinutes)+":"+Integer.toString(parTimeSeconds);
-            }
-            else{
-                parTimeString="0"+Integer.toString(parTimeMinutes)+":0"+Integer.toString(parTimeSeconds);
-            }
-        }
-
 
         timeStart=(int)System.currentTimeMillis();
 
         readFile();
 
-        levelTextView = (TextView)findViewById(R.id.levelTextView);
-        levelTextView.setText("Level "+Integer.toString(levelNumber+1));
 
-        powerUpsCounterTextView = (TextView)findViewById(R.id.powerUpsCounterTextView);
-        timeTextView = (TextView)findViewById(R.id.timeTextView);
+
+
 
         //run the method that initializes the layout
         start();
@@ -354,12 +322,12 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         time = (int) (System.currentTimeMillis() - timeStart - pausedTime);
         for (int i = 0; i < wallNumber - 4; i++) {
             if (time - mazeWall[i].getTimeTouched() > visibleThreshold) {
-                mazeWall[i].setVisibility(show);
+                mazeWall[i].setVisibility(show);    //TODO
             }
         }
 
-        //show the ball when it has been hidden for more than 3 seconds
-        if(ballHidden==true && time>timePlayingBallHit+3000){
+        //show the ball when it has been hidden for more than 5 seconds
+        if(ballHidden==true && time>timePlayingBallHit+5000){
             playingBall.setVisibility(show);
             ballHidden=false;
         }
@@ -367,24 +335,6 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         //determine the current playing time in seconds and minutes
         timeMinutes = (time / (1000 * 60)) % 60;
         timeSeconds = ((time - (timeMinutes * 60 * 1000)) / 1000) % 60;
-
-        //display current time in game
-        if (timeMinutes < 10) {
-            if (timeSeconds < 10) {
-                timeTextView.setText("0" + Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds)+"/"+parTimeString);
-            } else {
-                timeTextView.setText("0" + Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds)+"/"+parTimeString);
-            }
-        } else {
-            if (timeSeconds < 10) {
-                timeTextView.setText(Integer.toString(timeMinutes) + ":0" + Integer.toString(timeSeconds)+"/"+parTimeString);
-            } else {
-                timeTextView.setText(Integer.toString(timeMinutes) + ":" + Integer.toString(timeSeconds)+"/"+parTimeString);
-            }
-        }
-
-
-
     }
 
     //restart level
@@ -394,8 +344,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
     //go back to the level select screen
     public void quitLevelClick(View v){
-        Intent intent = new Intent(LevelPlayHiddenWalls.this, LevelSelectV2.class);
-        intent.putExtra("levelNumber", levelNumber);
+        Intent intent = new Intent(LevelPlayHiddenWalls.this, HiddenLevelSelect.class);
         startActivity(intent);
         finish();
     }
@@ -451,7 +400,6 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         //hide the powerup and count it as hit
         if(powerUp.getHittable()) {
             amountPowerUpsTouched = amountPowerUpsTouched + 1;
-            powerUpsCounterTextView.setText(Integer.toString(amountPowerUpsTouched) + " / " + Integer.toString(powerUpCounter));
         }
 
         else return;
@@ -487,44 +435,15 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
     //this method is called when the last powerup has been picked up
     private void finishedLevel(){
-        //checks if a new high score has been achieved. If so this will be stored.
-        HighScoreEditor highScoreEditor = new HighScoreEditor();
-        int previous_score = highScoreEditor.getValue(this, "HighScore_" + levelNumber);
-        if(time < previous_score || previous_score == 0) {
-            highScoreEditor.saveInt(this, "HighScore_" + levelNumber, time);
-        }
 
         Intent intent = new Intent(LevelPlayHiddenWalls.this, FinishedScreen.class);
         intent.putExtra("levelNumber", levelNumber);
+        intent.putExtra("GameType","hidden");
         startActivity(intent);
         finish();
 
 
     }
-
-    //This method is called when the player hits the next level button
-    public void nextLevelButtonClick(View v){
-        UnlockEditor unlockCheck = new UnlockEditor();
-        //checks if the next level is unlocked
-        if(unlockCheck.requestUnlock(this, (levelNumber / 4)) || levelNumber % 4 != 3) {
-            if(levelNumber!=8) {
-                Intent intent = new Intent(LevelPlayHiddenWalls.this, LevelPlayHiddenWalls.class);
-                intent.putExtra("levelNumber", levelNumber + 1);
-
-                startActivity(intent);
-                finish();
-            }
-            else {
-                Toast toast = Toast.makeText(this, "Coming soon!", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        }
-        else{
-            Toast toast = Toast.makeText(this, "Next level not yet unlocked", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }
-
 
     //hides whole map
     public void pinkPowerUp(PowerUp powerUp){
@@ -577,9 +496,30 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
     //choses a random effect
     public void multiPowerUp(PowerUp powerUp){
-        //TODO add multi effects
-        powerUp.setInvisible();
-        powerUp.setHittable(false);
+        Random rand = new Random();
+        int x = rand.nextInt(5)+1;
+
+        switch (x){
+            case 1:
+                pinkPowerUp(powerUp);
+                break;
+
+            case 2:
+                redPowerUp(powerUp);
+                break;
+
+            case 3:
+                bluePowerUp(powerUp);
+                break;
+
+            case 4:
+                yellowPowerUp(powerUp);
+                break;
+
+            case 5:
+                greenPowerUp(powerUp);
+                break;
+        }
     }
 
     //this method will move the ball
@@ -592,9 +532,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         int a = alp.leftMargin;
         int b = alp.topMargin;
 
-        if (time > (parTime + 1000)) {
-            timeTextView.setTextColor(getResources().getColor(R.color.red));
-        }
+
 
         //while steps have to be taken:
         while (maxMovementX > stepsTakenX || maxMovenentY > stepsTakenY) {
@@ -847,8 +785,8 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
                     rl.addView(imagePowerUp, lp);
 
                     powerUps.add(powerUpCounter,new PowerUp(powerUpsPlacement[i][j], imagePowerUp));
-                    powerUps.get(powerUpCounter).setWidth((int) (2d * block));
-                    powerUps.get(powerUpCounter).setHeight((int) (2d * block));
+                    powerUps.get(powerUpCounter).setWidth((int) (3d * block));
+                    powerUps.get(powerUpCounter).setHeight((int) (3d * block));
                     powerUps.get(powerUpCounter).setCenter((int) ((double) j * 8.428d * block + 4.714d * block), (int) ((double) i * 8.428d *  block + block * 26.29d-offset));
                     powerUps.get(powerUpCounter).setCorners();
                     powerUpCounter = powerUpCounter + 1;
@@ -891,12 +829,11 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
 
 
-        playingBall.setWidth((int) (2d * block));
-        playingBall.setHeight((int) (2d * block));
+        playingBall.setWidth((int) (3d * block));
+        playingBall.setHeight((int) (3d * block));
         playingBall.setCenter((int) ((4.714d + ballPositionX * 8.428) * block), (int) (((26.29d + ballPositionY * 8.428) * block)-offset));
         playingBall.setCorners();
 
-        powerUpsCounterTextView.setText("0 / "+Integer.toString(powerUpCounter));
     }
 
 }

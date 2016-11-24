@@ -14,8 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 
-
-public class HiddenLevelSelect extends AppCompatActivity {
+public class ChangingLevelSelect extends AppCompatActivity {
     private Button[] buttons = new Button[60];
     private int levelsAmount = 60;
 
@@ -23,7 +22,7 @@ public class HiddenLevelSelect extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.hidden_level_select);
+        setContentView(R.layout.changing_level_select);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -31,7 +30,7 @@ public class HiddenLevelSelect extends AppCompatActivity {
         getSupportActionBar().hide();
 
 
-        final LinearLayout layout = (LinearLayout)findViewById(R.id.hiddenWallsLayout);
+        final LinearLayout layout = (LinearLayout)findViewById(R.id.changingWallsLayout);
         ViewTreeObserver vto = layout.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -54,7 +53,7 @@ public class HiddenLevelSelect extends AppCompatActivity {
 
     private void setButtons(){
         SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        int unlockedLevel = prefs.getInt("hiddenLevelProgress", 0);
+        int unlockedLevel = prefs.getInt("changingLevelProgress", 0);
 
         if(unlockedLevel==0){
             for(int i=1;i<levelsAmount;i++){
@@ -80,16 +79,9 @@ public class HiddenLevelSelect extends AppCompatActivity {
         }
     }
 
-    public void onButtonClickHiddenLevels(View v){
+    public void onButtonClickChangingLevels(View v){
         int buttonPressed = Integer.parseInt((String)v.getTag());
-        Intent intent;
-        if(buttonPressed<6){
-            intent = new Intent(HiddenLevelSelect.this, InfoScreenLevel.class);
-        }
-        else {
-            intent = new Intent(HiddenLevelSelect.this, LevelPlayHiddenWalls.class);
-        }
-
+        Intent intent = new Intent(ChangingLevelSelect.this, LevelPlayChangingWalls.class);
         intent.putExtra("levelNumber", buttonPressed-1);
         startActivity(intent);
         finish();
@@ -98,7 +90,7 @@ public class HiddenLevelSelect extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        Intent intent = new Intent(HiddenLevelSelect.this, MainLevelSelect.class);
+        Intent intent = new Intent(ChangingLevelSelect.this, MainLevelSelect.class);
         startActivity(intent);
         finish();
     }

@@ -32,6 +32,8 @@ public class MainLevelSelect extends AppCompatActivity {
         mAdView.loadAd(adRequest);
     }
 
+    //TODO uitleg geven over de level types als je een level select start
+
     public void mainLevelSelectButtonClick(View v){
         String buttonPressed = (String)v.getTag();
         Intent intent = new Intent();
@@ -40,7 +42,7 @@ public class MainLevelSelect extends AppCompatActivity {
             intent = new Intent(MainLevelSelect.this, HiddenLevelSelect.class);
         }
         if(buttonPressed.equals("changing")){
-            intent = new Intent(MainLevelSelect.this, LevelPlayChangingWalls.class);
+            intent = new Intent(MainLevelSelect.this, ChangingLevelSelect.class);
         }
         if(buttonPressed.equals("locked")){
             intent = new Intent(MainLevelSelect.this, LevelPlayKeys.class);

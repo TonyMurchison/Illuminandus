@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/black">
+    android:background="@color/background">
 
 
     <LinearLayout
@@ -64,6 +64,22 @@
             android:textSize="30sp"
             android:textColor="@color/white"
             />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="normal maze"
+            android:layout_weight="1"
+            android:background="@drawable/button_normal"
+            android:layout_margin="5dp"
+            android:onClick="mainLevelSelectButtonClick"
+            android:tag="locked"
+            android:id="@+id/normalButton"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            />
+
+
 
 
 

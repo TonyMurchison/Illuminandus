@@ -20,9 +20,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".LevelSelect" />
-        <activity android:name=".LevelSelectV2" />
         <activity android:name=".MainLevelSelect"/>
         <activity android:name=".HiddenLevelSelect"/>
+        <activity android:name=".ChangingLevelSelect"/>
         <activity android:name=".LevelPlay" />
         <activity android:name=".LevelPlayHiddenWalls" />
         <activity android:name=".LevelPlayChangingWalls" />

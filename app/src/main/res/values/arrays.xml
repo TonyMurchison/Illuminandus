@@ -13,25 +13,25 @@
     </integer-array>
 
     <string-array name="levelNames">
-        <item>Level 1: The Blue Ball</item>
-        <item>Level 2: Lorem ipsum</item>
-        <item>Level 3: Lorem ipsum</item>
-        <item>Level 4: Lorem ipsum</item>
-        <item>Level 5: Lorem ipsum</item>
-        <item>Level 6: Lorem ipsum</item>
-        <item>Level 7: Lorem ipsum</item>
-        <item>Level 8: Lorem ipsum</item>
-        <item>Level 9: Lorem ipsum</item>
+        <item>The Blue Power-up</item>
+        <item>The Pink Power-up</item>
+        <item>The Red Power-up</item>
+        <item>The Yellow Power-up</item>
+        <item>Lorem ipsum</item>
+        <item>Lorem ipsum</item>
+        <item>Lorem ipsum</item>
+        <item>Lorem ipsum</item>
+        <item>Lorem ipsum</item>
 
 
 
     </string-array>
 
     <string-array name="infoStrings">
-        <item>The blue ball will reveal the whole map for 8 seconds. Use this time wisely!</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</item>
+        <item>The blue Power-up will reveal the whole map for 8 seconds. Use this time wisely!</item>
+        <item>The pink Power-up will hide all the walls. Do not get lost!</item>
+        <item>The red Power-up will invert the controls of the ball. Things are getting harder!</item>
+        <item>The yellow Power-up will hide the playingball for 5 seconds.</item>
         <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</item>
         <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</item>
         <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</item>
