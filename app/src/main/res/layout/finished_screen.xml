@@ -12,12 +12,26 @@
         android:layout_height="wrap_content"
         android:text="FINISED"
         android:gravity="center"
+        android:textColor="@color/white"
         android:textSize="50sp"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="GO BACK TO LEVEL SELECT"
         android:onClick="returnToLevelSelect"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next level"
+        android:onClick="nextLevelButton"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="restart"
+        android:onClick="restartLevelButton"/>
 
 
     <RelativeLayout

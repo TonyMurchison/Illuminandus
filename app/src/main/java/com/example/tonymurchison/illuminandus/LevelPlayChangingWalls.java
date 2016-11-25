@@ -41,6 +41,10 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
     private int ballPositionX;
     private int ballPositionY;
 
+    private Exit exitPoint;
+    private int exitPositionX;
+    private int exitPositionY;
+
     //remaining items
     private SensorManager sManager;
     private int x = 0;          //stores the angle of the phone around the x-axis
@@ -96,6 +100,9 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
         //set ball
         ImageView ballImage = (ImageView)findViewById(R.id.ball);
         playingBall = new Ball(ballImage);
+
+        ImageView exitImage = (ImageView)findViewById(R.id.exit);
+        exitPoint = new Exit(exitImage);
 
         //set the things that are depended of the screen resolution
         Display display = getWindowManager().getDefaultDisplay();
@@ -238,7 +245,17 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
                 ballPositionX=Integer.parseInt(line)-1;
                 line = scanner.nextLine();
                 ballPositionY=Integer.parseInt(line)-1;
+
+                scanner.nextLine();
+
+                line = scanner.nextLine();
+                exitPositionX=Integer.parseInt(line)-1;
+                line = scanner.nextLine();
+                exitPositionY=Integer.parseInt(line)-1;
+
                 reading=false;
+
+
 
             }
         }
@@ -401,6 +418,7 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
 
         Intent intent = new Intent(LevelPlayChangingWalls.this, FinishedScreen.class);
         intent.putExtra("levelNumber", levelNumber);
+        intent.putExtra("GameType","changing");
         startActivity(intent);
         finish();
 
@@ -428,6 +446,10 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
                 if(mazeWall[i].getHittable()==true) {
                     intersectWall(playingBall, mazeWall[i]);
                 }
+            }
+
+            if(exitPoint.getHittable()==true) {
+                intersectExit(playingBall, exitPoint);
             }
 
             //this will run if there are steps left to be done in the x direction
@@ -467,6 +489,46 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
         alp.leftMargin = a;
         alp.topMargin = b;
         playingBall.setLayoutParams(alp);   //render layout
+    }
+
+    private void hitExit(){
+        exitPoint.setVisibility(hide);
+        exitPoint.setHittable(false);
+
+        finishedLevel();
+    }
+
+    private void intersectExit(Ball ball, Exit exit){
+        //top left corner of the ball
+        if (ball.getTopLeftX() >= exit.getTopLeftX() && ball.getTopLeftX() <= exit.getTopRightX()) {              //is the x position of the ball between those of the two sides of the power up
+            if (ball.getTopLeftY() >= exit.getTopLeftY() && ball.getTopLeftY() <= exit.getBottomLeftY()) {        //is the y position of the ball between those of the two sides of the power up
+                hitExit();
+                return;
+            }
+        }
+
+        //top rigth corner of the ball
+        if (ball.getTopRightX() >= exit.getTopLeftX() && ball.getTopRightX() <= exit.getTopRightX()) {            //is the x position of the ball between those of the two sides of the power up
+            if (ball.getTopRightY() >= exit.getTopLeftY() && ball.getTopRightY() <= exit.getBottomLeftY()) {      //is the y position of the ball between those of the two sides of the power up
+                hitExit();
+                return;
+            }
+        }
+
+        //bottom left corner of the ball
+        if (ball.getBottomLeftX() >= exit.getBottomLeftX() && ball.getBottomLeftX() <= exit.getBottomRightX()) {  //is the x position of the ball between those of the two sides of the power up
+            if (ball.getBottomLeftY() >= exit.getTopLeftY() && ball.getBottomLeftY() <= exit.getBottomLeftY()) {  //is the y position of the ball between those of the two sides of the power up
+                hitExit();
+                return;
+            }
+        }
+
+        //bottom rigth corner of the ball
+        if (ball.getBottomRightX() >= exit.getBottomLeftX() && ball.getBottomRightX() <= exit.getBottomRightX()) {//is the x position of the ball between those of the two sides of the power up
+            if (ball.getBottomRightY() >= exit.getTopLeftY() && ball.getBottomRightY() <= exit.getBottomLeftY()) {//is the y position of the ball between those of the two sides of the power up
+                hitExit();
+            }
+        }
     }
 
     //checks if a certain wall and the playing ball intersect
@@ -654,6 +716,12 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
         playingBall.setHeight((int) (2d * block));
         playingBall.setCenter((int) ((4.714d + ballPositionX * 8.428) * block), (int) (((26.29d + ballPositionY * 8.428) * block)-offset));
         playingBall.setCorners();
+
+        exitPoint.setWidth((int) (2d * block));
+        exitPoint.setHeight((int) (2d * block));
+        exitPoint.setCenter((int) ((4.714d + exitPositionX * 8.428) * block), (int) (((26.29d + exitPositionY * 8.428) * block)-offset));
+        exitPoint.setCorners();
+
 
         wallAmount = wallNumber-4;
 

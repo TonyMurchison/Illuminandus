@@ -18,6 +18,14 @@
         android:paddingTop="5dp">
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/version"
+            android:textColor="@color/white"
+            android:layout_gravity="bottom"
+            android:textSize="10sp"/>
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Game Modes"
@@ -73,11 +81,13 @@
             android:background="@drawable/button_normal"
             android:layout_margin="5dp"
             android:onClick="mainLevelSelectButtonClick"
-            android:tag="locked"
+            android:tag="normal"
             android:id="@+id/normalButton"
             android:textSize="30sp"
             android:textColor="@color/white"
             />
+
+
 
 
 

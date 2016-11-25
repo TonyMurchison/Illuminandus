@@ -36,8 +36,10 @@ public class MainLevelSelect extends AppCompatActivity {
 
     public void mainLevelSelectButtonClick(View v){
         String buttonPressed = (String)v.getTag();
-        Intent intent = new Intent();
+        Intent intent = new Intent(MainLevelSelect.this, InfoScreenGameType.class);
+        intent.putExtra("gameType", buttonPressed);
 
+        /*
         if(buttonPressed.equals("hidden")){
             intent = new Intent(MainLevelSelect.this, HiddenLevelSelect.class);
         }
@@ -45,9 +47,13 @@ public class MainLevelSelect extends AppCompatActivity {
             intent = new Intent(MainLevelSelect.this, ChangingLevelSelect.class);
         }
         if(buttonPressed.equals("locked")){
-            intent = new Intent(MainLevelSelect.this, LevelPlayKeys.class);
+            intent = new Intent(MainLevelSelect.this, LockedLevelSelect.class);
         }
 
+        if(buttonPressed.equals("normal")){
+            intent = new Intent(MainLevelSelect.this, NormalLevelSelect.class);
+        }
+*/
         startActivity(intent);
         finish();
     }

@@ -322,7 +322,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         time = (int) (System.currentTimeMillis() - timeStart - pausedTime);
         for (int i = 0; i < wallNumber - 4; i++) {
             if (time - mazeWall[i].getTimeTouched() > visibleThreshold) {
-                mazeWall[i].setVisibility(show);    //TODO
+                mazeWall[i].setVisibility(hide);    //TODO
             }
         }
 
@@ -435,7 +435,6 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
     //this method is called when the last powerup has been picked up
     private void finishedLevel(){
-
         Intent intent = new Intent(LevelPlayHiddenWalls.this, FinishedScreen.class);
         intent.putExtra("levelNumber", levelNumber);
         intent.putExtra("GameType","hidden");
@@ -685,7 +684,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         float wy = (ball.getWidth() + wall.getWidth()) * (ball.getCenterY() - wall.getCenterY());
         float hx = (ball.getHeight() + wall.getHeight()) * (ball.getCenterX() - wall.getCenterX());
 
-        wall.setVisibility(1f);
+        wall.setVisibility(show);
         wall.setTimeTouched((int) System.currentTimeMillis() - timeStart - pausedTime);
 
         if (wy > hx) {
@@ -707,6 +706,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         Resources r = getResources();
         double offset;
         DisplayMetrics metrics = getResources().getDisplayMetrics();
+
 
         if(metrics.densityDpi>400 && metrics.densityDpi <=720){
             offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
@@ -731,7 +731,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
                     mazeWall[wallNumber].setHeight((int)(1d * block));
                     mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d * block + 4.714d *  block), (int) ((double) i * 8.428d *  block +  block * 30.504d-offset));
                     mazeWall[wallNumber].setCorners();
-                    mazeWall[wallNumber].setVisibility(show);
+                    mazeWall[wallNumber].setVisibility(hide);
                     wallNumber = wallNumber + 1;
                 }
             }
@@ -747,7 +747,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
                     mazeWall[wallNumber].setHeight((int)(9.428d * block)); //8.25
                     mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d *  block +  block * 8.928d), (int) ((double) i * 8.428d * block +  block * 26.29d-offset));
                     mazeWall[wallNumber].setCorners();
-                    mazeWall[wallNumber].setVisibility(show);
+                    mazeWall[wallNumber].setVisibility(hide);
                     wallNumber = wallNumber + 1;
                 }
             }
@@ -829,8 +829,8 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
 
 
-        playingBall.setWidth((int) (3d * block));
-        playingBall.setHeight((int) (3d * block));
+        playingBall.setWidth((int) (2d * block));
+        playingBall.setHeight((int) (2d * block));
         playingBall.setCenter((int) ((4.714d + ballPositionX * 8.428) * block), (int) (((26.29d + ballPositionY * 8.428) * block)-offset));
         playingBall.setCorners();
 

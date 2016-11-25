@@ -17,11 +17,8 @@
         <item>The Pink Power-up</item>
         <item>The Red Power-up</item>
         <item>The Yellow Power-up</item>
-        <item>Lorem ipsum</item>
-        <item>Lorem ipsum</item>
-        <item>Lorem ipsum</item>
-        <item>Lorem ipsum</item>
-        <item>Lorem ipsum</item>
+        <item>The Green Power-up</item>
+        <item>The Multi Power-up</item>
 
 
 
@@ -32,13 +29,18 @@
         <item>The pink Power-up will hide all the walls. Do not get lost!</item>
         <item>The red Power-up will invert the controls of the ball. Things are getting harder!</item>
         <item>The yellow Power-up will hide the playingball for 5 seconds.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</item>
+        <item>The green Power-up will show walls that are inside a certain radius of the ball.</item>
+        <item>The multi Power-up will have a randomly chosen effect.</item>
 
     </string-array>
+
+    <string-array name="explenation">
+        <item>The hidden maze is a game mode where all the walls are hidden. You can make them appear by hitting them with the ball. The goal is to collect all the power-ups in the level, but be aware that not all are "helpful" </item>
+        <item>The changing maze is a game mode where you have to reach the exit but with a twist. Every few seconds the maze will shift the walls around, so be fast!</item>
+        <item>The locked maze is a game mode where you have to reach the exit but not before you have collected the keys to open the doors that are obstructing your path!</item>
+        <item>The normal maze is the traditional maze game where you have to reach the exit. Kick back and relax!</item>
+    </string-array>
+
+
 
 </resources>

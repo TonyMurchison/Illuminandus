@@ -1102,6 +1102,12 @@
         android:id="@+id/ball"
         android:src="@drawable/player_character_v2"/>
 
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:id="@+id/exit"
+        android:src="@drawable/pickup_multi_v2"/>
+
 
 
 
