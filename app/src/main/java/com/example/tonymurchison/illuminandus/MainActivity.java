@@ -22,6 +22,17 @@ public class MainActivity extends AppCompatActivity {
     boolean notYetStarted = true;
 */
 
+    //TODO zorgen dat muren niet uitsteken
+    //TODO zorgen dat je de bewegingen kan calibreren naar een nieuw 0 punt
+    //TODO rode bal minder heftig maken
+    //TODO timing in hidden analyseren of het goed is
+    //TODO pauze scherm en eind scherm mooi maken
+    //TODO knoppen mooi maken
+    //TODO tekst vergroten
+    //TODO changing mazes zorgen dat de muren niet problemen geven met de bal
+    //TODO visuele indicatie van de tijd die een powerup nog actief is
+    //TODO level nummer laten zien in game
+
 
 
     @Override
