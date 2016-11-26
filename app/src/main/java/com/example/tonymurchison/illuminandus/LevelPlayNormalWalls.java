@@ -74,6 +74,7 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
     private boolean started=false;
     private int wallAmount=0;
 
+    private SystemUiHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,10 +97,10 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 
 
         //set ball
-        ImageView ballImage = (ImageView)findViewById(R.id.ball);
+        ImageView ballImage = (ImageView) findViewById(R.id.ball);
         playingBall = new Ball(ballImage);
 
-        ImageView exitImage = (ImageView)findViewById(R.id.exit);
+        ImageView exitImage = (ImageView) findViewById(R.id.exit);
         exitPoint = new Exit(exitImage);
 
         //set the things that are depended of the screen resolution
@@ -107,73 +108,38 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         Point size = new Point();
         display.getSize(size);
         screenWidth = size.x;
-        speedAdjustment=screenWidth/1000d;
-        block=screenWidth / 60d;
+        speedAdjustment = screenWidth / 1000d;
+        block = screenWidth / 60d;
 
         readFile();
 
 
         //run the method that initializes the layout
         start();
-        started=true;
+        started = true;
 
-        currentApiVersion = Build.VERSION.SDK_INT;
-
-        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-
-        // This work only for android 4.4+
-        if(currentApiVersion >= Build.VERSION_CODES.KITKAT)
-        {
-
-            getWindow().getDecorView().setSystemUiVisibility(flags);
-
-            // Code below is to handle presses of Volume up or Volume down.
-            // Without this, after pressing volume buttons, the navigation bar will
-            // show up and won't hide
-            final View decorView = getWindow().getDecorView();
-            decorView
-                    .setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener()
-                    {
-
-                        @Override
-                        public void onSystemUiVisibilityChange(int visibility)
-                        {
-                            if((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0)
-                            {
-                                decorView.setSystemUiVisibility(flags);
-                            }
-                        }
-                    });
-        }
-
-
+        helper = new SystemUiHelper(
+                this,
+                3,   // Choose from one of the levels
+                0);  // There are additional flags, usually this will be 0
     }
 
-    @SuppressLint("NewApi")
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus)
-    {
-        super.onWindowFocusChanged(hasFocus);
-        if(currentApiVersion >= Build.VERSION_CODES.KITKAT && hasFocus)
-        {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
-    }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_UP:
+                if (helper.isShowing()){
+                    helper.hide();
+                }else{
+                    helper.show();
+                }
+                break;
+        }
+
+
         return super.onTouchEvent(event);
 
     }
@@ -311,6 +277,9 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         super.onResume();
         //TODO zorgen dat het goed komt als je terug komt
         sManager.registerListener(this, sManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_FASTEST);
+
+        helper.hide();
+
     }
 
     @Override

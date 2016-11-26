@@ -23,8 +23,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -78,6 +76,9 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
 
     private int wallAmount=0;
 
+    private SystemUiHelper helper;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,64 +120,30 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
         //run the method that initializes the layout
         start();
 
-        currentApiVersion = Build.VERSION.SDK_INT;
+        helper = new SystemUiHelper(
+                this,
+                3,   // Choose from one of the levels
+                0);  // There are additional flags, usually this will be 0
 
-        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-
-        // This work only for android 4.4+
-        if(currentApiVersion >= Build.VERSION_CODES.KITKAT)
-        {
-
-            getWindow().getDecorView().setSystemUiVisibility(flags);
-
-            // Code below is to handle presses of Volume up or Volume down.
-            // Without this, after pressing volume buttons, the navigation bar will
-            // show up and won't hide
-            final View decorView = getWindow().getDecorView();
-            decorView
-                    .setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener()
-                    {
-
-                        @Override
-                        public void onSystemUiVisibilityChange(int visibility)
-                        {
-                            if((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0)
-                            {
-                                decorView.setSystemUiVisibility(flags);
-                            }
-                        }
-                    });
-        }
 
 
     }
 
-    @SuppressLint("NewApi")
     @Override
-    public void onWindowFocusChanged(boolean hasFocus)
-    {
-        super.onWindowFocusChanged(hasFocus);
-        if(currentApiVersion >= Build.VERSION_CODES.KITKAT && hasFocus)
-        {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_UP:
+                if (helper.isShowing()){
+                    helper.hide();
+                }else{
+                    helper.show();
+                }
+                break;
         }
-    }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
+
         return super.onTouchEvent(event);
+
 
     }
 
@@ -335,6 +302,10 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
         super.onResume();
         //TODO zorgen dat het goed komt als je terug komt
         sManager.registerListener(this, sManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_FASTEST);
+
+
+
+        helper.hide();
     }
 
     @Override
@@ -628,6 +599,8 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
         }
     }
 
+
+
     public void start() {
         Resources r = getResources();
         double offset;
@@ -640,6 +613,11 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
 
             offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, r.getDisplayMetrics());
         }
+
+
+
+
+
         //TODO testen of dit op alle schermen werkt
 
 

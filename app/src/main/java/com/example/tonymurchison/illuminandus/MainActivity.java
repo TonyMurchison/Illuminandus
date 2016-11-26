@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
+    /*
     private ImageView startButton;
     private ImageView fadeView;
     private ImageView background;
@@ -19,7 +20,21 @@ public class MainActivity extends AppCompatActivity {
     private int screenHeight;
     private long timeAtStart=0;
     boolean notYetStarted = true;
+*/
 
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Intent intent = new Intent(this, MainLevelSelect.class);
+        startActivity(intent);
+        finish();
+    }
+
+
+    /*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Display display = getWindowManager().getDefaultDisplay();
@@ -65,4 +80,5 @@ public class MainActivity extends AppCompatActivity {
         System.gc();
         finish();
     }
+    */
 }

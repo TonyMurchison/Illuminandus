@@ -35,7 +35,7 @@
     </string-array>
 
     <string-array name="explenation">
-        <item>The hidden maze is a game mode where all the walls are hidden. You can make them appear by hitting them with the ball. The goal is to collect all the power-ups in the level, but be aware that not all are "helpful" </item>
+        <item>The hidden maze is a game mode where all the walls are hidden. You can make them appear by hitting them with the ball, but be aware that they will hide again after a couple of seconds. The goal is to collect all the power-ups in the level, but be aware that not all are "helpful" </item>
         <item>The changing maze is a game mode where you have to reach the exit but with a twist. Every few seconds the maze will shift the walls around, so be fast!</item>
         <item>The locked maze is a game mode where you have to reach the exit but not before you have collected the keys to open the doors that are obstructing your path!</item>
         <item>The normal maze is the traditional maze game where you have to reach the exit. Kick back and relax!</item>

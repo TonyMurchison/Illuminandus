@@ -83,31 +83,32 @@ public class FinishedScreen extends AppCompatActivity {
     }
 
     public void nextLevelButton(View v){
-        Intent intent = new Intent();
-        if(gameType.equals("hidden")){
-            if(levelNumber<6){
-                intent = new Intent(FinishedScreen.this, InfoScreenLevel.class);
+        if(levelNumber<59) {
+            Intent intent = new Intent();
+            if (gameType.equals("hidden")) {
+                if (levelNumber < 6) {
+                    intent = new Intent(FinishedScreen.this, InfoScreenLevel.class);
+                } else {
+                    intent = new Intent(FinishedScreen.this, LevelPlayHiddenWalls.class);
+                }
             }
-            else {
-                intent = new Intent(FinishedScreen.this, LevelPlayHiddenWalls.class);
+
+            if (gameType.equals("changing")) {
+                intent = new Intent(FinishedScreen.this, LevelPlayChangingWalls.class);
             }
-        }
 
-        if(gameType.equals("changing")){
-            intent = new Intent(FinishedScreen.this, LevelPlayChangingWalls.class);
-        }
+            if (gameType.equals("locked")) {
+                intent = new Intent(FinishedScreen.this, LevelPlayKeys.class);
+            }
 
-        if(gameType.equals("locked")){
-            intent = new Intent(FinishedScreen.this, LevelPlayKeys.class);
-        }
+            if (gameType.equals("normal")) {
+                intent = new Intent(FinishedScreen.this, LevelPlayNormalWalls.class);
+            }
 
-        if(gameType.equals("normal")){
-            intent = new Intent(FinishedScreen.this, LevelPlayNormalWalls.class);
+            intent.putExtra("levelNumber", levelNumber + 1);
+            startActivity(intent);
+            finish();
         }
-
-        intent.putExtra("levelNumber", levelNumber+1);
-        startActivity(intent);
-        finish();
 
     }
 

@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.tonymurchison.illuminandus"
-        minSdkVersion 19
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -26,8 +26,12 @@ dependencies {
     compile 'com.google.firebase:firebase-ads:9.6.1'
     compile 'com.google.firebase:firebase-messaging:9.6.1'
     compile 'com.google.android.gms:play-services-ads:9.6.1'
+    compile 'com.google.firebase:firebase-crash:9.6.1'
+    compile 'com.google.firebase:firebase-core:9.6.1'
     testCompile 'junit:junit:4.12'
 }
+
+
 
 
 
