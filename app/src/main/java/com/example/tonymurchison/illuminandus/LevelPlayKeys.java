@@ -625,6 +625,9 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
         double offset;
         DisplayMetrics metrics = getResources().getDisplayMetrics();
 
+        offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
+
+        /*
         if(metrics.densityDpi>400 && metrics.densityDpi <=720){
             offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
         }
@@ -632,6 +635,8 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
 
             offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, r.getDisplayMetrics());
         }
+
+*/
 
 
         for (int i = 0; i < 10; i++) {

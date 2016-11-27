@@ -610,7 +610,9 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
         Resources r = getResources();
         double offset;
         DisplayMetrics metrics = getResources().getDisplayMetrics();
+        offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
 
+        /*
         if(metrics.densityDpi>400 && metrics.densityDpi <=720){
             offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
         }
@@ -619,7 +621,7 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
             offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, r.getDisplayMetrics());
         }
 
-
+*/
 
 
 

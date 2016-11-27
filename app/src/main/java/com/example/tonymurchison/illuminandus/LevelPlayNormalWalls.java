@@ -536,6 +536,9 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         double offset;
         DisplayMetrics metrics = getResources().getDisplayMetrics();
 
+        offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
+
+        /*
         if(metrics.densityDpi>400 && metrics.densityDpi <=720){
             offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
         }
@@ -543,6 +546,8 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 
             offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, r.getDisplayMetrics());
         }
+
+*/
 
 
 
