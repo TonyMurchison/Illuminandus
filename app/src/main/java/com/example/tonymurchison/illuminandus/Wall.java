@@ -15,9 +15,7 @@ class Wall extends GameObjects {
 
     //constructor
     Wall(ImageView wall){
-
         wallImage = wall;
-
     }
 
     void setHittable(boolean x){
