@@ -33,8 +33,6 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEventListener{
-    private AdView mAdView;
-
     //game items
     private Ball playingBall;
     private int ballPositionX;
@@ -66,10 +64,6 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
     private float show = 1;
     private float hide = 0;
 
-
-    private boolean started=false;
-    private int wallAmount=0;
-
     private SystemUiHelper helper;
 
     private SensorEvent eventStorage;
@@ -94,7 +88,7 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        mAdView = (AdView) findViewById(R.id.adView);
+        AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
@@ -121,7 +115,6 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 
         //run the method that initializes the layout
         start();
-        started = true;
 
         SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         offsetMoveX = (double) prefs.getInt("OffsetX", 0);
@@ -192,7 +185,7 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         Scanner scanner = new Scanner(inputStream);
         boolean reading = true;
         String level = "Level "+Integer.toString(levelNumber+1);
-        while(reading==true){
+        while(reading){
             if(level.equals(scanner.nextLine())){
 
                 for(int i=0;i<16;i++){
@@ -367,12 +360,12 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         while (maxMovementX > stepsTakenX || maxMovenentY > stepsTakenY) {
             //check all the walls
             for (int i = 0; i < wallNumber; i++) {
-                if(mazeWall[i].getHittable()==true) {
+                if(mazeWall[i].getHittable()) {
                     intersectWall(playingBall, mazeWall[i]);
                 }
             }
 
-            if(exitPoint.getHittable()==true) {
+            if(exitPoint.getHittable()) {
                 intersectExit(playingBall, exitPoint);
             }
 
@@ -565,7 +558,7 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
                 mazeWall[wallNumber].setCenter((int) ((double) j * 4.916d * block + 2.857d *  block), (int) ((double) i * 4.916d *  block +  block * 27.514d-offset));
                 mazeWall[wallNumber].setCorners();
 
-                if (horizontalWalls[i][j] == true) {
+                if (horizontalWalls[i][j]) {
                     mazeWall[wallNumber].setHittable(true);
                     mazeWall[wallNumber].setVisibility(show);
                 }
@@ -587,7 +580,7 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
                 mazeWall[wallNumber].setCenter((int) ((double) j * 4.916d *  block +  block * 5.416d), (int) ((double) i * 4.916d * block +  block * 25.056d-offset));
                 mazeWall[wallNumber].setCorners();
 
-                if (verticalWalls[i][j] == true) {
+                if (verticalWalls[i][j]) {
                     mazeWall[wallNumber].setHittable(true);
                     mazeWall[wallNumber].setVisibility(show);
                 }
@@ -645,11 +638,6 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         exitPoint.setHeight((int) (2d * block));
         exitPoint.setCenter((int) ((2.857d + exitPositionX * 4.916) * block), (int) (((25.056d + exitPositionY * 4.916) * block)-offset));
         exitPoint.setCorners();
-
-
-
-        wallAmount = wallNumber-4;
-
     }
 
 

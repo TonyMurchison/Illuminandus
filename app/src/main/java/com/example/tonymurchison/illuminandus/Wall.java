@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-public class Wall extends GameObjects {
+class Wall extends GameObjects {
     private float opacity;
     private ImageView wallImage;
     int timeTouched=0;
@@ -14,30 +14,30 @@ public class Wall extends GameObjects {
     Context context;
 
     //constructor
-    public Wall(ImageView wall){
+    Wall(ImageView wall){
 
         wallImage = wall;
 
     }
 
-    public void setHittable(boolean x){
+    void setHittable(boolean x){
         hittable = x;
     }
 
 
-    public boolean getHittable(){
+    boolean getHittable(){
         return hittable;
     }
 
-    public void setSpecial(int i){
+    void setSpecial(int i){
         special = i;
     }
 
-    public int getSpecial(){
+    int getSpecial(){
         return special;
     }
 
-    public void setColor(Context c){
+    void setColor(Context c){
         context = c;
         if(special==1) {
             wallImage.setBackgroundColor(context.getResources().getColor(R.color.greenKey));
@@ -51,7 +51,7 @@ public class Wall extends GameObjects {
     }
 
     //This method sets the coordinates for the four corners
-    public void setCorners() {
+    void setCorners() {
         if(width>height){
             //top left corner
             topLeftX=(centerX-(width/2)+2);
@@ -68,7 +68,6 @@ public class Wall extends GameObjects {
             //bottom left corner
             bottomLeftX=(centerX-(width/2)+2);
             bottomLeftY=(centerY+(height/2));
-            return;
         }
 
         else{
@@ -90,11 +89,11 @@ public class Wall extends GameObjects {
         }
     }
 
-    public float getVisility(){
+    float getVisility(){
         return opacity;
     }
 
-    public void setVisibility(float i){
+    void setVisibility(float i){
         opacity=i;
         if(i==0){
             wallImage.setVisibility(View.INVISIBLE  );
@@ -104,19 +103,19 @@ public class Wall extends GameObjects {
         }
     }
 
-    public void setWidth(int widthInput) {
+    void setWidth(int widthInput) {
         width = widthInput;
         wallImage.requestLayout();
         wallImage.getLayoutParams().width = width;
     }
 
-    public void setHeight(int heightInput){
+    void setHeight(int heightInput){
         height = heightInput;
         wallImage.requestLayout();
         wallImage.getLayoutParams().height = height;
     }
 
-    public void setCenter(int x, int y){
+    void setCenter(int x, int y){
         centerX=x;
         centerY=y;
         RelativeLayout.LayoutParams alp = getLayoutParams();
@@ -126,19 +125,19 @@ public class Wall extends GameObjects {
 
     }
 
-    public void setTimeTouched(int timeInput){
+    void setTimeTouched(int timeInput){
         timeTouched=timeInput;
     }
 
-    public int getTimeTouched(){
+    int getTimeTouched(){
         return timeTouched;
     }
 
-    public RelativeLayout.LayoutParams getLayoutParams(){
+    RelativeLayout.LayoutParams getLayoutParams(){
         return (RelativeLayout.LayoutParams) wallImage.getLayoutParams();
     }
 
-    public void setLayoutParams(RelativeLayout.LayoutParams alp){
+    void setLayoutParams(RelativeLayout.LayoutParams alp){
         wallImage.setLayoutParams(alp);
     }
 }

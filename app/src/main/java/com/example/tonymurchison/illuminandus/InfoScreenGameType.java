@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 public class InfoScreenGameType extends AppCompatActivity {
     int levelNumber;
-    String levelString[];
-    String infoString[];
     String gameType;
 
 

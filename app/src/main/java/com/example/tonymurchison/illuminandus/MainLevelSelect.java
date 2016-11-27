@@ -13,9 +13,6 @@ import com.google.android.gms.ads.AdView;
 import com.tjeannin.apprate.AppRate;
 
 public class MainLevelSelect extends AppCompatActivity {
-    private AdView mAdView;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +24,7 @@ public class MainLevelSelect extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
 
-        mAdView = (AdView) findViewById(R.id.adView);
+        AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
@@ -41,22 +38,6 @@ public class MainLevelSelect extends AppCompatActivity {
         String buttonPressed = (String)v.getTag();
         Intent intent = new Intent(MainLevelSelect.this, InfoScreenGameType.class);
         intent.putExtra("gameType", buttonPressed);
-
-        /*
-        if(buttonPressed.equals("hidden")){
-            intent = new Intent(MainLevelSelect.this, LevelSelectHidden.class);
-        }
-        if(buttonPressed.equals("changing")){
-            intent = new Intent(MainLevelSelect.this, LevelSelectChanging.class);
-        }
-        if(buttonPressed.equals("locked")){
-            intent = new Intent(MainLevelSelect.this, LevelSelectLocked.class);
-        }
-
-        if(buttonPressed.equals("normal")){
-            intent = new Intent(MainLevelSelect.this, LevelSelectNormal.class);
-        }
-*/
         startActivity(intent);
         finish();
     }

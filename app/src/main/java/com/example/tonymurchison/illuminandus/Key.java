@@ -5,33 +5,33 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 
-public class Key extends GameObjects {
+class Key extends GameObjects {
     private float opacity;
     private ImageView keyImage;
     private int type;
     private boolean hittable =false;
 
-    public Key(int typeInput, ImageView key){
+    Key(int typeInput, ImageView key){
         type = typeInput;
         keyImage = key;
     }
 
-    public void setHittable(boolean x){
+    void setHittable(boolean x){
         hittable = x;
     }
 
 
-    public boolean getHittable(){
+    boolean getHittable(){
         return hittable;
     }
 
-    public int returnType(){
+    int returnType(){
         return type;
     }
 
 
     //This method sets the coordinates for the four corners
-    public void setCorners() {
+    void setCorners() {
         if(width>height){
             //top left corner
             topLeftX=(centerX-(width/2)+2);
@@ -48,7 +48,6 @@ public class Key extends GameObjects {
             //bottom left corner
             bottomLeftX=(centerX-(width/2)+2);
             bottomLeftY=(centerY+(height/2));
-            return;
         }
 
         else{
@@ -70,11 +69,11 @@ public class Key extends GameObjects {
         }
     }
 
-    public float getVisility(){
+    float getVisility(){
         return opacity;
     }
 
-    public void setVisibility(float i){
+    void setVisibility(float i){
         opacity=i;
         if(i==0){
             keyImage.setVisibility(View.INVISIBLE  );
@@ -84,19 +83,19 @@ public class Key extends GameObjects {
         }
     }
 
-    public void setWidth(int widthInput) {
+    void setWidth(int widthInput) {
         width = widthInput;
         keyImage.requestLayout();
         keyImage.getLayoutParams().width = width;
     }
 
-    public void setHeight(int heightInput){
+    void setHeight(int heightInput){
         height = heightInput;
         keyImage.requestLayout();
         keyImage.getLayoutParams().height = height;
     }
 
-    public void setCenter(int x, int y){
+    void setCenter(int x, int y){
         centerX=x;
         centerY=y;
         RelativeLayout.LayoutParams alp = getLayoutParams();
@@ -108,11 +107,11 @@ public class Key extends GameObjects {
 
 
 
-    public RelativeLayout.LayoutParams getLayoutParams(){
+    RelativeLayout.LayoutParams getLayoutParams(){
         return (RelativeLayout.LayoutParams) keyImage.getLayoutParams();
     }
 
-    public void setLayoutParams(RelativeLayout.LayoutParams alp){
+    void setLayoutParams(RelativeLayout.LayoutParams alp){
         keyImage.setLayoutParams(alp);
     }
 

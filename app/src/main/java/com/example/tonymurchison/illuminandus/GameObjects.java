@@ -1,66 +1,66 @@
 package com.example.tonymurchison.illuminandus;
 
-public class GameObjects {
-    public int centerX;
-    public int centerY;
-    public int topLeftX;
-    public int topRightX;
-    public int bottomLeftX;
-    public int bottomRightX;
-    public int topLeftY;
-    public int topRightY;
-    public int bottomLeftY;
-    public int bottomRightY;
+class GameObjects {
+    int centerX;
+    int centerY;
+    int topLeftX;
+    int topRightX;
+    int bottomLeftX;
+    int bottomRightX;
+    int topLeftY;
+    int topRightY;
+    int bottomLeftY;
+    int bottomRightY;
 
 
-    public int width;
-    public int height;
+    int width;
+    int height;
 
-    public int getWidth(){
+    int getWidth(){
         return width;
     }
 
-    public int getHeight(){
+    int getHeight(){
         return height;
     }
 
-    public int getCenterX(){
+    int getCenterX(){
         return centerX;
     }
 
-    public int getCenterY(){
+    int getCenterY(){
         return centerY;
     }
 
-    public int getTopLeftX(){
+    int getTopLeftX(){
         return topLeftX;
     }
 
-    public int getTopRightX(){
+    int getTopRightX(){
         return topRightX;
     }
 
-    public int getBottomLeftX(){
+    int getBottomLeftX(){
         return bottomLeftX;
     }
 
-    public int getBottomRightX(){
+    int getBottomRightX(){
         return bottomRightX;
     }
 
-    public int getTopLeftY(){
+    int getTopLeftY(){
         return topLeftY;
     }
 
-    public int getTopRightY(){
+    int getTopRightY(){
         return topRightY;
     }
 
-    public int getBottomLeftY(){
+    int getBottomLeftY(){
         return bottomLeftY;
     }
 
-    public int getBottomRightY(){
+    int getBottomRightY(){
         return bottomRightY;
     }
 

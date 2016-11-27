@@ -34,8 +34,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class LevelPlayKeys extends AppCompatActivity implements SensorEventListener{
-    private AdView mAdView;
-
     //game items
     private Ball playingBall;
     private int ballPositionX;
@@ -73,7 +71,6 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
     private float show = 1;
     private float hide = 0;
 
-    private TextView levelTextView;
 
     private int wallAmount=0;
 
@@ -98,7 +95,7 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        mAdView = (AdView) findViewById(R.id.adView);
+        AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
@@ -120,7 +117,7 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
         speedAdjustment=screenWidth/1000d;
         block=screenWidth / 60d;
 
-        levelTextView = (TextView)findViewById(R.id.levelTextView);
+        TextView levelTextView = (TextView)findViewById(R.id.levelTextView);
         levelTextView.setText("Level "+Integer.toString(levelNumber+1));
 
         readFile();
@@ -199,7 +196,7 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
         Scanner scanner = new Scanner(inputStream);
         boolean reading = true;
         String level = "Level "+Integer.toString(levelNumber+1);
-        while(reading==true){
+        while(reading){
             if(level.equals(scanner.nextLine())){
                 for(int i=0;i<10;i++){
                     String line = scanner.nextLine();
@@ -252,7 +249,7 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
                 scanner.nextLine();
 
                 String lineMark = scanner.nextLine();
-                while(lineMark.isEmpty()==false) {
+                while(!lineMark.isEmpty()) {
                     wallsToMark.add(Integer.parseInt(lineMark));
                     lineMark = scanner.nextLine();
                     special.add(Integer.parseInt(lineMark));
@@ -400,17 +397,17 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
         while (maxMovementX > stepsTakenX || maxMovenentY > stepsTakenY) {
             //check all the walls
             for(int i=0;i<keys.size();i++){
-                if(keys.get(i).getHittable()==true){
+                if(keys.get(i).getHittable()){
                     intersectKey(playingBall, keys.get(i));
                 }
             }
 
-            if(exitPoint.getHittable()==true) {
+            if(exitPoint.getHittable()) {
                 intersectExit(playingBall, exitPoint);
             }
 
             for (int i = 0; i < wallNumber; i++) {
-                if(mazeWall[i].getHittable()==true) {
+                if(mazeWall[i].getHittable()) {
                     intersectWall(playingBall, mazeWall[i]);
                 }
             }
@@ -685,7 +682,7 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
                 mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d * block + 4.714d *  block), (int) ((double) i * 8.428d *  block +  block * 30.504d-offset));
                 mazeWall[wallNumber].setCorners();
 
-                if (horizontalWalls[i][j] == true) {
+                if (horizontalWalls[i][j]) {
                     mazeWall[wallNumber].setHittable(true);
                     mazeWall[wallNumber].setVisibility(show);
                 }
@@ -707,7 +704,7 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
                 mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d *  block +  block * 8.928d), (int) ((double) i * 8.428d * block +  block * 26.29d-offset));
                 mazeWall[wallNumber].setCorners();
 
-                if (verticalWalls[i][j] == true) {
+                if (verticalWalls[i][j]) {
                     mazeWall[wallNumber].setHittable(true);
                     mazeWall[wallNumber].setVisibility(show);
                 }

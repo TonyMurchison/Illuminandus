@@ -34,7 +34,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class LevelPlayChangingWalls extends AppCompatActivity implements SensorEventListener{
-    private AdView mAdView;
+
 
     //game items
     private Ball playingBall;
@@ -69,7 +69,6 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
     private float show = 1;
     private float hide = 0;
 
-    private boolean started=false;
     private int wallAmount=0;
 
     private SystemUiHelper helper;
@@ -79,7 +78,6 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
     private double offsetMoveX=0;
     private double offsetMoveY=0;
 
-    private TextView levelTextView;
 
 
     @Override
@@ -97,7 +95,7 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        mAdView = (AdView) findViewById(R.id.adView);
+        AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
@@ -122,10 +120,12 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
 
         //run the method that initializes the layout
         start();
-        started=true;
 
-        levelTextView = (TextView)findViewById(R.id.levelTextView);
-        levelTextView.setText("Level "+Integer.toString(levelNumber+1));
+        TextView levelTextView = (TextView)findViewById(R.id.levelTextView);
+        String text = "Level "+Integer.toString(levelNumber+1);
+        if(levelTextView!=null) {
+            levelTextView.setText(text);
+        }
 
         SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         offsetMoveX = (double) prefs.getInt("OffsetX", 0);
@@ -200,18 +200,17 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
         Scanner scanner = new Scanner(inputStream);
         boolean reading = true;
         String level = "Level "+Integer.toString(levelNumber+1);
-        while(reading==true){
+        while(reading){
             if(level.equals(scanner.nextLine())){
 
                 for(int i=0;i<9;i++){
                     String line = scanner.nextLine();
                     for(int j=0;j<7;j++){
+                        horizontalWalls[i][j]=false;
                         if(Character.getNumericValue(line.charAt(j))==1){
                             horizontalWalls[i][j]=true;
                         }
-                        else{
-                            horizontalWalls[i][j]=false;
-                        }
+
                     }
                 }
 
@@ -220,12 +219,11 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
                 for(int i=0;i<10;i++){
                     String line = scanner.nextLine();
                     for(int j=0;j<6;j++){
+                        verticalWalls[i][j]=false;
                         if(Character.getNumericValue(line.charAt(5-j))==1){
                             verticalWalls[i][j]=true;
                         }
-                        else{
-                            verticalWalls[i][j]=false;
-                        }
+
                     }
                 }
 
@@ -366,7 +364,7 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
 
             while (i < 20) {
                 int randomNumber = rand.nextInt(wallAmount);
-                if (mazeWall[randomNumber].getVisility()==show && contains(numbersUsed, randomNumber) == false) {
+                if (mazeWall[randomNumber].getVisility()==show && !contains(numbersUsed, randomNumber)) {
                     wallsToHide[i] = randomNumber;
                     numbersUsed[i] = randomNumber;
                     i = i + 1;
@@ -376,7 +374,7 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
 
             while (j < 20) {
                 int randomNumber = rand.nextInt(wallAmount);
-                if (mazeWall[randomNumber].getVisility()==hide && contains(numbersUsed, randomNumber) == false) {
+                if (mazeWall[randomNumber].getVisility()==hide && !contains(numbersUsed, randomNumber)) {
                     wallsToShow[j] = randomNumber;
                     numbersUsed[j + 20] = randomNumber;
                     j = j + 1;
@@ -437,12 +435,12 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
         while (maxMovementX > stepsTakenX || maxMovenentY > stepsTakenY) {
             //check all the walls
             for (int i = 0; i < wallNumber; i++) {
-                if(mazeWall[i].getHittable()==true) {
+                if(mazeWall[i].getHittable()) {
                     intersectWall(playingBall, mazeWall[i]);
                 }
             }
 
-            if(exitPoint.getHittable()==true) {
+            if(exitPoint.getHittable()) {
                 intersectExit(playingBall, exitPoint);
             }
 
@@ -635,7 +633,7 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
                 mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d * block + 4.714d *  block), (int) ((double) i * 8.428d *  block +  block * 30.504d-offset));
                 mazeWall[wallNumber].setCorners();
 
-                if (horizontalWalls[i][j] == true) {
+                if (horizontalWalls[i][j]) {
                     mazeWall[wallNumber].setHittable(true);
                     mazeWall[wallNumber].setVisibility(show);
                 }
@@ -657,7 +655,7 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
                 mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d *  block +  block * 8.928d), (int) ((double) i * 8.428d * block +  block * 26.29d-offset));
                 mazeWall[wallNumber].setCorners();
 
-                if (verticalWalls[i][j] == true) {
+                if (verticalWalls[i][j]) {
                     mazeWall[wallNumber].setHittable(true);
                     mazeWall[wallNumber].setVisibility(show);
                 }

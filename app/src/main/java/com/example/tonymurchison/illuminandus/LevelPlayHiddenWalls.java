@@ -41,8 +41,6 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
     //time items
     private int timeStart;
     private int time;
-    private int timeMinutes;
-    private int timeSeconds;
     private int pausedTime=0;
     private int timeAtPause=0;
     private int timePlayingBallHit;
@@ -92,7 +90,6 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
     private double offsetMoveX=0;
     private double offsetMoveY=0;
 
-    private TextView levelTextView;
 
 
     @Override
@@ -132,7 +129,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
         readFile();
 
-        levelTextView = (TextView)findViewById(R.id.levelTextView);
+        TextView levelTextView = (TextView)findViewById(R.id.levelTextView);
         levelTextView.setText("Level "+Integer.toString(levelNumber+1));
 
         SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
@@ -211,7 +208,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         Scanner scanner = new Scanner(inputStream);
         boolean reading = true;
         String level = "Level "+Integer.toString(levelNumber+1);
-        while(reading==true){
+        while(reading){
             if(level.equals(scanner.nextLine())){
                 for(int i=0;i<10;i++){
                     String line = scanner.nextLine();
@@ -312,14 +309,12 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         }
 
         //show the ball when it has been hidden for more than 5 seconds
-        if(ballHidden==true && time>timePlayingBallHit+5000){
+        if(ballHidden && time>timePlayingBallHit+5000){
             playingBall.setVisibility(show);
             ballHidden=false;
         }
 
-        //determine the current playing time in seconds and minutes
-        timeMinutes = (time / (1000 * 60)) % 60;
-        timeSeconds = ((time - (timeMinutes * 60 * 1000)) / 1000) % 60;
+
     }
 
     //restart level
@@ -345,7 +340,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
     @Override
     protected void onResume() {
         super.onResume();
-        if(started==true) {
+        if(started) {
             pausedTime = pausedTime + ((int) System.currentTimeMillis() - timeAtPause);
         }
         started=true;
@@ -713,7 +708,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 7; j++) {
-                if (horizontalWalls[i][j] == true) {
+                if (horizontalWalls[i][j]) {
                     int id = getResources().getIdentifier("horizontal_wall_" + ((i*7) + (j)), "id", getPackageName());
                     ImageView wallImage = (ImageView) findViewById(id);
                     mazeWall[wallNumber] = new Wall(wallImage);
@@ -729,7 +724,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 6; j++) {
-                if (verticalWalls[i][j] == true) {
+                if (verticalWalls[i][j]) {
                     int id = getResources().getIdentifier("vertical_wall_" + ((i*6) + (j)), "id", getPackageName());
                     ImageView wallImage = (ImageView) findViewById(id);
                     mazeWall[wallNumber] = new Wall(wallImage);

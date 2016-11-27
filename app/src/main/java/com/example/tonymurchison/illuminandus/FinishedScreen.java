@@ -14,7 +14,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 public class FinishedScreen extends AppCompatActivity {
-    private AdView mAdView;
     private int levelNumber;
     private String gameType;
 
@@ -33,7 +32,7 @@ public class FinishedScreen extends AppCompatActivity {
         levelNumber = extras.getInt("levelNumber");
         gameType = extras.getString("GameType");
 
-        mAdView = (AdView) findViewById(R.id.adView);
+        AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 

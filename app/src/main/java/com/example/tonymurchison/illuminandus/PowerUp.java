@@ -5,20 +5,20 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 
-public class PowerUp extends GameObjects {
+class PowerUp extends GameObjects {
     private ImageView powerUpImage;
     private int type;
     private boolean hittable=true;
 
     //constructor
-    public PowerUp(int typeInput, ImageView powerUp){
+    PowerUp(int typeInput, ImageView powerUp){
         powerUpImage = powerUp;     //store the given image for the power up
         type = typeInput;
 
     }
 
     //This method sets the coordinates for the four corners
-    public void setCorners() {
+    void setCorners() {
         //top left corner
         topLeftX=(centerX-(width/2));
         topLeftY=(centerY-(height/2));
@@ -37,24 +37,21 @@ public class PowerUp extends GameObjects {
     }
 
     //make the power up go invisible
-    public void setInvisible(){powerUpImage.setVisibility(View.GONE);}
+    void setInvisible(){powerUpImage.setVisibility(View.GONE);}
 
-    public void setVisible(){powerUpImage.setVisibility(View.VISIBLE);}
-
-
-    public void setWidth(int widthInput){
+    void setWidth(int widthInput){
         width=widthInput;
         powerUpImage.requestLayout();
         powerUpImage.getLayoutParams().width = width;
     }
 
-    public void setHeight(int heightInput){
+    void setHeight(int heightInput){
         height=heightInput;
         powerUpImage.requestLayout();
         powerUpImage.getLayoutParams().height = height;
     }
 
-    public void setCenter(int x, int y){
+    void setCenter(int x, int y){
         centerX=x;
         centerY=y;
         RelativeLayout.LayoutParams alp = getLayoutParams();
@@ -63,27 +60,23 @@ public class PowerUp extends GameObjects {
         setLayoutParams(alp);
     }
 
-    public int getType(){
+    int getType(){
         return type;
     }
 
-    public void setType(int typeInput){
-        type=typeInput;
-    }
-
-    public void setHittable(boolean set_hittable){
+    void setHittable(boolean set_hittable){
         hittable=set_hittable;
     }
 
-    public boolean getHittable(){
+    boolean getHittable(){
         return hittable;
     }
 
-    public RelativeLayout.LayoutParams getLayoutParams(){
+    RelativeLayout.LayoutParams getLayoutParams(){
         return (RelativeLayout.LayoutParams) powerUpImage.getLayoutParams();
     }
 
-    public void setLayoutParams(RelativeLayout.LayoutParams alp){
+    void setLayoutParams(RelativeLayout.LayoutParams alp){
         powerUpImage.setLayoutParams(alp);
     }
 }

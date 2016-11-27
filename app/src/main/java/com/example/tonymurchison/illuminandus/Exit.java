@@ -4,17 +4,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-public class Exit extends GameObjects{
+class Exit extends GameObjects{
     private ImageView exitImage;
     private boolean hittable = true;
 
     //constructor
-    public Exit(ImageView exit){
+    Exit(ImageView exit){
         exitImage = exit;
     }
 
     //This method sets the coordinates for the four corners
-    public void setCorners() {
+    void setCorners() {
         //top left corner
         topLeftX=(centerX-(width/2));
         topLeftY=(centerY-(height/2));
@@ -32,16 +32,7 @@ public class Exit extends GameObjects{
         bottomLeftY=(centerY+(height/2));
     }
 
-
-    public void setCenterX(int x){
-        centerX=x;
-    }
-
-    public void setCenterY(int y){
-        centerY=y;
-    }
-
-    public void setVisibility(float x){
+    void setVisibility(float x){
         if(x==1){
             exitImage.setVisibility(View.VISIBLE);
         }
@@ -50,19 +41,19 @@ public class Exit extends GameObjects{
         }
     }
 
-    public void setWidth(int widthInput){
+    void setWidth(int widthInput){
         width = widthInput;
         exitImage.requestLayout();
         exitImage.getLayoutParams().width = width;
     }
 
-    public void setHeight(int heightInput){
+    void setHeight(int heightInput){
         height = heightInput;
         exitImage.requestLayout();
         exitImage.getLayoutParams().height = height;
     }
 
-    public void setCenter(int x, int y){
+    void setCenter(int x, int y){
         centerX=x;
         centerY=y;
         RelativeLayout.LayoutParams alp = getLayoutParams();
@@ -71,19 +62,19 @@ public class Exit extends GameObjects{
         setLayoutParams(alp);
     }
 
-    public void setHittable(boolean x){
+    void setHittable(boolean x){
         hittable = x;
     }
 
-    public boolean getHittable(){
+    boolean getHittable(){
         return hittable;
     }
 
-    public RelativeLayout.LayoutParams getLayoutParams(){
+    private RelativeLayout.LayoutParams getLayoutParams(){
         return (RelativeLayout.LayoutParams) exitImage.getLayoutParams();
     }
 
-    public void setLayoutParams(RelativeLayout.LayoutParams alp){
+    private void setLayoutParams(RelativeLayout.LayoutParams alp){
         exitImage.setLayoutParams(alp);
     }
 }
