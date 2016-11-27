@@ -77,17 +77,17 @@ public class InfoScreenGameType extends AppCompatActivity {
         Intent intent = new Intent();
 
         if(gameType.equals("hidden")){
-            intent = new Intent(InfoScreenGameType.this, HiddenLevelSelect.class);
+            intent = new Intent(InfoScreenGameType.this, LevelSelectHidden.class);
         }
         if(gameType.equals("changing")){
-            intent = new Intent(InfoScreenGameType.this, ChangingLevelSelect.class);
+            intent = new Intent(InfoScreenGameType.this, LevelSelectChanging.class);
         }
         if(gameType.equals("locked")){
-            intent = new Intent(InfoScreenGameType.this, LockedLevelSelect.class);
+            intent = new Intent(InfoScreenGameType.this, LevelSelectLocked.class);
         }
 
         if(gameType.equals("normal")){
-            intent = new Intent(InfoScreenGameType.this, NormalLevelSelect.class);
+            intent = new Intent(InfoScreenGameType.this, LevelSelectNormal.class);
         }
 
         startActivity(intent);

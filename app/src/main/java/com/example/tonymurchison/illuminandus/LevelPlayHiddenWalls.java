@@ -2,8 +2,9 @@ package com.example.tonymurchison.illuminandus;
 
 
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -12,7 +13,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -23,14 +23,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 import android.os.Handler;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -85,9 +84,15 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
     private int amountPowerUpsTouched=0;
 
     private boolean started = false; //dit is hopelijk tijdelijk om te zorgen dat de tijd niet negatief is bij de start
-    private int currentApiVersion;
 
     private SystemUiHelper helper;
+
+    private SensorEvent eventStorage;
+
+    private double offsetMoveX=0;
+    private double offsetMoveY=0;
+
+    private TextView levelTextView;
 
 
     @Override
@@ -127,8 +132,12 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
         readFile();
 
+        levelTextView = (TextView)findViewById(R.id.levelTextView);
+        levelTextView.setText("Level "+Integer.toString(levelNumber+1));
 
-
+        SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        offsetMoveX = (double) prefs.getInt("OffsetX", 0);
+        offsetMoveY = (double) prefs.getInt("OffsetY", 0);
 
 
         //run the method that initializes the layout
@@ -166,21 +175,26 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
     }
 
     @Override
-    public void onPause(){
-        super.onPause();
-        timeAtPause = (int)System.currentTimeMillis();
-    }
-
-    @Override
     public void onBackPressed(){
         super.onBackPressed();
-        pause();
+        Intent intent = new Intent(LevelPlayHiddenWalls.this, LevelSelectHidden.class);
+        startActivity(intent);
+        finish();
     }
 
-    public void pause(){
-        Intent intent = new Intent(LevelPlayHiddenWalls.this, PauseScreen.class);
-        //TODO moet in het pauze scherm te zien wat de huidige tijd en score is?
-        startActivity(intent);
+    public void calibrateButtonClick(View v){
+        double x = eventStorage.values[2];
+        double y = eventStorage.values[1];
+
+        offsetMoveX = x;
+        offsetMoveY = y;
+
+        SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("OffsetX", (int)x);
+        editor.putInt("OffsetY", (int)y);
+
+        editor.commit();
     }
 
     void readFile(){
@@ -257,14 +271,16 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
     public void onSensorChanged (SensorEvent event){
 
+        eventStorage = event;
+
         //if sensor is unreliable, return void
         if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
             return;
         }
 
         //read the data from the gyroscopes
-        double xb=event.values[2]*speedAdjustment;
-        double yb=event.values[1]*speedAdjustment*-1;
+        double xb=(event.values[2]-offsetMoveX) * speedAdjustment;
+        double yb=(event.values[1]-offsetMoveY) * speedAdjustment*-1;
 
         //max out the speed
         if (xb > 15d*speedAdjustment) {
@@ -291,7 +307,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         time = (int) (System.currentTimeMillis() - timeStart - pausedTime);
         for (int i = 0; i < wallNumber - 4; i++) {
             if (time - mazeWall[i].getTimeTouched() > visibleThreshold) {
-                mazeWall[i].setVisibility(hide);    //TODO
+                mazeWall[i].setVisibility(hide);
             }
         }
 
@@ -313,7 +329,14 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
     //go back to the level select screen
     public void quitLevelClick(View v){
-        Intent intent = new Intent(LevelPlayHiddenWalls.this, HiddenLevelSelect.class);
+        Intent intent = new Intent(LevelPlayHiddenWalls.this, LevelSelectHidden.class);
+        startActivity(intent);
+        finish();
+    }
+
+
+    public void mainMenuButtonClicked(View v){
+        Intent intent = new Intent(LevelPlayHiddenWalls.this, MainLevelSelect.class);
         startActivity(intent);
         finish();
     }
@@ -361,11 +384,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         timeAtPause = (int)System.currentTimeMillis();
     }
 
-    //open up the pause screen
-    public void pauseScreen(View v){
-        pause();
 
-    }
 
     //if a power up is hit this method will determine what has to happen
     public void hitPowerUp(PowerUp powerUp){
@@ -687,7 +706,6 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
             offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, r.getDisplayMetrics());
         }
-        //TODO testen of dit op alle schermen werkt
 
 
 

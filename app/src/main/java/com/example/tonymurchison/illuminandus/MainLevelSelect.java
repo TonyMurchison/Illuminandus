@@ -10,10 +10,10 @@ import android.view.WindowManager;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.tjeannin.apprate.AppRate;
 
 public class MainLevelSelect extends AppCompatActivity {
     private AdView mAdView;
-
 
 
 
@@ -30,9 +30,12 @@ public class MainLevelSelect extends AppCompatActivity {
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+        new AppRate(this).init();
     }
 
-    //TODO uitleg geven over de level types als je een level select start
+
+
 
     public void mainLevelSelectButtonClick(View v){
         String buttonPressed = (String)v.getTag();
@@ -41,17 +44,17 @@ public class MainLevelSelect extends AppCompatActivity {
 
         /*
         if(buttonPressed.equals("hidden")){
-            intent = new Intent(MainLevelSelect.this, HiddenLevelSelect.class);
+            intent = new Intent(MainLevelSelect.this, LevelSelectHidden.class);
         }
         if(buttonPressed.equals("changing")){
-            intent = new Intent(MainLevelSelect.this, ChangingLevelSelect.class);
+            intent = new Intent(MainLevelSelect.this, LevelSelectChanging.class);
         }
         if(buttonPressed.equals("locked")){
-            intent = new Intent(MainLevelSelect.this, LockedLevelSelect.class);
+            intent = new Intent(MainLevelSelect.this, LevelSelectLocked.class);
         }
 
         if(buttonPressed.equals("normal")){
-            intent = new Intent(MainLevelSelect.this, NormalLevelSelect.class);
+            intent = new Intent(MainLevelSelect.this, LevelSelectNormal.class);
         }
 */
         startActivity(intent);

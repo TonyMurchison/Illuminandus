@@ -47,7 +47,7 @@ public class InfoScreenLevel extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        Intent intent = new Intent(InfoScreenLevel.this, HiddenLevelSelect.class);
+        Intent intent = new Intent(InfoScreenLevel.this, LevelSelectHidden.class);
         startActivity(intent);
         finish();
     }

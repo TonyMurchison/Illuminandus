@@ -1,8 +1,9 @@
 package com.example.tonymurchison.illuminandus;
 
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -11,10 +12,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -31,7 +30,6 @@ import com.google.android.gms.ads.AdView;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Random;
 import java.util.Scanner;
 
 public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEventListener{
@@ -53,7 +51,6 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
     private boolean allowedMovement[] = {true, true, true, true};
     private int levelNumber=0;  //level 1 equals levelNumber 0 etc
     private double allowMovement =1;
-    private boolean ballHidden = false;
     private Handler h;
     private int delay = 20;
 
@@ -69,12 +66,18 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
     private float show = 1;
     private float hide = 0;
 
-    private int currentApiVersion;
 
     private boolean started=false;
     private int wallAmount=0;
 
     private SystemUiHelper helper;
+
+    private SensorEvent eventStorage;
+
+    private double offsetMoveX=0;
+    private double offsetMoveY=0;
+
+    private TextView levelTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,10 +116,16 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 
         readFile();
 
+        levelTextView = (TextView)findViewById(R.id.levelTextView);
+        levelTextView.setText("Level "+Integer.toString(levelNumber+1));
 
         //run the method that initializes the layout
         start();
         started = true;
+
+        SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        offsetMoveX = (double) prefs.getInt("OffsetX", 0);
+        offsetMoveY = (double) prefs.getInt("OffsetY", 0);
 
         helper = new SystemUiHelper(
                 this,
@@ -144,20 +153,29 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 
     }
 
-    @Override
-    public void onPause(){
-        super.onPause();
-    }
+
 
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        pause();
+        Intent intent = new Intent(LevelPlayNormalWalls.this, LevelSelectNormal.class);
+        startActivity(intent);
+        finish();
     }
 
-    public void pause(){
-        Intent intent = new Intent(LevelPlayNormalWalls.this, PauseScreen.class);
-        startActivity(intent);
+    public void calibrateButtonClick(View v){
+        double x = eventStorage.values[2];
+        double y = eventStorage.values[1];
+
+        offsetMoveX = x;
+        offsetMoveY = y;
+
+        SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("OffsetX", (int)x);
+        editor.putInt("OffsetY", (int)y);
+
+        editor.commit();
     }
 
     void readFile(){
@@ -231,14 +249,16 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 
     public void onSensorChanged (SensorEvent event){
 
+        eventStorage = event;
+
         //if sensor is unreliable, return void
         if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
             return;
         }
 
         //read the data from the gyroscopes
-        double xb=event.values[2]*speedAdjustment;
-        double yb=event.values[1]*speedAdjustment*-1;
+        double xb=(event.values[2]-offsetMoveX) * speedAdjustment;
+        double yb=(event.values[1]-offsetMoveY) * speedAdjustment*-1;
 
         //max out the speed
         if (xb > 15d*speedAdjustment) {
@@ -266,10 +286,17 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 
     //go back to the level select screen
     public void quitLevelClick(View v){
-        Intent intent = new Intent(LevelPlayNormalWalls.this, NormalLevelSelect.class);
+        Intent intent = new Intent(LevelPlayNormalWalls.this, LevelSelectNormal.class);
         startActivity(intent);
         finish();
     }
+
+    public void mainMenuButtonClicked(View v){
+        Intent intent = new Intent(LevelPlayNormalWalls.this, MainLevelSelect.class);
+        startActivity(intent);
+        finish();
+    }
+
 
 
     @Override
@@ -310,11 +337,8 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         //TODO moet hier nog iets?
     }
 
-    //open up the pause screen
-    public void pauseScreen(View v){
-        pause();
-//TODO moet hier nog iets?
-    }
+
+
 
     //this method is called when the last powerup has been picked up
     private void finishedLevel(){
@@ -526,7 +550,6 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 
             offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, r.getDisplayMetrics());
         }
-        //TODO testen of dit op alle schermen werkt
 
 
 

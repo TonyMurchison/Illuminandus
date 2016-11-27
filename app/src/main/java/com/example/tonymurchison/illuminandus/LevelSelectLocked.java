@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 
-public class LockedLevelSelect extends AppCompatActivity {
+public class LevelSelectLocked extends AppCompatActivity {
     private Button[] buttons = new Button[60];
     private int levelsAmount = 60;
 
@@ -62,9 +62,6 @@ public class LockedLevelSelect extends AppCompatActivity {
             }
         }
         else{
-            for(int i=0;i<unlockedLevel;i++){
-                buttons[i].setBackground(getResources().getDrawable(R.drawable.layout_button_level_select_completed));
-            }
             if(unlockedLevel!=levelsAmount-1){
                 for(int i=unlockedLevel+1;i<levelsAmount;i++){
                     buttons[i].setBackground(getResources().getDrawable(R.drawable.layout_button_level_select_locked));
@@ -81,7 +78,7 @@ public class LockedLevelSelect extends AppCompatActivity {
 
     public void onButtonClickLockedLevels(View v){
         int buttonPressed = Integer.parseInt((String)v.getTag());
-        Intent intent = new Intent(LockedLevelSelect.this, LevelPlayKeys.class);
+        Intent intent = new Intent(LevelSelectLocked.this, LevelPlayKeys.class);
         intent.putExtra("levelNumber", buttonPressed-1);
         startActivity(intent);
         finish();
@@ -90,7 +87,7 @@ public class LockedLevelSelect extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        Intent intent = new Intent(LockedLevelSelect.this, MainLevelSelect.class);
+        Intent intent = new Intent(LevelSelectLocked.this, MainLevelSelect.class);
         startActivity(intent);
         finish();
     }

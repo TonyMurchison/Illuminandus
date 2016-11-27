@@ -14,7 +14,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 
-public class ChangingLevelSelect extends AppCompatActivity {
+
+public class LevelSelectHidden extends AppCompatActivity {
     private Button[] buttons = new Button[60];
     private int levelsAmount = 60;
 
@@ -22,7 +23,7 @@ public class ChangingLevelSelect extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.changing_level_select);
+        setContentView(R.layout.hidden_level_select);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -30,7 +31,7 @@ public class ChangingLevelSelect extends AppCompatActivity {
         getSupportActionBar().hide();
 
 
-        final LinearLayout layout = (LinearLayout)findViewById(R.id.changingWallsLayout);
+        final LinearLayout layout = (LinearLayout)findViewById(R.id.hiddenWallsLayout);
         ViewTreeObserver vto = layout.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -53,7 +54,7 @@ public class ChangingLevelSelect extends AppCompatActivity {
 
     private void setButtons(){
         SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        int unlockedLevel = prefs.getInt("changingLevelProgress", 0);
+        int unlockedLevel = prefs.getInt("hiddenLevelProgress", 0);
 
         if(unlockedLevel==0){
             for(int i=1;i<levelsAmount;i++){
@@ -62,9 +63,6 @@ public class ChangingLevelSelect extends AppCompatActivity {
             }
         }
         else{
-            for(int i=0;i<unlockedLevel;i++){
-                buttons[i].setBackground(getResources().getDrawable(R.drawable.layout_button_level_select_completed));
-            }
             if(unlockedLevel!=levelsAmount-1){
                 for(int i=unlockedLevel+1;i<levelsAmount;i++){
                     buttons[i].setBackground(getResources().getDrawable(R.drawable.layout_button_level_select_locked));
@@ -79,9 +77,16 @@ public class ChangingLevelSelect extends AppCompatActivity {
         }
     }
 
-    public void onButtonClickChangingLevels(View v){
+    public void onButtonClickHiddenLevels(View v){
         int buttonPressed = Integer.parseInt((String)v.getTag());
-        Intent intent = new Intent(ChangingLevelSelect.this, LevelPlayChangingWalls.class);
+        Intent intent;
+        if(buttonPressed<6){
+            intent = new Intent(LevelSelectHidden.this, InfoScreenLevel.class);
+        }
+        else {
+            intent = new Intent(LevelSelectHidden.this, LevelPlayHiddenWalls.class);
+        }
+
         intent.putExtra("levelNumber", buttonPressed-1);
         startActivity(intent);
         finish();
@@ -90,7 +95,7 @@ public class ChangingLevelSelect extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        Intent intent = new Intent(ChangingLevelSelect.this, MainLevelSelect.class);
+        Intent intent = new Intent(LevelSelectHidden.this, MainLevelSelect.class);
         startActivity(intent);
         finish();
     }

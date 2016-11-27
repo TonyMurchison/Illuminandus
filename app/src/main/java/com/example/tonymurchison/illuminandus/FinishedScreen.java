@@ -41,6 +41,35 @@ public class FinishedScreen extends AppCompatActivity {
 
     }
 
+    public void homeButtonClick(View v){
+        Intent intent = new Intent(FinishedScreen.this, MainLevelSelect.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        if(gameType.equals("hidden")){
+            intent = new Intent(FinishedScreen.this, LevelSelectHidden.class);
+        }
+
+        if(gameType.equals("changing")){
+            intent = new Intent(FinishedScreen.this, LevelSelectChanging.class);
+        }
+
+        if(gameType.equals("locked")){
+            intent = new Intent(FinishedScreen.this, LevelSelectLocked.class);
+        }
+
+        if(gameType.equals("normal")){
+            intent = new Intent(FinishedScreen.this, LevelSelectNormal.class);
+        }
+
+        startActivity(intent);
+        finish();
+    }
+
     private void unlockLevel(){
         SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
 
@@ -143,19 +172,19 @@ public class FinishedScreen extends AppCompatActivity {
     public void returnToLevelSelect(View v){
         Intent intent = new Intent();
         if(gameType.equals("hidden")){
-            intent = new Intent(FinishedScreen.this, HiddenLevelSelect.class);
+            intent = new Intent(FinishedScreen.this, LevelSelectHidden.class);
         }
 
         if(gameType.equals("changing")){
-            intent = new Intent(FinishedScreen.this, ChangingLevelSelect.class);
+            intent = new Intent(FinishedScreen.this, LevelSelectChanging.class);
         }
 
         if(gameType.equals("locked")){
-            intent = new Intent(FinishedScreen.this, LockedLevelSelect.class);
+            intent = new Intent(FinishedScreen.this, LevelSelectLocked.class);
         }
 
         if(gameType.equals("normal")){
-            intent = new Intent(FinishedScreen.this, NormalLevelSelect.class);
+            intent = new Intent(FinishedScreen.this, LevelSelectNormal.class);
         }
 
         startActivity(intent);

@@ -1,8 +1,9 @@
 package com.example.tonymurchison.illuminandus;
 
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -11,7 +12,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -52,7 +52,6 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
     private boolean allowedMovement[] = {true, true, true, true};
     private int levelNumber=0;  //level 1 equals levelNumber 0 etc
     private double allowMovement =1;
-    private boolean ballHidden = false;
     private Handler h;
     private Handler handlerChangingWalls;
     private int delay = 20;
@@ -70,13 +69,17 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
     private float show = 1;
     private float hide = 0;
 
-    private TextView levelTextView;
-    private int currentApiVersion;
-
     private boolean started=false;
     private int wallAmount=0;
 
     private SystemUiHelper helper;
+
+    private SensorEvent eventStorage;
+
+    private double offsetMoveX=0;
+    private double offsetMoveY=0;
+
+    private TextView levelTextView;
 
 
     @Override
@@ -121,12 +124,18 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
         start();
         started=true;
 
+        levelTextView = (TextView)findViewById(R.id.levelTextView);
+        levelTextView.setText("Level "+Integer.toString(levelNumber+1));
+
+        SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        offsetMoveX = (double) prefs.getInt("OffsetX", 0);
+        offsetMoveY = (double) prefs.getInt("OffsetY", 0);
+
+
         helper = new SystemUiHelper(
                 this,
                 3,   // Choose from one of the levels
                 0);  // There are additional flags, usually this will be 0
-
-
 
 
     }
@@ -151,21 +160,31 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
 
     }
 
-    @Override
-    public void onPause(){
-        super.onPause();
-    }
+
 
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        pause();
+        Intent intent = new Intent(LevelPlayChangingWalls.this, LevelSelectChanging.class);
+        startActivity(intent);
+        finish();
     }
 
-    public void pause(){
-        Intent intent = new Intent(LevelPlayChangingWalls.this, PauseScreen.class);
-        startActivity(intent);
+    public void calibrateButtonClick(View v){
+        double x = eventStorage.values[2];
+        double y = eventStorage.values[1];
+
+        offsetMoveX = x;
+        offsetMoveY = y;
+
+        SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("OffsetX", (int)x);
+        editor.putInt("OffsetY", (int)y);
+
+        editor.commit();
     }
+
 
     void readFile(){
         AssetManager assetManager = getResources().getAssets();
@@ -240,14 +259,16 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
 
     public void onSensorChanged (SensorEvent event){
 
+        eventStorage = event;
+
         //if sensor is unreliable, return void
         if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
             return;
         }
 
         //read the data from the gyroscopes
-        double xb=event.values[2]*speedAdjustment;
-        double yb=event.values[1]*speedAdjustment*-1;
+        double xb=(event.values[2]-offsetMoveX) * speedAdjustment;
+        double yb=(event.values[1]-offsetMoveY) * speedAdjustment*-1;
 
         //max out the speed
         if (xb > 15d*speedAdjustment) {
@@ -275,7 +296,13 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
 
     //go back to the level select screen
     public void quitLevelClick(View v){
-        Intent intent = new Intent(LevelPlayChangingWalls.this, ChangingLevelSelect.class);
+        Intent intent = new Intent(LevelPlayChangingWalls.this, LevelSelectChanging.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void mainMenuButtonClicked(View v){
+        Intent intent = new Intent(LevelPlayChangingWalls.this, MainLevelSelect.class);
         startActivity(intent);
         finish();
     }
@@ -284,7 +311,6 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
     @Override
     protected void onResume() {
         super.onResume();
-        //TODO zorgen dat het goed komt als je terug komt
         sManager.registerListener(this, sManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_FASTEST);
 
         helper.hide();
@@ -376,14 +402,9 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
         sManager.unregisterListener(this);
         h = null;
         super.onStop();
-        //TODO moet hier nog iets?
     }
 
-    //open up the pause screen
-    public void pauseScreen(View v){
-        pause();
-//TODO moet hier nog iets?
-    }
+
 
     //this method is called when the last powerup has been picked up
     private void finishedLevel(){
@@ -599,7 +620,6 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
 
             offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, r.getDisplayMetrics());
         }
-        //TODO testen of dit op alle schermen werkt
 
 
 
