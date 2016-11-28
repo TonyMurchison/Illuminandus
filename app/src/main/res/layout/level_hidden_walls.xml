@@ -16,9 +16,9 @@
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="5dp"
+            android:layout_height="50dp"
             android:orientation="horizontal"
+            android:layout_weight="1"
             >
 
             <TextView
@@ -68,13 +68,86 @@
                 />
 
 
-            <!--
-                hier kunnen alle knoppen en dergelijke worden geplaatst.
-            -->
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:gravity="center">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/paddingPowerupIndicator"
+                android:paddingRight="@dimen/paddingPowerupIndicator">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/pickup_blue_v2"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/white"
+                    android:text="0s"
+                    android:gravity="center"
+                    android:id="@+id/bluePowerupTimer"
+                    />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/paddingPowerupIndicator"
+                android:paddingRight="@dimen/paddingPowerupIndicator">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/pickup_red_v2"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/white"
+                    android:text="0s"
+                    android:gravity="center"
+                    android:id="@+id/redPowerupTimer"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/paddingPowerupIndicator"
+                android:paddingRight="@dimen/paddingPowerupIndicator">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/pickup_yellow_v2"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/white"
+                    android:text="0s"
+                    android:gravity="center"
+                    android:id="@+id/yellowPowerupTimer"
+                    />
+
+            </LinearLayout>
+
+
+
+
+
+
+
+        </LinearLayout>
 
 
 

@@ -7,7 +7,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    tools:context="com.example.tonymurchison.illuminandus.MainActivity"
+    tools:context="com.illuminandus.tonymurchison.illuminandus.MainActivity"
     android:background="@color/background"
     >
 

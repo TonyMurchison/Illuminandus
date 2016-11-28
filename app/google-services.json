@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:368230649996:android:dfd6d09dc22d83fc",
         "android_client_info": {
-          "package_name": "com.example.tonymurchison.illuminandus"
+          "package_name": "my.illuminandus"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "368230649996-dhmc3v6hqaie8m1hif3l26cabqlqcmil.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.tonymurchison.illuminandus",
+            "package_name": "my.illuminandus",
             "certificate_hash": "F542911AA4F71BE5D9CF34B9C9DFB726ABBE8E76"
           }
         },

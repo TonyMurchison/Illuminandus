@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tonymurchison.illuminandus">
+    package="my.illuminandus">
 
     <!--
         android:largeHeap="true"
         -->
+
+    <compatible-screens>
+        <!-- all small size screens -->
+        <screen android:screenSize="small" android:screenDensity="ldpi" />
+        <screen android:screenSize="small" android:screenDensity="mdpi" />
+        <screen android:screenSize="small" android:screenDensity="hdpi" />
+        <screen android:screenSize="small" android:screenDensity="xhdpi" />
+        <!-- all normal size screens -->
+        <screen android:screenSize="normal" android:screenDensity="ldpi" />
+        <screen android:screenSize="normal" android:screenDensity="mdpi" />
+        <screen android:screenSize="normal" android:screenDensity="hdpi" />
+        <screen android:screenSize="normal" android:screenDensity="xhdpi" />
+    </compatible-screens>
 
     <application
         android:allowBackup="true"
@@ -17,7 +30,7 @@
 
 
 
-        <activity android:name=".MainActivity"
+        <activity android:name="my.illuminandus.MainActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,22 +39,23 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainLevelSelect"/>
-        <activity android:name=".LevelSelectHidden"/>
-        <activity android:name=".LevelSelectLocked"/>
-        <activity android:name=".LevelSelectChanging"/>
-        <activity android:name=".LevelSelectNormal"/>
-        <activity android:name=".LevelPlayHiddenWalls" />
-        <activity android:name=".LevelPlayChangingWalls" />
-        <activity android:name=".LevelPlayKeys"/>
-        <activity android:name=".LevelPlayNormalWalls"/>
-        <activity android:name=".FinishedScreen"/>
-        <activity android:name=".InfoScreenLevel"/>
-        <activity android:name=".InfoScreenGameType"/>
+        <activity android:name="my.illuminandus.MainLevelSelect"/>
+        <activity android:name="my.illuminandus.LevelSelectHidden"/>
+        <activity android:name="my.illuminandus.LevelSelectLocked"/>
+        <activity android:name="my.illuminandus.LevelSelectChanging"/>
+        <activity android:name="my.illuminandus.LevelSelectNormal"/>
+        <activity android:name="my.illuminandus.LevelPlayHiddenWalls" />
+        <activity android:name="my.illuminandus.LevelPlayChangingWalls" />
+        <activity android:name="my.illuminandus.LevelPlayKeys"/>
+        <activity android:name="my.illuminandus.LevelPlayNormalWalls"/>
+        <activity android:name="my.illuminandus.FinishedScreen"/>
+        <activity android:name="my.illuminandus.InfoScreenLevel"/>
+        <activity android:name="my.illuminandus.InfoScreenGameType"/>
 
-        <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
     </application>
 
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.INTERNET"
         />
 
