@@ -36,6 +36,10 @@ class Wall extends GameObjects {
         return special;
     }
 
+    ImageView getImageView(){
+        return wallImage;
+    }
+
     void setColor(Context c){
         context = c;
         if(special==1) {

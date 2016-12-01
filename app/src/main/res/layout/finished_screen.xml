@@ -39,6 +39,7 @@
                 android:src="@drawable/play_button"
                 android:onClick="nextLevelButton"
                 android:layout_weight="1"
+                android:padding="5dp"
                 />
 
             <ImageView
@@ -47,45 +48,34 @@
                 android:src="@drawable/restart_button"
                 android:onClick="restartLevelButton"
                 android:layout_weight="1"
+                android:padding="5dp"
                 />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="5dp">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/level_select_button"
                 android:layout_weight="1"
-                android:onClick="returnToLevelSelect"/>
+                android:onClick="returnToLevelSelect"
+                android:padding="5dp"
+                />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/home_button"
                 android:layout_weight="1"
-                android:onClick="homeButtonClick"/>
-
+                android:onClick="homeButtonClick"
+                android:padding="5dp"
+                />
 
         </LinearLayout>
 
 
 
+
+
     </LinearLayout>
-
-
-
-
-
 
 
     <RelativeLayout

@@ -12,10 +12,12 @@ import android.view.WindowManager;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class FinishedScreen extends AppCompatActivity {
     private int levelNumber;
     private String gameType;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,13 @@ public class FinishedScreen extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         levelNumber = extras.getInt("levelNumber");
         gameType = extras.getString("GameType");
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        //TODO misschien meer dingen loggen?
+        Bundle bundle = new Bundle();
+        bundle.putString("gameTypeFinished",gameType);
+        mFirebaseAnalytics.logEvent("GameTypeFinished", bundle);
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -54,7 +63,7 @@ public class FinishedScreen extends AppCompatActivity {
         }
 
         if(gameType.equals("changing")){
-            intent = new Intent(FinishedScreen.this, LevelSelectChanging.class);
+            intent = new Intent(FinishedScreen.this, MainLevelSelect.class);
         }
 
         if(gameType.equals("locked")){
@@ -76,14 +85,6 @@ public class FinishedScreen extends AppCompatActivity {
             if(prefs.getInt("hiddenLevelProgress",0)<levelNumber+1){
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putInt("hiddenLevelProgress", levelNumber+1);
-                editor.commit();
-            }
-        }
-
-        if(gameType.equals("changing")){
-            if(prefs.getInt("changingLevelProgress",0)<levelNumber+1){
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putInt("changingLevelProgress", levelNumber+1);
                 editor.commit();
             }
         }
@@ -175,7 +176,7 @@ public class FinishedScreen extends AppCompatActivity {
         }
 
         if(gameType.equals("changing")){
-            intent = new Intent(FinishedScreen.this, LevelSelectChanging.class);
+            intent = new Intent(FinishedScreen.this, MainLevelSelect.class);
         }
 
         if(gameType.equals("locked")){

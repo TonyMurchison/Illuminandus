@@ -10,15 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
 
-    //TODO zorgen dat muren niet uitsteken
-    //TODO changing mazes zorgen dat de muren niet problemen geven met de bal
     //TODO splashscreen logo
     //TODO nieuw icon
-    //TODO google gaming ding toevoegen?
-    //TODO social media toevoegen
-    //TODO rating vragen
-    //TODO nieuwe maze generation code proberen
-    //TODO zorgen dat de app alleen voor telefoons is
+    //TODO levels maken
+    //TODO muren goed uitlijnen
 
 
 

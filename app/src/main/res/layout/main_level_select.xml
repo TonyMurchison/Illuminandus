@@ -17,25 +17,28 @@
         android:paddingBottom="5dp"
         android:paddingTop="5dp">
 
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/versionNumber"
+            android:text=""
+            android:id="@+id/versionNumberTextView"
             android:textColor="@color/white"
             android:layout_gravity="bottom"
             android:textSize="10sp"/>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:text="Game Modes"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="40sp"
             android:layout_weight="1"/>
+
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:text="Hidden Maze"
             android:layout_weight="1"
             android:background="@drawable/button_hidden"
@@ -46,9 +49,11 @@
             android:textSize="30sp"
             android:textColor="@color/white"
             />
+
+
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:text="changing maze"
             android:layout_weight="1"
             android:background="@drawable/button_changing"
@@ -61,7 +66,7 @@
             />
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:text="locked maze"
             android:layout_weight="1"
             android:background="@drawable/button_locked"
@@ -75,7 +80,7 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:text="normal maze"
             android:layout_weight="1"
             android:background="@drawable/button_normal"
@@ -87,21 +92,11 @@
             android:textColor="@color/white"
             />
 
-
-
-
-
-
-
-
-
-
-
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="50dp"
         xmlns:ads="http://schemas.android.com/apk/res-auto">
 
         <com.google.android.gms.ads.AdView

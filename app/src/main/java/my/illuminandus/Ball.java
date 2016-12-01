@@ -49,6 +49,10 @@ class Ball extends GameObjects {
         }
     }
 
+    ImageView getImageView(){
+        return ballImage;
+    }
+
     void setWidth(int widthInput){
         width = widthInput;
         ballImage.requestLayout();

@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="levelNames">
-        <item>The Blue Power-up</item>
-        <item>The Pink Power-up</item>
-        <item>The Red Power-up</item>
-        <item>The Yellow Power-up</item>
-        <item>The Green Power-up</item>
-        <item>The Multi Power-up</item>
+        <item>The Blue Power-Up</item>
+        <item>The Pink Power-Up</item>
+        <item>The Red Power-Up</item>
+        <item>The Yellow Power-Up</item>
+        <item>The Green Power-Up</item>
+        <item>The Multi Power-Up</item>
     </string-array>
 
     <string-array name="infoStrings">
-        <item>The blue Power-up will reveal the whole map for 8 seconds. Use this time wisely!</item>
-        <item>The pink Power-up will hide all the walls. Do not get lost!</item>
-        <item>The red Power-up will invert the controls of the ball for 6 seconds. Things are getting harder!</item>
-        <item>The yellow Power-up will hide the playingball for 5 seconds.</item>
-        <item>The green Power-up will show walls that are inside a certain radius of the ball.</item>
-        <item>The multi Power-up will have a randomly chosen effect.</item>
+        <item>The Blue Power-Up reveals the whole map for 8 seconds. Use this time wisely!</item>
+        <item>The Pink Power-Up hides all the walls. Don\'t get lost!</item>
+        <item>The Red Power-Up inverts the ball controls for 6 seconds. Things are getting harder!</item>
+        <item>The Yellow Power-Up hides the player ball for 5 seconds.</item>
+        <item>The Green Power-Up shows walls within a certain radius of the ball.</item>
+        <item>The Multi Power-Up has a randomly chosen effect.</item>
     </string-array>
 
     <string-array name="explenation">
-        <item>The hidden maze is a game mode where all the walls are hidden. You can make them appear by hitting them with the ball, but be aware that they will hide again after a couple of seconds. The goal is to collect all the power-ups in the level, but be aware that not all are "helpful" </item>
-        <item>The changing maze is a game mode where you have to reach the exit but with a twist. Every few seconds the maze will shift the walls around, so be fast!</item>
-        <item>The locked maze is a game mode where you have to reach the exit but not before you have collected the keys to open the doors that are obstructing your path!</item>
-        <item>The normal maze is the traditional maze game where you have to reach the exit. Kick back and relax!</item>
+        <item>The Hidden Maze is a game mode in which all the walls are hidden. Hit the walls with the ball to show them for a few seconds. Your goal is to collect all pick-ups. Be careful though - not all pick-ups work in your favour!</item>
+        <item>The Changing Maze is a game mode in which you have to reach the exit, but with a twist. Every few seconds the maze will shift the walls around, so be fast!</item>
+        <item>The Locked Maze is a game mode in which you have to reach the exit - but not before you\'ve collected the keys to clear your path!</item>
+        <item>The Normal Maze is a traditional maze game in which you have to reach the exit. Kick back and relax!</item>
     </string-array>
+
 </resources>

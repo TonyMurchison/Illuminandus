@@ -58,6 +58,7 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
     private int wallNumber=0;
 
     int screenWidth;
+    int screenHeight;
     double speedAdjustment;
     double block;
 
@@ -105,8 +106,9 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         Point size = new Point();
         display.getSize(size);
         screenWidth = size.x;
+        screenHeight = size.y;
         speedAdjustment = screenWidth / 1000d;
-        block = screenWidth / 60d;
+        block =  ((screenHeight*(9d/16d)) / 60d);
 
         readFile();
 
@@ -157,18 +159,20 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
     }
 
     public void calibrateButtonClick(View v){
-        double x = eventStorage.values[2];
-        double y = eventStorage.values[1];
+        if(eventStorage!=null) {
+            double x = eventStorage.values[2];
+            double y = eventStorage.values[1];
 
-        offsetMoveX = x;
-        offsetMoveY = y;
+            offsetMoveX = x;
+            offsetMoveY = y;
 
-        SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("OffsetX", (int)x);
-        editor.putInt("OffsetY", (int)y);
+            SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt("OffsetX", (int) x);
+            editor.putInt("OffsetY", (int) y);
 
-        editor.commit();
+            editor.commit();
+        }
     }
 
     void readFile(){
@@ -295,7 +299,6 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
     @Override
     protected void onResume() {
         super.onResume();
-        //TODO zorgen dat het goed komt als je terug komt
         sManager.registerListener(this, sManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_FASTEST);
 
         helper.hide();
@@ -327,7 +330,6 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         sManager.unregisterListener(this);
         h = null;
         super.onStop();
-        //TODO moet hier nog iets?
     }
 
 
@@ -533,10 +535,14 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 
     public void start() {
         Resources r = getResources();
-        double offset;
+        int offset;
         DisplayMetrics metrics = getResources().getDisplayMetrics();
 
-        offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
+        offset = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics()));
+
+        int offsetX = (int) ((screenWidth-(60d*block))/2);
+
+
 
         /*
         if(metrics.densityDpi>400 && metrics.densityDpi <=720){
@@ -550,6 +556,17 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 */
 
 
+        int offsetConstantHeight = (int) (5.916d * block);
+        int offsetConstantWidth = (int) (1d*block);
+
+        //TODO de onderstaande een meervoud van de bovende maken, voorbeeld: int offsetH1 = offsetConstantWidth*(4.916d)
+        int offsetConstant = (int) (4.916d * block);
+        int offsetH1 = (int) (3d *  block);
+        int offsetH2 = (int) (block * 27.5d);
+        int offsetV1 = (int) (block * 5.416d);
+        int offsetV2 = (int) (block * 25.1d);
+
+
 
 
 
@@ -558,9 +575,9 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
                 int id = getResources().getIdentifier("horizontal_wall_" + ((i*12) + (j)), "id", getPackageName());
                 ImageView wallImage = (ImageView) findViewById(id);
                 mazeWall[wallNumber] = new Wall(wallImage);
-                mazeWall[wallNumber].setWidth((int)(5.916d * block));
-                mazeWall[wallNumber].setHeight((int)(1d * block));
-                mazeWall[wallNumber].setCenter((int) ((double) j * 4.916d * block + 2.857d *  block), (int) ((double) i * 4.916d *  block +  block * 27.514d-offset));
+                mazeWall[wallNumber].setWidth(offsetConstantHeight);
+                mazeWall[wallNumber].setHeight(offsetConstantWidth);
+                mazeWall[wallNumber].setCenter((j * offsetConstant) + offsetX + offsetH1, (i * offsetConstant) +  offsetH2 - offset);
                 mazeWall[wallNumber].setCorners();
 
                 if (horizontalWalls[i][j]) {
@@ -580,9 +597,9 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
                 int id = getResources().getIdentifier("vertical_wall_" + ((i*11) + (j)), "id", getPackageName());
                 ImageView wallImage = (ImageView) findViewById(id);
                 mazeWall[wallNumber] = new Wall(wallImage);
-                mazeWall[wallNumber].setWidth((int)(1d * block));
-                mazeWall[wallNumber].setHeight((int)(5.916d * block));
-                mazeWall[wallNumber].setCenter((int) ((double) j * 4.916d *  block +  block * 5.416d), (int) ((double) i * 4.916d * block +  block * 25.056d-offset));
+                mazeWall[wallNumber].setWidth(offsetConstantWidth);
+                mazeWall[wallNumber].setHeight(offsetConstantHeight);
+                mazeWall[wallNumber].setCenter((j *offsetConstant) +  offsetV1 + offsetX,  (i * offsetConstant) +  offsetV2 -offset);
                 mazeWall[wallNumber].setCorners();
 
                 if (verticalWalls[i][j]) {
@@ -601,7 +618,7 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         mazeWall[wallNumber] = new Wall(leftBorderWallImage);
         mazeWall[wallNumber].setWidth((int)(1 * block));
         mazeWall[wallNumber].setHeight((int)(84 * block));
-        mazeWall[wallNumber].setCenter((int) ((0.5d) * block), (int) (64.123d * block-offset));
+        mazeWall[wallNumber].setCenter((int) ((0.5d) * block+offsetX), (int) (64.123d * block-offset));
         mazeWall[wallNumber].setCorners();
         mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
@@ -610,7 +627,7 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         mazeWall[wallNumber] = new Wall(rightBorderWallImage);
         mazeWall[wallNumber].setWidth((int)(1 * block));
         mazeWall[wallNumber].setHeight((int)(84 * block));
-        mazeWall[wallNumber].setCenter((int) (59.5d * block), (int) (64.123d * block-offset));
+        mazeWall[wallNumber].setCenter((int) (59.5d * block+offsetX), (int) (64.123d * block-offset));
         mazeWall[wallNumber].setCorners();
         mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
@@ -619,7 +636,7 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         mazeWall[wallNumber] = new Wall(topBorderWallImage);
         mazeWall[wallNumber].setWidth((int)(60 * block));
         mazeWall[wallNumber].setHeight((int)(1 * block));
-        mazeWall[wallNumber].setCenter((int) (30d *  block), (int) (22.598d * block-offset));
+        mazeWall[wallNumber].setCenter((int) (30d *  block+offsetX), (int) (22.598d * block-offset));
         mazeWall[wallNumber].setCorners();
         mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
@@ -628,20 +645,20 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         mazeWall[wallNumber] = new Wall(bottomBorderWallImage);
         mazeWall[wallNumber].setWidth((int)(60 * block));
         mazeWall[wallNumber].setHeight((int)(1 * block));
-        mazeWall[wallNumber].setCenter((int) (30d * block),(int)(106.17d *block-offset));
+        mazeWall[wallNumber].setCenter((int) (30d * block+offsetX),(int)(106.17d *block-offset));
         mazeWall[wallNumber].setCorners();
         mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
 
         playingBall.setWidth((int) (2d * block));
         playingBall.setHeight((int) (2d * block));
-        playingBall.setCenter((int) ((2.857d + ballPositionX * 4.916) * block), (int) (((25.056d + ballPositionY * 4.916) * block)-offset));
+        playingBall.setCenter((int) ((2.857d+offsetX + ballPositionX * 4.916) * block), (int) (((25.056d + ballPositionY * 4.916) * block)-offset));
         playingBall.setCorners();
 
 
         exitPoint.setWidth((int) (2d * block));
         exitPoint.setHeight((int) (2d * block));
-        exitPoint.setCenter((int) ((2.857d + exitPositionX * 4.916) * block), (int) (((25.056d + exitPositionY * 4.916) * block)-offset));
+        exitPoint.setCenter((int) ((2.857d+offsetX + exitPositionX * 4.916) * block), (int) (((25.056d + exitPositionY * 4.916) * block)-offset));
         exitPoint.setCorners();
     }
 

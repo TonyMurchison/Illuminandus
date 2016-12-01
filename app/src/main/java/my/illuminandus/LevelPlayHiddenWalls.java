@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -105,6 +106,10 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
 
 
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +141,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         screenWidth = size.x;
         speedAdjustment=screenWidth/1000d;
         block=screenWidth / 60d;
+
 
 
         timeStart=(int)System.currentTimeMillis();
@@ -196,18 +202,20 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
     }
 
     public void calibrateButtonClick(View v){
-        double x = eventStorage.values[2];
-        double y = eventStorage.values[1];
+        if(eventStorage!=null) {
+            double x = eventStorage.values[2];
+            double y = eventStorage.values[1];
 
-        offsetMoveX = x;
-        offsetMoveY = y;
+            offsetMoveX = x;
+            offsetMoveY = y;
 
-        SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("OffsetX", (int)x);
-        editor.putInt("OffsetY", (int)y);
+            SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt("OffsetX", (int) x);
+            editor.putInt("OffsetY", (int) y);
 
-        editor.commit();
+            editor.commit();
+        }
     }
 
     void readFile(){
@@ -311,7 +319,6 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
 
 
-
         //determine the amount of steps in each direction to be taken for the next move
         x = (int)Math.round((xb/(1d*invert))*allowMovement);
         y =(int) Math.round((-yb/(1d*invert ))*allowMovement);
@@ -319,6 +326,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         //check if a wall should be set invisible, this happens when the "visibleThreshold" has been reached
         time = (int) (System.currentTimeMillis() - timeStart - pausedTime);
         for (int i = 0; i < wallNumber - 4; i++) {
+
             if (time - mazeWall[i].getTimeTouched() > visibleThreshold) {
                 mazeWall[i].setVisibility(hide);
             }
@@ -523,7 +531,6 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
     //inverts controls
     public void redPowerUp(PowerUp powerUp){
-        //TODO wat gebeurt er als er twee vlak achter elkaar raakt?
         redBallHit=true;
         redTimer = (int)(System.currentTimeMillis() - timeStart-pausedTime);
         redPowerupTextView.setText("8s");

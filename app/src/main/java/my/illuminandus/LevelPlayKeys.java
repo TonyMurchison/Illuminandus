@@ -53,13 +53,13 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
     private Handler h;
     private int delay = 20;
 
-    private Wall mazeWall[] = new Wall[241];
-    private boolean horizontalWalls[][] = new boolean[9][7];
-    private boolean verticalWalls[][] = new boolean[10][6];
+    private Wall mazeWall[] = new Wall[260];
+    private boolean horizontalWalls[][] = new boolean[13][10];
+    private boolean verticalWalls[][] = new boolean[14][9];
     private int wallNumber=0;
 
     private ArrayList<Key> keys = new ArrayList<>();
-    private int keysPosition[][] = new int[10][7];
+    private int keysPosition[][] = new int[14][10];
     private int keysCounter=0;
     private ArrayList<Integer> wallsToMark = new ArrayList<>();
     private ArrayList<Integer> special = new ArrayList<>();
@@ -168,18 +168,20 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
     }
 
     public void calibrateButtonClick(View v){
-        double x = eventStorage.values[2];
-        double y = eventStorage.values[1];
+        if(eventStorage!=null) {
+            double x = eventStorage.values[2];
+            double y = eventStorage.values[1];
 
-        offsetMoveX = x;
-        offsetMoveY = y;
+            offsetMoveX = x;
+            offsetMoveY = y;
 
-        SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("OffsetX", (int)x);
-        editor.putInt("OffsetY", (int)y);
+            SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt("OffsetX", (int) x);
+            editor.putInt("OffsetY", (int) y);
 
-        editor.commit();
+            editor.commit();
+        }
     }
 
     void readFile(){
@@ -198,37 +200,36 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
         String level = "Level "+Integer.toString(levelNumber+1);
         while(reading){
             if(level.equals(scanner.nextLine())){
-                for(int i=0;i<10;i++){
+                for(int i=0;i<14;i++){
                     String line = scanner.nextLine();
-                    for(int j=0;j<7;j++){
+                    for(int j=0;j<10;j++){
                         keysPosition[i][j]=Character.getNumericValue(line.charAt(j));
                     }
                 }
 
                 scanner.nextLine();
-                for(int i=0;i<9;i++){
+
+                for(int i=0;i<13;i++){
                     String line = scanner.nextLine();
-                    for(int j=0;j<7;j++){
+                    for(int j=0;j<10;j++){
+                        horizontalWalls[i][j]=false;
                         if(Character.getNumericValue(line.charAt(j))==1){
                             horizontalWalls[i][j]=true;
                         }
-                        else{
-                            horizontalWalls[i][j]=false;
-                        }
+
                     }
                 }
 
                 scanner.nextLine();
 
-                for(int i=0;i<10;i++){
+                for(int i=0;i<14;i++){
                     String line = scanner.nextLine();
-                    for(int j=0;j<6;j++){
+                    for(int j=0;j<9;j++){
+                        verticalWalls[i][j]=false;
                         if(Character.getNumericValue(line.charAt(j))==1){
                             verticalWalls[i][j]=true;
                         }
-                        else{
-                            verticalWalls[i][j]=false;
-                        }
+
                     }
                 }
 
@@ -639,8 +640,8 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
 */
 
 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 7; j++) {
+        for (int i = 0; i < 14; i++) {
+            for (int j = 0; j < 10; j++) {
                 if (keysPosition[i][j] > 0) {
 
                     ImageView imageKey = new ImageView(LevelPlayKeys.this);
@@ -668,7 +669,7 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
                     keys.add(keysCounter,new Key(keysPosition[i][j], imageKey));
                     keys.get(keysCounter).setWidth((int) (4d * block));
                     keys.get(keysCounter).setHeight((int) (4d * block));
-                    keys.get(keysCounter).setCenter((int) ((double) j * 8.428d * block + 4.714d * block), (int) ((double) i * 8.428d *  block + block * 26.29d-offset));
+                    keys.get(keysCounter).setCenter((int) ((double) j * 5.9d * block + 3.45d * block), (int) ((double) i * 5.9d *  block + block * 26.85d-offset));
                     keys.get(keysCounter).setCorners();
                     keys.get(keysCounter).setHittable(true);
                     keysCounter = keysCounter + 1;
@@ -677,14 +678,14 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
         }
 
 
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 7; j++) {
-                int id = getResources().getIdentifier("horizontal_wall_" + ((i*7) + (j)), "id", getPackageName());
+        for (int i = 0; i < 13; i++) {
+            for (int j = 0; j < 10; j++) {
+                int id = getResources().getIdentifier("horizontal_wall_" + ((i*10) + (j)), "id", getPackageName());
                 ImageView wallImage = (ImageView) findViewById(id);
                 mazeWall[wallNumber] = new Wall(wallImage);
-                mazeWall[wallNumber].setWidth((int)(9.428d * block));
+                mazeWall[wallNumber].setWidth((int)(6.9d * block));
                 mazeWall[wallNumber].setHeight((int)(1d * block));
-                mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d * block + 4.714d *  block), (int) ((double) i * 8.428d *  block +  block * 30.504d-offset));
+                mazeWall[wallNumber].setCenter((int) ((double) j * 5.9d * block + 3.45d *  block), (int) ((double) i * 5.9d *  block +  block * 29.8d-offset));
                 mazeWall[wallNumber].setCorners();
 
                 if (horizontalWalls[i][j]) {
@@ -699,14 +700,14 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
             }
         }
 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 6; j++) {
-                int id = getResources().getIdentifier("vertical_wall_" + ((i*6) + (j)), "id", getPackageName());
+        for (int i = 0; i < 14; i++) {
+            for (int j = 0; j < 9; j++) {
+                int id = getResources().getIdentifier("vertical_wall_" + ((i*9) + (j)), "id", getPackageName());
                 ImageView wallImage = (ImageView) findViewById(id);
                 mazeWall[wallNumber] = new Wall(wallImage);
                 mazeWall[wallNumber].setWidth((int)(1d * block));
-                mazeWall[wallNumber].setHeight((int)(9.428d * block)); //8.25
-                mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d *  block +  block * 8.928d), (int) ((double) i * 8.428d * block +  block * 26.29d-offset));
+                mazeWall[wallNumber].setHeight((int)(6.85d * block)); //8.25
+                mazeWall[wallNumber].setCenter((int) ((double) j * 5.9d *  block +  block * 6.4d), (int) ((double) i * 5.9d * block +  block * 26.85d-offset));
                 mazeWall[wallNumber].setCorners();
 
                 if (verticalWalls[i][j]) {
@@ -721,13 +722,11 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
             }
         }
 
-
-
         ImageView leftBorderWallImage = (ImageView) findViewById(R.id.leftBorderWall);
         mazeWall[wallNumber] = new Wall(leftBorderWallImage);
         mazeWall[wallNumber].setWidth((int)(1 * block));
-        mazeWall[wallNumber].setHeight((int)(84 * block));
-        mazeWall[wallNumber].setCenter((int) ((0.5d) * block), (int) (64.123d * block-offset));
+        mazeWall[wallNumber].setHeight((int)(82.6d * block));
+        mazeWall[wallNumber].setCenter((int) ((0.5d) * block), (int) (65.2d * block-offset));
         mazeWall[wallNumber].setCorners();
         mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
@@ -735,8 +734,8 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
         ImageView rightBorderWallImage = (ImageView) findViewById(R.id.rightBorderWall);
         mazeWall[wallNumber] = new Wall(rightBorderWallImage);
         mazeWall[wallNumber].setWidth((int)(1 * block));
-        mazeWall[wallNumber].setHeight((int)(84 * block));
-        mazeWall[wallNumber].setCenter((int) (59.5d * block), (int) (64.123d * block-offset));
+        mazeWall[wallNumber].setHeight((int)(82.6d * block));
+        mazeWall[wallNumber].setCenter((int) (59.5d * block), (int) (65.2d * block-offset));
         mazeWall[wallNumber].setCorners();
         mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
@@ -745,7 +744,7 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
         mazeWall[wallNumber] = new Wall(topBorderWallImage);
         mazeWall[wallNumber].setWidth((int)(60 * block));
         mazeWall[wallNumber].setHeight((int)(1 * block));
-        mazeWall[wallNumber].setCenter((int) (30d *  block), (int) (22.076d * block-offset));
+        mazeWall[wallNumber].setCenter((int) (30d *  block), (int) (23.9d * block-offset));
         mazeWall[wallNumber].setCorners();
         mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
@@ -761,12 +760,12 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
 
         playingBall.setWidth((int) (2d * block));
         playingBall.setHeight((int) (2d * block));
-        playingBall.setCenter((int) ((4.714d + ballPositionX * 8.428) * block), (int) (((26.29d + ballPositionY * 8.428) * block)-offset));
+        playingBall.setCenter((int) ((3.45d + ballPositionX * 5.9) * block), (int) (((26.85d + ballPositionY * 5.9) * block)-offset));
         playingBall.setCorners();
 
         exitPoint.setWidth((int) (2d * block));
         exitPoint.setHeight((int) (2d * block));
-        exitPoint.setCenter((int) ((4.714d + exitPositionX * 8.428) * block), (int) (((26.29d + exitPositionY * 8.428) * block)-offset));
+        exitPoint.setCenter((int) ((3.45d + exitPositionX * 5.9) * block), (int) (((26.85d + exitPositionY * 5.9) * block)-offset));
         exitPoint.setCorners();
 
         for(int i=0;i<wallsToMark.size();i++){

@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -24,6 +25,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -57,9 +59,9 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
     private int delay = 20;
     private int delayHandlerChangingWalls = 2000;
 
-    private Wall mazeWall[] = new Wall[241];
-    private boolean horizontalWalls[][] = new boolean[9][7];
-    private boolean verticalWalls[][] = new boolean[10][6];
+    private Wall mazeWall[] = new Wall[260];
+    private boolean horizontalWalls[][] = new boolean[13][10];
+    private boolean verticalWalls[][] = new boolean[14][9];
     private int wallNumber=0;
 
     int screenWidth;
@@ -78,15 +80,12 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
     private double offsetMoveX=0;
     private double offsetMoveY=0;
 
-
+    private int[] lastNumbers = {-1,-1,-1,-1,-1};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        Bundle extras = getIntent().getExtras();
-        levelNumber = extras.getInt("levelNumber");
 
         setContentView(R.layout.level_changing_walls);
         getSupportActionBar().hide();
@@ -121,11 +120,6 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
         //run the method that initializes the layout
         start();
 
-        TextView levelTextView = (TextView)findViewById(R.id.levelTextView);
-        String text = "Level "+Integer.toString(levelNumber+1);
-        if(levelTextView!=null) {
-            levelTextView.setText(text);
-        }
 
         SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         offsetMoveX = (double) prefs.getInt("OffsetX", 0);
@@ -165,24 +159,26 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        Intent intent = new Intent(LevelPlayChangingWalls.this, LevelSelectChanging.class);
+        Intent intent = new Intent(LevelPlayChangingWalls.this, MainLevelSelect.class);
         startActivity(intent);
         finish();
     }
 
     public void calibrateButtonClick(View v){
-        double x = eventStorage.values[2];
-        double y = eventStorage.values[1];
+        if(eventStorage!=null) {
+            double x = eventStorage.values[2];
+            double y = eventStorage.values[1];
 
-        offsetMoveX = x;
-        offsetMoveY = y;
+            offsetMoveX = x;
+            offsetMoveY = y;
 
-        SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("OffsetX", (int)x);
-        editor.putInt("OffsetY", (int)y);
+            SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt("OffsetX", (int) x);
+            editor.putInt("OffsetY", (int) y);
 
-        editor.commit();
+            editor.commit();
+        }
     }
 
 
@@ -199,13 +195,15 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
 
         Scanner scanner = new Scanner(inputStream);
         boolean reading = true;
-        String level = "Level "+Integer.toString(levelNumber+1);
+        Random rand = new Random();
+        levelNumber = rand.nextInt(60) + 1;
+        String level = "Level "+Integer.toString(levelNumber);
         while(reading){
             if(level.equals(scanner.nextLine())){
 
-                for(int i=0;i<9;i++){
+                for(int i=0;i<13;i++){
                     String line = scanner.nextLine();
-                    for(int j=0;j<7;j++){
+                    for(int j=0;j<10;j++){
                         horizontalWalls[i][j]=false;
                         if(Character.getNumericValue(line.charAt(j))==1){
                             horizontalWalls[i][j]=true;
@@ -216,30 +214,23 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
 
                 scanner.nextLine();
 
-                for(int i=0;i<10;i++){
+                for(int i=0;i<14;i++){
                     String line = scanner.nextLine();
-                    for(int j=0;j<6;j++){
+                    for(int j=0;j<9;j++){
                         verticalWalls[i][j]=false;
-                        if(Character.getNumericValue(line.charAt(5-j))==1){
+                        if(Character.getNumericValue(line.charAt(j))==1){
                             verticalWalls[i][j]=true;
                         }
 
                     }
                 }
 
-                scanner.nextLine();
 
-                String line = scanner.nextLine();
-                ballPositionX=Integer.parseInt(line)-1;
-                line = scanner.nextLine();
-                ballPositionY=Integer.parseInt(line)-1;
+                ballPositionX=0;
+                ballPositionY=0;
 
-                scanner.nextLine();
-
-                line = scanner.nextLine();
-                exitPositionX=Integer.parseInt(line)-1;
-                line = scanner.nextLine();
-                exitPositionY=Integer.parseInt(line)-1;
+                exitPositionX=9;
+                exitPositionY=13;
 
                 reading=false;
 
@@ -248,6 +239,8 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
             }
         }
         scanner.close();
+
+
     }
 
     @Override
@@ -292,12 +285,7 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
         super.recreate();
     }
 
-    //go back to the level select screen
-    public void quitLevelClick(View v){
-        Intent intent = new Intent(LevelPlayChangingWalls.this, LevelSelectChanging.class);
-        startActivity(intent);
-        finish();
-    }
+
 
     public void mainMenuButtonClicked(View v){
         Intent intent = new Intent(LevelPlayChangingWalls.this, MainLevelSelect.class);
@@ -353,43 +341,101 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
     }
 
     public void changeWalls(){
+        AssetManager assetManager = getResources().getAssets();
+        InputStream inputStream = null;
+
+        try {
+            inputStream = assetManager.open("LevelsChangingWall.txt");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int randomLevel=-1;
+        do {
             Random rand = new Random();
+            randomLevel = rand.nextInt(60) + 1;
+        }while(contains(lastNumbers,randomLevel));
 
-            int wallsToHide[] = new int[20];
-            int wallsToShow[] = new int[20];
-            int numbersUsed[] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+        lastNumbers[4]=lastNumbers[3];
+        lastNumbers[3]=lastNumbers[2];
+        lastNumbers[2]=lastNumbers[1];
+        lastNumbers[1]=lastNumbers[0];
+        lastNumbers[0]=randomLevel;
 
-            int i = 0;
-            int j = 0;
+        Scanner scanner = new Scanner(inputStream);
+        boolean reading = true;
+        String level = "Level "+Integer.toString(randomLevel);
+        while(reading){
+            if(level.equals(scanner.nextLine())){
 
-            while (i < 20) {
-                int randomNumber = rand.nextInt(wallAmount);
-                if (mazeWall[randomNumber].getVisility()==show && !contains(numbersUsed, randomNumber)) {
-                    wallsToHide[i] = randomNumber;
-                    numbersUsed[i] = randomNumber;
-                    i = i + 1;
+                for(int i=0;i<13;i++){
+                    String line = scanner.nextLine();
+                    for(int j=0;j<10;j++){
+                        horizontalWalls[i][j]=false;
+                        if(Character.getNumericValue(line.charAt(j))==1){
+                            horizontalWalls[i][j]=true;
+                        }
+
+                    }
                 }
 
-            }
+                scanner.nextLine();
 
-            while (j < 20) {
-                int randomNumber = rand.nextInt(wallAmount);
-                if (mazeWall[randomNumber].getVisility()==hide && !contains(numbersUsed, randomNumber)) {
-                    wallsToShow[j] = randomNumber;
-                    numbersUsed[j + 20] = randomNumber;
-                    j = j + 1;
+                for(int i=0;i<14;i++){
+                    String line = scanner.nextLine();
+                    for(int j=0;j<9;j++){
+                        verticalWalls[i][j]=false;
+                        if(Character.getNumericValue(line.charAt(j))==1){
+                            verticalWalls[i][j]=true;
+                        }
+
+                    }
                 }
-            }
 
-            for (int x = 0; x < 20; x++) {
-                mazeWall[wallsToHide[x]].setHittable(false);
-                mazeWall[wallsToHide[x]].setVisibility(hide);
-            }
 
-            for (int x = 0; x < 20; x++) {
-                mazeWall[wallsToShow[x]].setHittable(true);
-                mazeWall[wallsToShow[x]].setVisibility(show);
+                ballPositionX=0;
+                ballPositionY=0;
+
+                exitPositionX=9;
+                exitPositionY=13;
+
+                reading=false;
+
+
+
             }
+        }
+        scanner.close();
+
+        int tempWallNumber=0;
+        for(int i = 0; i < 13; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (horizontalWalls[i][j]) {
+                    mazeWall[tempWallNumber].setHittable(true);
+                    mazeWall[tempWallNumber].setVisibility(show);
+                } else {
+                    mazeWall[tempWallNumber].setHittable(false);
+                    mazeWall[tempWallNumber].setVisibility(hide);
+                }
+                tempWallNumber=tempWallNumber+1;
+            }
+        }
+
+        for(int i = 0; i < 14; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (verticalWalls[i][j]) {
+                    mazeWall[tempWallNumber].setHittable(true);
+                    mazeWall[tempWallNumber].setVisibility(show);
+                } else {
+                    mazeWall[tempWallNumber].setHittable(false);
+                    mazeWall[tempWallNumber].setVisibility(hide);
+                }
+                tempWallNumber=tempWallNumber+1;
+            }
+        }
+
+
 
     }
 
@@ -625,14 +671,14 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
 
 
 
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 7; j++) {
-                int id = getResources().getIdentifier("horizontal_wall_" + ((i*7) + (j)), "id", getPackageName());
+        for (int i = 0; i < 13; i++) {
+            for (int j = 0; j < 10; j++) {
+                int id = getResources().getIdentifier("horizontal_wall_" + ((i*10) + (j)), "id", getPackageName());
                 ImageView wallImage = (ImageView) findViewById(id);
                 mazeWall[wallNumber] = new Wall(wallImage);
-                mazeWall[wallNumber].setWidth((int)(9.428d * block));
+                mazeWall[wallNumber].setWidth((int)(6.9d * block));
                 mazeWall[wallNumber].setHeight((int)(1d * block));
-                mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d * block + 4.714d *  block), (int) ((double) i * 8.428d *  block +  block * 30.504d-offset));
+                mazeWall[wallNumber].setCenter((int) ((double) j * 5.9d * block + 3.45d *  block), (int) ((double) i * 5.9d *  block +  block * 29.8d-offset));
                 mazeWall[wallNumber].setCorners();
 
                 if (horizontalWalls[i][j]) {
@@ -647,14 +693,14 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
             }
         }
 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 6; j++) {
-                int id = getResources().getIdentifier("vertical_wall_" + ((i*6) + (j)), "id", getPackageName());
+        for (int i = 0; i < 14; i++) {
+            for (int j = 0; j < 9; j++) {
+                int id = getResources().getIdentifier("vertical_wall_" + ((i*9) + (j)), "id", getPackageName());
                 ImageView wallImage = (ImageView) findViewById(id);
                 mazeWall[wallNumber] = new Wall(wallImage);
                 mazeWall[wallNumber].setWidth((int)(1d * block));
-                mazeWall[wallNumber].setHeight((int)(9.428d * block)); //8.25
-                mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d *  block +  block * 8.928d), (int) ((double) i * 8.428d * block +  block * 26.29d-offset));
+                mazeWall[wallNumber].setHeight((int)(6.85d * block)); //8.25
+                mazeWall[wallNumber].setCenter((int) ((double) j * 5.9d *  block +  block * 6.4d), (int) ((double) i * 5.9d * block +  block * 26.85d-offset));
                 mazeWall[wallNumber].setCorners();
 
                 if (verticalWalls[i][j]) {
@@ -672,8 +718,8 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
         ImageView leftBorderWallImage = (ImageView) findViewById(R.id.leftBorderWall);
         mazeWall[wallNumber] = new Wall(leftBorderWallImage);
         mazeWall[wallNumber].setWidth((int)(1 * block));
-        mazeWall[wallNumber].setHeight((int)(84 * block));
-        mazeWall[wallNumber].setCenter((int) ((0.5d) * block), (int) (64.123d * block-offset));
+        mazeWall[wallNumber].setHeight((int)(82.6d * block));
+        mazeWall[wallNumber].setCenter((int) ((0.5d) * block), (int) (65.2d * block-offset));
         mazeWall[wallNumber].setCorners();
         mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
@@ -681,8 +727,8 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
         ImageView rightBorderWallImage = (ImageView) findViewById(R.id.rightBorderWall);
         mazeWall[wallNumber] = new Wall(rightBorderWallImage);
         mazeWall[wallNumber].setWidth((int)(1 * block));
-        mazeWall[wallNumber].setHeight((int)(84 * block));
-        mazeWall[wallNumber].setCenter((int) (59.5d * block), (int) (64.123d * block-offset));
+        mazeWall[wallNumber].setHeight((int)(82.6d * block));
+        mazeWall[wallNumber].setCenter((int) (59.5d * block), (int) (65.2d * block-offset));
         mazeWall[wallNumber].setCorners();
         mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
@@ -691,7 +737,7 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
         mazeWall[wallNumber] = new Wall(topBorderWallImage);
         mazeWall[wallNumber].setWidth((int)(60 * block));
         mazeWall[wallNumber].setHeight((int)(1 * block));
-        mazeWall[wallNumber].setCenter((int) (30d *  block), (int) (22.076d * block-offset));
+        mazeWall[wallNumber].setCenter((int) (30d *  block), (int) (23.9d * block-offset));
         mazeWall[wallNumber].setCorners();
         mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
@@ -707,12 +753,12 @@ public class LevelPlayChangingWalls extends AppCompatActivity implements SensorE
 
         playingBall.setWidth((int) (2d * block));
         playingBall.setHeight((int) (2d * block));
-        playingBall.setCenter((int) ((4.714d + ballPositionX * 8.428) * block), (int) (((26.29d + ballPositionY * 8.428) * block)-offset));
+        playingBall.setCenter((int) ((3.45d + ballPositionX * 5.9d) * block), (int) (((26.85d + ballPositionY * 5.9d) * block)-offset));
         playingBall.setCorners();
 
         exitPoint.setWidth((int) (2d * block));
         exitPoint.setHeight((int) (2d * block));
-        exitPoint.setCenter((int) ((4.714d + exitPositionX * 8.428) * block), (int) (((26.29d + exitPositionY * 8.428) * block)-offset));
+        exitPoint.setCenter((int) ((3.45d + exitPositionX * 5.9d) * block), (int) (((26.85d + exitPositionY * 5.9d) * block)-offset));
         exitPoint.setCorners();
 
 
