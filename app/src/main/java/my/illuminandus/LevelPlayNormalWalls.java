@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -60,7 +61,7 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
     int screenWidth;
     int screenHeight;
     double speedAdjustment;
-    double block;
+    int block;
 
     private float show = 1;
     private float hide = 0;
@@ -108,7 +109,7 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         screenWidth = size.x;
         screenHeight = size.y;
         speedAdjustment = screenWidth / 1000d;
-        block =  ((screenHeight*(9d/16d)) / 60d);
+        block =  (int)((screenHeight*(9d/16d)) / 61d);
 
         readFile();
 
@@ -303,6 +304,11 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 
         helper.hide();
 
+        /*
+        Toast.makeText(getApplicationContext(),Integer.toString(mazeWall[194].getCenterY()-mazeWall[0].getCenterY()),Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),Integer.toString(mazeWall[191].getCenterY()-mazeWall[195].getCenterY()),Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),Integer.toString(block),Toast.LENGTH_LONG).show();
+*/
     }
 
     @Override
@@ -540,7 +546,12 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 
         offset = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics()));
 
-        int offsetX = (int) ((screenWidth-(60d*block))/2);
+
+        int unit = (int) Math.floor(5.916d*block);
+
+        int offsetX = ((screenWidth-(61*block))/2);
+        int offsetY = (screenHeight-offset-(87*block));
+
 
 
 
@@ -556,17 +567,18 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 */
 
 
-        int offsetConstantHeight = (int) (5.916d * block);
-        int offsetConstantWidth = (int) (1d*block);
 
+
+/*
         //TODO de onderstaande een meervoud van de bovende maken, voorbeeld: int offsetH1 = offsetConstantWidth*(4.916d)
-        int offsetConstant = (int) (4.916d * block);
-        int offsetH1 = (int) (3d *  block);
-        int offsetH2 = (int) (block * 27.5d);
-        int offsetV1 = (int) (block * 5.416d);
-        int offsetV2 = (int) (block * 25.1d);
+        int offsetConstantWidth = (int) (offsetConstantHeight/5.916d);
+        int offsetConstant = (int) (offsetConstantHeight*(4.916d/5.916d));
+        int offsetH1 = (int) (offsetConstantHeight*(3d/5.916d));
+        int offsetH2 = (int) (offsetConstantHeight*(27.65d/5.916d));
+        int offsetV1 = (int) (offsetConstantHeight*(5.5d/5.916d));
+        int offsetV2 = (int) (offsetConstantHeight*(25.3d/5.916d));
 
-
+*/
 
 
 
@@ -575,9 +587,9 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
                 int id = getResources().getIdentifier("horizontal_wall_" + ((i*12) + (j)), "id", getPackageName());
                 ImageView wallImage = (ImageView) findViewById(id);
                 mazeWall[wallNumber] = new Wall(wallImage);
-                mazeWall[wallNumber].setWidth(offsetConstantHeight);
-                mazeWall[wallNumber].setHeight(offsetConstantWidth);
-                mazeWall[wallNumber].setCenter((j * offsetConstant) + offsetX + offsetH1, (i * offsetConstant) +  offsetH2 - offset);
+                mazeWall[wallNumber].setWidth(6*block);
+                mazeWall[wallNumber].setHeight(block);
+                mazeWall[wallNumber].setCenter((j * (5*block)) + offsetX +(int)(3*block), (i * (5*block)) +offsetY+(int)(6.5d*block));
                 mazeWall[wallNumber].setCorners();
 
                 if (horizontalWalls[i][j]) {
@@ -597,9 +609,9 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
                 int id = getResources().getIdentifier("vertical_wall_" + ((i*11) + (j)), "id", getPackageName());
                 ImageView wallImage = (ImageView) findViewById(id);
                 mazeWall[wallNumber] = new Wall(wallImage);
-                mazeWall[wallNumber].setWidth(offsetConstantWidth);
-                mazeWall[wallNumber].setHeight(offsetConstantHeight);
-                mazeWall[wallNumber].setCenter((j *offsetConstant) +  offsetV1 + offsetX,  (i * offsetConstant) +  offsetV2 -offset);
+                mazeWall[wallNumber].setWidth(block);
+                mazeWall[wallNumber].setHeight(6*block);
+                mazeWall[wallNumber].setCenter((j * (5*block) + (int)(5.5d*block)) + offsetX,  (i * (5*block)) +  offsetY + 4*block);
                 mazeWall[wallNumber].setCorners();
 
                 if (verticalWalls[i][j]) {
@@ -616,49 +628,49 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 
         ImageView leftBorderWallImage = (ImageView) findViewById(R.id.leftBorderWall);
         mazeWall[wallNumber] = new Wall(leftBorderWallImage);
-        mazeWall[wallNumber].setWidth((int)(1 * block));
-        mazeWall[wallNumber].setHeight((int)(84 * block));
-        mazeWall[wallNumber].setCenter((int) ((0.5d) * block+offsetX), (int) (64.123d * block-offset));
+        mazeWall[wallNumber].setWidth(block);
+        mazeWall[wallNumber].setHeight(86 * block);
+        mazeWall[wallNumber].setCenter((int) ((0.5d) * block+offsetX), offsetY+(44*block));
         mazeWall[wallNumber].setCorners();
         mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
 
         ImageView rightBorderWallImage = (ImageView) findViewById(R.id.rightBorderWall);
         mazeWall[wallNumber] = new Wall(rightBorderWallImage);
-        mazeWall[wallNumber].setWidth((int)(1 * block));
-        mazeWall[wallNumber].setHeight((int)(84 * block));
-        mazeWall[wallNumber].setCenter((int) (59.5d * block+offsetX), (int) (64.123d * block-offset));
+        mazeWall[wallNumber].setWidth(block);
+        mazeWall[wallNumber].setHeight(86*block);
+        mazeWall[wallNumber].setCenter((int) (60.5d * block+offsetX),offsetY+(44*block));
         mazeWall[wallNumber].setCorners();
         mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
 
         ImageView topBorderWallImage = (ImageView) findViewById(R.id.topBorderWall);
         mazeWall[wallNumber] = new Wall(topBorderWallImage);
-        mazeWall[wallNumber].setWidth((int)(60 * block));
-        mazeWall[wallNumber].setHeight((int)(1 * block));
-        mazeWall[wallNumber].setCenter((int) (30d *  block+offsetX), (int) (22.598d * block-offset));
+        mazeWall[wallNumber].setWidth(60 * block);
+        mazeWall[wallNumber].setHeight(block);
+        mazeWall[wallNumber].setCenter((int) (30.5d *  block+offsetX), (int) (offsetY+(1.5d*block)));
         mazeWall[wallNumber].setCorners();
         mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
 
         ImageView bottomBorderWallImage = (ImageView) findViewById(R.id.bottomBorderWall);
         mazeWall[wallNumber] = new Wall(bottomBorderWallImage);
-        mazeWall[wallNumber].setWidth((int)(60 * block));
-        mazeWall[wallNumber].setHeight((int)(1 * block));
-        mazeWall[wallNumber].setCenter((int) (30d * block+offsetX),(int)(106.17d *block-offset));
+        mazeWall[wallNumber].setWidth(61 * block);
+        mazeWall[wallNumber].setHeight(block);
+        mazeWall[wallNumber].setCenter((int) (30.5d * block+offsetX),(int)(86.5d*block+offsetY));
         mazeWall[wallNumber].setCorners();
         mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
 
-        playingBall.setWidth((int) (2d * block));
-        playingBall.setHeight((int) (2d * block));
-        playingBall.setCenter((int) ((2.857d+offsetX + ballPositionX * 4.916) * block), (int) (((25.056d + ballPositionY * 4.916) * block)-offset));
+        playingBall.setWidth(2 * block);
+        playingBall.setHeight(2 * block);
+        playingBall.setCenter((ballPositionX * 5 *block)+offsetX+3*block,(ballPositionY * 5 * block)  +  offsetY + 4*block);
         playingBall.setCorners();
 
 
         exitPoint.setWidth((int) (2d * block));
         exitPoint.setHeight((int) (2d * block));
-        exitPoint.setCenter((int) ((2.857d+offsetX + exitPositionX * 4.916) * block), (int) (((25.056d + exitPositionY * 4.916) * block)-offset));
+        exitPoint.setCenter((exitPositionX * 5 *block)+offsetX+3*block, (exitPositionY * 5 * block)  +  offsetY + 4*block);
         exitPoint.setCorners();
     }
 

@@ -8,8 +8,8 @@ android {
         applicationId "my.illuminandus"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 5
-        versionName "1.4"
+        versionCode 12
+        versionName "1.74"
     }
     buildTypes {
         release {

@@ -36,7 +36,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEventListener{
-
     private AdView mAdView;
 
     //time items
@@ -71,11 +70,12 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
     private int wallNumber=0;
 
     int screenWidth;
+    int screenHeight;
     double speedAdjustment;
-    double block;
+    int block;
 
     private float show = 1;
-    private float hide = 0;
+    private float hide = 1;
 
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
     private int powerUpsPlacement[][]= new int[10][7];
@@ -139,8 +139,9 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         Point size = new Point();
         display.getSize(size);
         screenWidth = size.x;
-        speedAdjustment=screenWidth/1000d;
-        block=screenWidth / 60d;
+        screenHeight = size.y;
+        speedAdjustment = screenWidth / 1000d;
+        block =  (int)((screenHeight*(9d/16d)) / 36d);
 
 
 
@@ -328,7 +329,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         for (int i = 0; i < wallNumber - 4; i++) {
 
             if (time - mazeWall[i].getTimeTouched() > visibleThreshold) {
-                mazeWall[i].setVisibility(hide);
+                //mazeWall[i].setVisibility(hide); //TODO
             }
         }
 
@@ -446,37 +447,40 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
     //if a power up is hit this method will determine what has to happen
     public void hitPowerUp(PowerUp powerUp){
         //hide the powerup and count it as hit
-        if(powerUp.getHittable()) {
-            amountPowerUpsTouched = amountPowerUpsTouched + 1;
+
+        if(powerUp.getHittable()==false){
+            return;
         }
 
-        else return;
+        amountPowerUpsTouched = amountPowerUpsTouched + 1;
+
+
 
         if(amountPowerUpsTouched==powerUpCounter) {
             finishedLevel();
         }
 
-        if(powerUp.getType()==1 && powerUp.getHittable()){
+        if(powerUp.getType()==1){
             yellowPowerUp(powerUp);
         }
 
-        if(powerUp.getType()==2 && powerUp.getHittable()){
+        if(powerUp.getType()==2){
             pinkPowerUp(powerUp);
         }
 
-        if (powerUp.getType()==3 && powerUp.getHittable()){
+        if (powerUp.getType()==3){
             greenPowerUp(powerUp);
         }
 
-        if(powerUp.getType()==4 && powerUp.getHittable()){
+        if(powerUp.getType()==4){
             redPowerUp(powerUp);
         }
 
-        if(powerUp.getType()==5 && powerUp.getHittable()){
+        if(powerUp.getType()==5){
             bluePowerUp(powerUp);
         }
 
-        if(powerUp.getType()==6 && powerUp.getHittable()){
+        if(powerUp.getType()==6){
             multiPowerUp(powerUp);
         }
     }
@@ -600,10 +604,12 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
             for (int i = 0; i < wallNumber; i++) {
                 intersectWall(playingBall, mazeWall[i]);
             }
+
             //checks all the powerups
             for(int i=0; i< powerUpCounter; i++){
                 intersectPowerUp(playingBall, powerUps.get(i));
             }
+
             //this will run if there are steps left to be done in the x direction
             if (stepsTakenX < maxMovementX) {
                 stepsTakenX = stepsTakenX + 1;
@@ -707,6 +713,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
     //checks if a certain powerup and the playing ball intersect
     public void intersectPowerUp(Ball ball, PowerUp powerUp) {
+
         //top left corner of the ball
         if (ball.getTopLeftX() >= powerUp.getTopLeftX() && ball.getTopLeftX() <= powerUp.getTopRightX()) {              //is the x position of the ball between those of the two sides of the power up
             if (ball.getTopLeftY() >= powerUp.getTopLeftY() && ball.getTopLeftY() <= powerUp.getBottomLeftY()) {        //is the y position of the ball between those of the two sides of the power up
@@ -737,6 +744,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
                 hitPowerUp(powerUp);
             }
         }
+
     }
 
     //if a wall is hit this method will be called. It decides which side of the wall is hit and therefor decides in which direction the movement of the ball should be stopped.
@@ -763,13 +771,18 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         }
     }
 
+
+
     public void start() {
         Resources r = getResources();
-        double offset;
+        int offset;
         DisplayMetrics metrics = getResources().getDisplayMetrics();
 
+        offset = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics()));
 
-        offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
+        int offsetX = ((screenWidth-(36*block))/2);
+        int offsetY = (screenHeight-offset-(52*block));
+
 
         /*
         if(metrics.densityDpi>400 && metrics.densityDpi <=720){
@@ -786,37 +799,6 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
 
 
 
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 7; j++) {
-                if (horizontalWalls[i][j]) {
-                    int id = getResources().getIdentifier("horizontal_wall_" + ((i*7) + (j)), "id", getPackageName());
-                    ImageView wallImage = (ImageView) findViewById(id);
-                    mazeWall[wallNumber] = new Wall(wallImage);
-                    mazeWall[wallNumber].setWidth((int)(9.428d * block));
-                    mazeWall[wallNumber].setHeight((int)(1d * block));
-                    mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d * block + 4.714d *  block), (int) ((double) i * 8.428d *  block +  block * 30.504d-offset));
-                    mazeWall[wallNumber].setCorners();
-                    mazeWall[wallNumber].setVisibility(hide);
-                    wallNumber = wallNumber + 1;
-                }
-            }
-        }
-
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 6; j++) {
-                if (verticalWalls[i][j]) {
-                    int id = getResources().getIdentifier("vertical_wall_" + ((i*6) + (j)), "id", getPackageName());
-                    ImageView wallImage = (ImageView) findViewById(id);
-                    mazeWall[wallNumber] = new Wall(wallImage);
-                    mazeWall[wallNumber].setWidth((int)(1d * block));
-                    mazeWall[wallNumber].setHeight((int)(9.428d * block)); //8.25
-                    mazeWall[wallNumber].setCenter((int) ((double) j * 8.428d *  block +  block * 8.928d), (int) ((double) i * 8.428d * block +  block * 26.29d-offset));
-                    mazeWall[wallNumber].setCorners();
-                    mazeWall[wallNumber].setVisibility(hide);
-                    wallNumber = wallNumber + 1;
-                }
-            }
-        }
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 7; j++) {
@@ -849,54 +831,91 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
                             RelativeLayout.LayoutParams.WRAP_CONTENT);
                     rl.addView(imagePowerUp, lp);
 
+
+
+
                     powerUps.add(powerUpCounter,new PowerUp(powerUpsPlacement[i][j], imagePowerUp));
-                    powerUps.get(powerUpCounter).setWidth((int) (3d * block));
-                    powerUps.get(powerUpCounter).setHeight((int) (3d * block));
-                    powerUps.get(powerUpCounter).setCenter((int) ((double) j * 8.428d * block + 4.714d * block), (int) ((double) i * 8.428d *  block + block * 26.29d-offset));
+                    powerUps.get(powerUpCounter).setWidth((int)(1.5d * block));
+                    powerUps.get(powerUpCounter).setHeight((int)(1.5d * block));
+                    powerUps.get(powerUpCounter).setCenter((j * 5 *block)+offsetX+3*block,(i * 5 * block)  +  offsetY + 4*block);
                     powerUps.get(powerUpCounter).setCorners();
                     powerUpCounter = powerUpCounter + 1;
+
                 }
             }
         }
 
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 7; j++) {
+                if (horizontalWalls[i][j]) {
+                    int id = getResources().getIdentifier("horizontal_wall_" + ((i*7) + (j)), "id", getPackageName());
+                    ImageView wallImage = (ImageView) findViewById(id);
+                    mazeWall[wallNumber] = new Wall(wallImage);
+                    mazeWall[wallNumber].setWidth(6*block);
+                    mazeWall[wallNumber].setHeight(block);
+                    mazeWall[wallNumber].setCenter((j * (5*block)) + offsetX +(int)(3*block), (i * (5*block)) +offsetY+(int)(6.5d*block));
+                    mazeWall[wallNumber].setCorners();
+                    mazeWall[wallNumber].setVisibility(hide);
+                    wallNumber = wallNumber + 1;
+                }
+            }
+        }
+
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 6; j++) {
+                if (verticalWalls[i][j]) {
+                    int id = getResources().getIdentifier("vertical_wall_" + ((i*6) + (j)), "id", getPackageName());
+                    ImageView wallImage = (ImageView) findViewById(id);
+                    mazeWall[wallNumber] = new Wall(wallImage);
+                    mazeWall[wallNumber].setWidth(block);
+                    mazeWall[wallNumber].setHeight(6*block);
+                    mazeWall[wallNumber].setCenter((j * (5*block) + (int)(5.5d*block)) + offsetX,  (i * (5*block)) +  offsetY + 4*block);
+                    mazeWall[wallNumber].setCorners();
+                    mazeWall[wallNumber].setVisibility(hide);
+                    wallNumber = wallNumber + 1;
+                }
+            }
+        }
 
         ImageView leftBorderWallImage = (ImageView) findViewById(R.id.leftBorderWall);
         mazeWall[wallNumber] = new Wall(leftBorderWallImage);
-        mazeWall[wallNumber].setWidth((int)(1 * block));
-        mazeWall[wallNumber].setHeight((int)(84 * block));
-        mazeWall[wallNumber].setCenter((int) ((0.5d) * block), (int) (64.123d * block-offset));
+        mazeWall[wallNumber].setWidth(block);
+        mazeWall[wallNumber].setHeight(50 * block);
+        mazeWall[wallNumber].setCenter((int) ((0.5d) * block+offsetX), offsetY+(26*block));
         mazeWall[wallNumber].setCorners();
+        mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
 
         ImageView rightBorderWallImage = (ImageView) findViewById(R.id.rightBorderWall);
         mazeWall[wallNumber] = new Wall(rightBorderWallImage);
-        mazeWall[wallNumber].setWidth((int)(1 * block));
-        mazeWall[wallNumber].setHeight((int)(84 * block));
-        mazeWall[wallNumber].setCenter((int) (59.5d * block), (int) (64.123d * block-offset));
+        mazeWall[wallNumber].setWidth(block);
+        mazeWall[wallNumber].setHeight(50*block);
+        mazeWall[wallNumber].setCenter((int) (35.5d * block+offsetX),offsetY+(26*block));
         mazeWall[wallNumber].setCorners();
+        mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
 
         ImageView topBorderWallImage = (ImageView) findViewById(R.id.topBorderWall);
         mazeWall[wallNumber] = new Wall(topBorderWallImage);
-        mazeWall[wallNumber].setWidth((int)(60 * block));
-        mazeWall[wallNumber].setHeight((int)(1 * block));
-        mazeWall[wallNumber].setCenter((int) (30d *  block), (int) (22.076d * block-offset));
+        mazeWall[wallNumber].setWidth(36 * block);
+        mazeWall[wallNumber].setHeight(block);
+        mazeWall[wallNumber].setCenter((int) (18 *  block+offsetX), (int) (offsetY+(1.5d*block)));
         mazeWall[wallNumber].setCorners();
+        mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
 
         ImageView bottomBorderWallImage = (ImageView) findViewById(R.id.bottomBorderWall);
         mazeWall[wallNumber] = new Wall(bottomBorderWallImage);
-        mazeWall[wallNumber].setWidth((int)(60 * block));
-        mazeWall[wallNumber].setHeight((int)(1 * block));
-        mazeWall[wallNumber].setCenter((int) (30d * block),(int)(106.5d *block-offset));
+        mazeWall[wallNumber].setWidth(36 * block);
+        mazeWall[wallNumber].setHeight(block);
+        mazeWall[wallNumber].setCenter((int) (18 * block+offsetX),(int)(51.5d*block)+offsetY);
         mazeWall[wallNumber].setCorners();
+        mazeWall[wallNumber].setHittable(true);
         wallNumber = wallNumber + 1;
 
-
-
-        playingBall.setWidth((int) (2d * block));
-        playingBall.setHeight((int) (2d * block));
-        playingBall.setCenter((int) ((4.714d + ballPositionX * 8.428) * block), (int) (((26.29d + ballPositionY * 8.428) * block)-offset));
+        playingBall.setWidth((int)(1.5d * block));
+        playingBall.setHeight((int)(1.5d * block));
+        playingBall.setCenter((ballPositionX * 5 *block)+offsetX+3*block,(ballPositionY * 5 * block)  +  offsetY + 4*block);
         playingBall.setCorners();
 
     }

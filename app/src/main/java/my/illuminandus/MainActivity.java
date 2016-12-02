@@ -13,7 +13,8 @@ public class MainActivity extends AppCompatActivity {
     //TODO splashscreen logo
     //TODO nieuw icon
     //TODO levels maken
-    //TODO muren goed uitlijnen
+    //TODO echte advertenties laden
+    //TODO tekst app store verbeteren
 
 
 

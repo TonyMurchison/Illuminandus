@@ -36,10 +36,7 @@ public class FinishedScreen extends AppCompatActivity {
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        //TODO misschien meer dingen loggen?
-        Bundle bundle = new Bundle();
-        bundle.putString("gameTypeFinished",gameType);
-        mFirebaseAnalytics.logEvent("GameTypeFinished", bundle);
+
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -47,6 +44,26 @@ public class FinishedScreen extends AppCompatActivity {
 
         unlockLevel();
 
+        logFinish();
+
+    }
+
+    private void logFinish(){
+        //TODO misschien meer dingen loggen?
+        Bundle bundle = new Bundle();
+
+        if(gameType=="hidden") {
+            mFirebaseAnalytics.logEvent("HiddenLevelPlayed", bundle);
+        }
+        if(gameType=="changing") {
+            mFirebaseAnalytics.logEvent("ChangingLevelPlayed", bundle);
+        }
+        if(gameType=="locked") {
+            mFirebaseAnalytics.logEvent("LockedLevelPlayed", bundle);
+        }
+        if(gameType=="normal") {
+            mFirebaseAnalytics.logEvent("NormalLevelPlayed", bundle);
+        }
     }
 
     public void homeButtonClick(View v){
