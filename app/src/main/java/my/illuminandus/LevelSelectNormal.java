@@ -15,8 +15,8 @@ import android.widget.LinearLayout;
 
 
 public class LevelSelectNormal extends AppCompatActivity {
-    private Button[] buttons = new Button[60];
-    private int levelsAmount = 60;
+    private Button[] buttons = new Button[40];
+    private int levelsAmount = 40;
 
 
     @Override

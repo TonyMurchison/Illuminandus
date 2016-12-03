@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -45,11 +48,16 @@ public class FinishedScreen extends AppCompatActivity {
         unlockLevel();
 
         logFinish();
+        if(!gameType.equals("changing")&&levelNumber==39) {
+            ImageView nextLevelButton = (ImageView) findViewById(R.id.nextLevelButton);
+            nextLevelButton.setVisibility(View.GONE);
 
+            TextView levelFinishedTextView = (TextView) findViewById(R.id.finishedLevelTextView);
+            levelFinishedTextView.setText("Good job, all levels completed in this gametype!");
+        }
     }
 
     private void logFinish(){
-        //TODO misschien meer dingen loggen?
         Bundle bundle = new Bundle();
 
         if(gameType=="hidden") {
@@ -129,7 +137,7 @@ public class FinishedScreen extends AppCompatActivity {
     }
 
     public void nextLevelButton(View v){
-        if(levelNumber<59) {
+        if(levelNumber<39) {
             Intent intent = new Intent();
             if (gameType.equals("hidden")) {
                 if (levelNumber < 5) {
@@ -155,6 +163,10 @@ public class FinishedScreen extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+
+
+
+
 
     }
 
