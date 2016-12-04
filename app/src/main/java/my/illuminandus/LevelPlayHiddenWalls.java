@@ -75,7 +75,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
     int block;
 
     private float show = 1;
-    private float hide = 1;
+    private float hide = 0;
 
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
     private int powerUpsPlacement[][]= new int[10][7];
@@ -329,7 +329,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
         for (int i = 0; i < wallNumber - 4; i++) {
 
             if (time - mazeWall[i].getTimeTouched() > visibleThreshold) {
-                //mazeWall[i].setVisibility(hide); //TODO
+                mazeWall[i].setVisibility(hide);
             }
         }
 

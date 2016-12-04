@@ -122,6 +122,8 @@ public class LevelPlayKeys extends AppCompatActivity implements SensorEventListe
         TextView levelTextView = (TextView)findViewById(R.id.levelTextView);
         levelTextView.setText("Level "+Integer.toString(levelNumber+1));
 
+
+
         readFile();
 
 

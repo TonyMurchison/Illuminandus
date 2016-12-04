@@ -10,11 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
 
-    //TODO splashscreen logo
-    //TODO nieuw icon
-    //TODO levels maken
+
     //TODO echte advertenties laden
-    //TODO tekst app store verbeteren
+    //TODO ballen misschien beter zichtbaar maken
+    //TODO icon ronde hoeken geven
 
 
 

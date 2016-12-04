@@ -28,13 +28,8 @@ public class LevelSelectHidden extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
-/*
-        //TODO dit weghalen
-        SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("hiddenLevelProgress", 60);
-        editor.commit();
-*/
+
+
 
         final LinearLayout layout = (LinearLayout)findViewById(R.id.hiddenWallsLayout);
         ViewTreeObserver vto = layout.getViewTreeObserver();

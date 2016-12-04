@@ -29,6 +29,10 @@ public class LevelSelectLocked extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
 
+        SharedPreferences prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("lockedLevelProgress", 39);
+        editor.commit();
 
         final LinearLayout layout = (LinearLayout)findViewById(R.id.lockedWallsLayout);
         ViewTreeObserver vto = layout.getViewTreeObserver();

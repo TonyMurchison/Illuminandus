@@ -547,7 +547,7 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
         offset = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics()));
 
 
-        int unit = (int) Math.floor(5.916d*block);
+
 
         int offsetX = ((screenWidth-(61*block))/2);
         int offsetY = (screenHeight-offset-(87*block));
@@ -555,30 +555,11 @@ public class LevelPlayNormalWalls extends AppCompatActivity implements SensorEve
 
 
 
-        /*
-        if(metrics.densityDpi>400 && metrics.densityDpi <=720){
-            offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
-        }
-        else{
-
-            offset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, r.getDisplayMetrics());
-        }
-
-*/
 
 
 
 
-/*
-        //TODO de onderstaande een meervoud van de bovende maken, voorbeeld: int offsetH1 = offsetConstantWidth*(4.916d)
-        int offsetConstantWidth = (int) (offsetConstantHeight/5.916d);
-        int offsetConstant = (int) (offsetConstantHeight*(4.916d/5.916d));
-        int offsetH1 = (int) (offsetConstantHeight*(3d/5.916d));
-        int offsetH2 = (int) (offsetConstantHeight*(27.65d/5.916d));
-        int offsetV1 = (int) (offsetConstantHeight*(5.5d/5.916d));
-        int offsetV2 = (int) (offsetConstantHeight*(25.3d/5.916d));
 
-*/
 
 
 
