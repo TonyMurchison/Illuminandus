@@ -91,10 +91,6 @@ public class FinishedScreen extends AppCompatActivity {
             intent = new Intent(FinishedScreen.this, MainLevelSelect.class);
         }
 
-        if(gameType.equals("locked")){
-            intent = new Intent(FinishedScreen.this, LevelSelectLocked.class);
-        }
-
         if(gameType.equals("normal")){
             intent = new Intent(FinishedScreen.this, LevelSelectNormal.class);
         }
@@ -114,13 +110,6 @@ public class FinishedScreen extends AppCompatActivity {
             }
         }
 
-        if(gameType.equals("locked")){
-            if(prefs.getInt("lockedLevelProgress",0)<levelNumber+1){
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putInt("lockedLevelProgress", levelNumber+1);
-                editor.commit();
-            }
-        }
 
         if(gameType.equals("normal")){
             if(prefs.getInt("normalLevelProgress",0)<levelNumber+1){
@@ -149,10 +138,6 @@ public class FinishedScreen extends AppCompatActivity {
 
             if (gameType.equals("changing")) {
                 intent = new Intent(FinishedScreen.this, LevelPlayChangingWalls.class);
-            }
-
-            if (gameType.equals("locked")) {
-                intent = new Intent(FinishedScreen.this, LevelPlayKeys.class);
             }
 
             if (gameType.equals("normal")) {
@@ -185,10 +170,6 @@ public class FinishedScreen extends AppCompatActivity {
             intent = new Intent(FinishedScreen.this, LevelPlayChangingWalls.class);
         }
 
-        if(gameType.equals("locked")){
-            intent = new Intent(FinishedScreen.this, LevelPlayKeys.class);
-        }
-
         if(gameType.equals("normal")){
             intent = new Intent(FinishedScreen.this, LevelPlayNormalWalls.class);
         }
@@ -206,10 +187,6 @@ public class FinishedScreen extends AppCompatActivity {
 
         if(gameType.equals("changing")){
             intent = new Intent(FinishedScreen.this, MainLevelSelect.class);
-        }
-
-        if(gameType.equals("locked")){
-            intent = new Intent(FinishedScreen.this, LevelSelectLocked.class);
         }
 
         if(gameType.equals("normal")){

@@ -64,6 +64,7 @@
             android:textSize="30sp"
             android:textColor="@color/white"
             />
+        <!--
         <Button
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -77,7 +78,7 @@
             android:textSize="30sp"
             android:textColor="@color/white"
             />
-
+-->
         <Button
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -88,6 +89,20 @@
             android:onClick="mainLevelSelectButtonClick"
             android:tag="normal"
             android:id="@+id/normalButton"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="rate maze games"
+            android:layout_weight="0.5"
+            android:background="@drawable/button_rate"
+            android:layout_margin="5dp"
+            android:onClick="rateButtonClick"
+            android:tag="rate"
+            android:id="@+id/rateButton"
             android:textSize="30sp"
             android:textColor="@color/white"
             />

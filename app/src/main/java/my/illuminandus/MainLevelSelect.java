@@ -3,6 +3,7 @@ package my.illuminandus;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -42,7 +43,11 @@ public class MainLevelSelect extends AppCompatActivity {
 
     }
 
-
+    public void rateButtonClick(View v){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("market://details?id=my.illuminandus"));
+        startActivity(intent);
+    }
 
     public void mainLevelSelectButtonClick(View v){
         String buttonPressed = (String)v.getTag();

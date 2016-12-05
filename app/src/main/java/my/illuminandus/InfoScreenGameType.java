@@ -41,11 +41,6 @@ public class InfoScreenGameType extends AppCompatActivity {
             explainText.setText(explenation[1]);
         }
 
-        if(gameType.equals("locked")){
-            gameTypeText.setBackground(getResources().getDrawable(R.drawable.button_locked));
-            gameTypeText.setText("LOCKED MAZE");
-            explainText.setText(explenation[2]);
-        }
 
         if(gameType.equals("normal")){
             gameTypeText.setBackground(getResources().getDrawable(R.drawable.button_normal));
@@ -80,9 +75,6 @@ public class InfoScreenGameType extends AppCompatActivity {
         }
         if(gameType.equals("changing")){
             intent = new Intent(InfoScreenGameType.this, LevelPlayChangingWalls.class);
-        }
-        if(gameType.equals("locked")){
-            intent = new Intent(InfoScreenGameType.this, LevelSelectLocked.class);
         }
 
         if(gameType.equals("normal")){

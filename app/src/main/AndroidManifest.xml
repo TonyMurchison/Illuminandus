@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
 
 
@@ -30,11 +30,9 @@
 
         <activity android:name="my.illuminandus.MainLevelSelect"/>
         <activity android:name="my.illuminandus.LevelSelectHidden"/>
-        <activity android:name="my.illuminandus.LevelSelectLocked"/>
         <activity android:name="my.illuminandus.LevelSelectNormal"/>
         <activity android:name="my.illuminandus.LevelPlayHiddenWalls" />
         <activity android:name="my.illuminandus.LevelPlayChangingWalls" />
-        <activity android:name="my.illuminandus.LevelPlayKeys"/>
         <activity android:name="my.illuminandus.LevelPlayNormalWalls"/>
         <activity android:name="my.illuminandus.FinishedScreen"/>
         <activity android:name="my.illuminandus.InfoScreenLevel"/>

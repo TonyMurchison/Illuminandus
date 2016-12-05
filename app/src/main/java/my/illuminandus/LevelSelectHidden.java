@@ -15,8 +15,8 @@ import android.widget.LinearLayout;
 
 
 public class LevelSelectHidden extends AppCompatActivity {
-    private Button[] buttons = new Button[40];
-    private int levelsAmount = 40;
+    private Button[] buttons = new Button[60];
+    private int levelsAmount = 60;
 
 
     @Override
@@ -28,8 +28,6 @@ public class LevelSelectHidden extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
-
-
 
         final LinearLayout layout = (LinearLayout)findViewById(R.id.hiddenWallsLayout);
         ViewTreeObserver vto = layout.getViewTreeObserver();
