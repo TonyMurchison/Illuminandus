@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.google.android.gms.ads.MobileAds;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("OffsetY", 0);
 
         editor.commit();
+
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-9044449755774524~3454029098");
 
 
 

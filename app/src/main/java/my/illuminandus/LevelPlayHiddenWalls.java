@@ -75,7 +75,7 @@ public class LevelPlayHiddenWalls extends AppCompatActivity implements SensorEve
     int block;
 
     private float show = 1;
-    private float hide = 1;
+    private float hide = 0;
 
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
     private int powerUpsPlacement[][]= new int[10][7];
